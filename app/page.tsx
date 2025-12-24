@@ -1,24 +1,11 @@
 import Link from 'next/link';
+import Header from '@/components/Header';
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <span className="text-3xl">🛡️</span>
-              </div>
-              <div className="ml-4">
-                <h1 className="text-2xl font-bold text-gray-900">AegisCare</h1>
-                <p className="text-sm text-gray-500">Privacy-Preserving Clinical Trial Matching</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
@@ -142,6 +129,117 @@ export default function Home() {
                     <span>Privacy guaranteed - you never see patient medical data</span>
                   </li>
                 </ol>
+              </div>
+            </div>
+          </div>
+
+          {/* Video Section */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">See AegisCare in Action</h3>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Watch how our platform revolutionizes clinical trial matching with complete privacy preservation
+              </p>
+            </div>
+
+            <div className="relative max-w-5xl mx-auto">
+              {/* Gradient Border Effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30"></div>
+
+              {/* Video Container */}
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-white">
+                {/* Video Header */}
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-3 h-3 rounded-full bg-red-400 animate-pulse"></div>
+                      <span className="text-white font-semibold">Featured Demo</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-white/80 text-sm">Powered by</span>
+                      <span className="text-white font-bold">Zama FHE</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* YouTube Video Embed */}
+                <div className="relative aspect-video w-full bg-gray-900">
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/sSwq-D9JzhE?rel=0&modestbranding=1"
+                    title="AegisCare Demo - Privacy-Preserving Clinical Trial Matching"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+
+                {/* Video Footer */}
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-gray-200">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm text-gray-600">Learn how FHE protects patient data</span>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://www.youtube.com/watch?v=sSwq-D9JzhE"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                      </svg>
+                      Watch on YouTube
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Elements */}
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-xl animate-bounce">
+                <span className="text-3xl">🎬</span>
+              </div>
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-xl animate-pulse">
+                <span className="text-2xl">🔐</span>
+              </div>
+            </div>
+
+            {/* Feature Highlights Below Video */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100">
+                <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h4 className="font-bold text-gray-900 mb-2">100% Encrypted</h4>
+                <p className="text-sm text-gray-600">Medical data stays encrypted throughout the entire process</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+                <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h4 className="font-bold text-gray-900 mb-2">HIPAA Compliant</h4>
+                <p className="text-sm text-gray-600">Meets healthcare privacy regulations with FHE technology</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+                <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h4 className="font-bold text-gray-900 mb-2">Lightning Fast</h4>
+                <p className="text-sm text-gray-600">Real-time eligibility checking on encrypted data</p>
               </div>
             </div>
           </div>

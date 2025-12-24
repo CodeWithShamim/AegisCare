@@ -12,6 +12,7 @@
 import { useState } from 'react';
 import PatientRegistrationForm from '@/components/PatientRegistrationForm';
 import EligibilityChecker from '@/components/EligibilityChecker';
+import Header from '@/components/Header';
 import { patientExists, connectWallet } from '@/lib/web3Client';
 
 export default function PatientDashboard() {
@@ -56,25 +57,7 @@ export default function PatientDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <span className="text-2xl">🛡️</span>
-              <div className="ml-3">
-                <h1 className="text-xl font-bold text-gray-900">AegisCare</h1>
-                <p className="text-xs text-gray-500">Patient Dashboard</p>
-              </div>
-            </div>
-            <a
-              href="/"
-              className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
-            >
-              Back to Home
-            </a>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">

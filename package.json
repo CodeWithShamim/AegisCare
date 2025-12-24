@@ -6,24 +6,44 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "deploy": "hardhat run scripts/deploy.ts --network fhevm_devnet",
+    "deploy:local": "hardhat run scripts/deploy.ts --network hardhat",
+    "node": "hardhat node",
+    "accounts": "hardhat run scripts/showAccounts.ts",
+    "typechain": "hardhat typechain"
   },
   "dependencies": {
     "@zama-fhe/relayer-sdk": "^0.3.0-8",
-    "ethers": "^5.8.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "viem": "^2.43.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chai": "^4.4.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solidity-coverage": "^0.8.7",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.2",
     "typescript": "^5"
   }
 }

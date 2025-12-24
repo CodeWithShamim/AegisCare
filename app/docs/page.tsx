@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import Header from '@/components/Header';
 
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState('');
@@ -21,9 +22,7 @@ export default function DocsPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = tableOfContents.map(({ id }) =>
-        document.getElementById(id)
-      );
+      const sections = tableOfContents.map(({ id }) => document.getElementById(id));
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -43,8 +42,11 @@ export default function DocsPage() {
 
   return (
     <div className="docs-container">
+      {/* Header */}
+      <Header />
+
       {/* Sidebar */}
-      <aside className="docs-sidebar">
+      <aside className="docs-sidebar mt-[-3%]">
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Documentation</h3>
           <Link href="/docs" className="docs-sidebar-link active">
@@ -87,10 +89,20 @@ export default function DocsPage() {
 
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Resources</h3>
-          <a href="https://docs.zama.ai/" target="_blank" rel="noopener noreferrer" className="docs-sidebar-link">
+          <a
+            href="https://docs.zama.ai/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
             Zama FHEVM Docs
           </a>
-          <a href="https://github.com/zama-ai/fhevm" target="_blank" rel="noopener noreferrer" className="docs-sidebar-link">
+          <a
+            href="https://github.com/zama-ai/fhevm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
             FHEVM GitHub
           </a>
         </div>
@@ -102,7 +114,9 @@ export default function DocsPage() {
           <div className="docs-content">
             {/* Breadcrumbs */}
             <nav className="docs-breadcrumbs">
-              <Link href="/" className="docs-breadcrumb-item">Home</Link>
+              <Link href="/" className="docs-breadcrumb-item">
+                Home
+              </Link>
               <span className="docs-breadcrumb-separator">/</span>
               <span className="docs-breadcrumb-current">Documentation</span>
             </nav>
@@ -110,9 +124,12 @@ export default function DocsPage() {
             {/* Main Content */}
             <h1>AegisCare Documentation</h1>
 
-            <p className="lead" style={{ fontSize: '20px', color: '#64748b', marginBottom: '32px' }}>
-              Welcome to the AegisCare documentation. Learn how to build privacy-preserving
-              clinical trial matching applications using Fully Homomorphic Encryption (FHE).
+            <p
+              className="lead"
+              style={{ fontSize: '20px', color: '#64748b', marginBottom: '32px' }}
+            >
+              Welcome to the AegisCare documentation. Learn how to build privacy-preserving clinical
+              trial matching applications using Fully Homomorphic Encryption (FHE).
             </p>
 
             {/* Introduction */}
@@ -136,14 +153,14 @@ export default function DocsPage() {
                 AegisCare is a revolutionary clinical trial matching platform that leverages
                 <strong> Zama FHEVM</strong> to enable privacy-preserving patient-trial matching.
                 Unlike traditional systems where patient medical data must be revealed to determine
-                eligibility, AegisCare performs matching computations on <strong>encrypted data</strong>,
-                ensuring zero plaintext leakage.
+                eligibility, AegisCare performs matching computations on{' '}
+                <strong>encrypted data</strong>, ensuring zero plaintext leakage.
               </p>
 
               <p>
-                Built with <strong>Next.js 16</strong>, <strong>React 19</strong>, <strong>TypeScript</strong>,
-                and <strong>TailwindCSS</strong>, AegisCare provides a modern, responsive user interface
-                for both patients and clinical trial sponsors.
+                Built with <strong>Next.js 16</strong>, <strong>React 19</strong>,{' '}
+                <strong>TypeScript</strong>, and <strong>TailwindCSS</strong>, AegisCare provides a
+                modern, responsive user interface for both patients and clinical trial sponsors.
               </p>
 
               <div className="docs-callout docs-callout-success">
@@ -152,8 +169,9 @@ export default function DocsPage() {
                   Production-Ready
                 </p>
                 <div className="docs-callout-content">
-                  AegisCare is production-ready for localhost development and ready for FHEVM deployment
-                  when infrastructure is available. All smart contracts are audited and tested.
+                  AegisCare is production-ready for localhost development and ready for FHEVM
+                  deployment when infrastructure is available. All smart contracts are audited and
+                  tested.
                 </div>
               </div>
             </section>
@@ -164,29 +182,62 @@ export default function DocsPage() {
 
               <h3>🔐 Privacy-Preserving Architecture</h3>
               <ul>
-                <li><strong>Client-side encryption</strong> - All medical data encrypted before submission</li>
-                <li><strong>FHE operations</strong> - Computations performed on encrypted data</li>
-                <li><strong>Zero plaintext leakage</strong> - No medical data ever revealed in plaintext</li>
-                <li><strong>EIP-712 signatures</strong> - Private decryption with typed data signing</li>
-                <li><strong>ACL-based access control</strong> - Granular decryption permissions</li>
+                <li>
+                  <strong>Client-side encryption</strong> - All medical data encrypted before
+                  submission
+                </li>
+                <li>
+                  <strong>FHE operations</strong> - Computations performed on encrypted data
+                </li>
+                <li>
+                  <strong>Zero plaintext leakage</strong> - No medical data ever revealed in
+                  plaintext
+                </li>
+                <li>
+                  <strong>EIP-712 signatures</strong> - Private decryption with typed data signing
+                </li>
+                <li>
+                  <strong>ACL-based access control</strong> - Granular decryption permissions
+                </li>
               </ul>
 
               <h3>⚡ Smart Contract Features</h3>
               <ul>
-                <li><strong>FHE eligibility computation</strong> - Encrypted comparisons on-chain</li>
-                <li><strong>Owner management</strong> - Pause/unpause functionality</li>
-                <li><strong>Enhanced metadata</strong> - Timestamps, participant counts, history tracking</li>
-                <li><strong>Gas optimization</strong> - Custom errors for efficient execution</li>
-                <li><strong>Comprehensive events</strong> - Full audit trail</li>
+                <li>
+                  <strong>FHE eligibility computation</strong> - Encrypted comparisons on-chain
+                </li>
+                <li>
+                  <strong>Owner management</strong> - Pause/unpause functionality
+                </li>
+                <li>
+                  <strong>Enhanced metadata</strong> - Timestamps, participant counts, history
+                  tracking
+                </li>
+                <li>
+                  <strong>Gas optimization</strong> - Custom errors for efficient execution
+                </li>
+                <li>
+                  <strong>Comprehensive events</strong> - Full audit trail
+                </li>
               </ul>
 
               <h3>🎨 Frontend Features</h3>
               <ul>
-                <li><strong>Beautiful responsive UI</strong> - TailwindCSS v4 styling</li>
-                <li><strong>Patient dashboard</strong> - Registration and eligibility checking</li>
-                <li><strong>Trial admin dashboard</strong> - Trial creation and management</li>
-                <li><strong>Real-time wallet connection</strong> - MetaMask integration</li>
-                <li><strong>Comprehensive error handling</strong> - User-friendly messages</li>
+                <li>
+                  <strong>Beautiful responsive UI</strong> - TailwindCSS v4 styling
+                </li>
+                <li>
+                  <strong>Patient dashboard</strong> - Registration and eligibility checking
+                </li>
+                <li>
+                  <strong>Trial admin dashboard</strong> - Trial creation and management
+                </li>
+                <li>
+                  <strong>Real-time wallet connection</strong> - MetaMask integration
+                </li>
+                <li>
+                  <strong>Comprehensive error handling</strong> - User-friendly messages
+                </li>
               </ul>
             </section>
 
@@ -205,25 +256,26 @@ export default function DocsPage() {
                   <p>
                     Patients encrypt their medical data (age, gender, BMI, conditions) client-side
                     using Zama FHE before registering on the platform. The encrypted data is stored
-                    on the blockchain without anyone (including the patient) being able to decrypt it.
+                    on the blockchain without anyone (including the patient) being able to decrypt
+                    it.
                   </p>
                 </li>
 
                 <li>
                   <strong>Trial Creation</strong>
                   <p>
-                    Clinical trial sponsors create trials with encrypted eligibility criteria.
-                    The criteria (age range, gender requirements, BMI limits, medical conditions)
-                    are encrypted before submission to the blockchain.
+                    Clinical trial sponsors create trials with encrypted eligibility criteria. The
+                    criteria (age range, gender requirements, BMI limits, medical conditions) are
+                    encrypted before submission to the blockchain.
                   </p>
                 </li>
 
                 <li>
                   <strong>Eligibility Computation</strong>
                   <p>
-                    When checking eligibility, the smart contract performs FHE operations to
-                    compare the patient's encrypted medical data with the trial's encrypted criteria.
-                    All comparisons happen <strong>entirely in the encrypted domain</strong>.
+                    When checking eligibility, the smart contract performs FHE operations to compare
+                    the patient's encrypted medical data with the trial's encrypted criteria. All
+                    comparisons happen <strong>entirely in the encrypted domain</strong>.
                   </p>
                 </li>
 
@@ -237,7 +289,8 @@ export default function DocsPage() {
                 </li>
               </ol>
 
-              <pre><code>{`// Example: FHE Eligibility Computation
+              <pre>
+                <code>{`// Example: FHE Eligibility Computation
 // All values are encrypted (euint256)
 
 // Patient's encrypted data
@@ -274,7 +327,8 @@ ebool isEligible = FHE.and(
 );
 
 // Store encrypted result - only patient can decrypt
-eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
+eligibilityResults[trialId][patientId] = isEligible;`}</code>
+              </pre>
             </section>
 
             {/* Architecture */}
@@ -282,7 +336,8 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
               <h2>Architecture Overview</h2>
 
               <p>
-                AegisCare follows a modern full-stack architecture with clear separation of concerns:
+                AegisCare follows a modern full-stack architecture with clear separation of
+                concerns:
               </p>
 
               <table>
@@ -295,27 +350,37 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><strong>Frontend</strong></td>
+                    <td>
+                      <strong>Frontend</strong>
+                    </td>
                     <td>Next.js 16, React 19, TypeScript, TailwindCSS</td>
                     <td>User interface, client-side encryption, wallet connection</td>
                   </tr>
                   <tr>
-                    <td><strong>FHE Client</strong></td>
+                    <td>
+                      <strong>FHE Client</strong>
+                    </td>
                     <td>@zama-fhe/relayer-sdk (mock)</td>
                     <td>FHE instance management, encryption/decryption operations</td>
                   </tr>
                   <tr>
-                    <td><strong>Web3 Client</strong></td>
+                    <td>
+                      <strong>Web3 Client</strong>
+                    </td>
                     <td>ethers.js v6</td>
                     <td>Wallet connection, smart contract interaction</td>
                   </tr>
                   <tr>
-                    <td><strong>Smart Contract</strong></td>
+                    <td>
+                      <strong>Smart Contract</strong>
+                    </td>
                     <td>Solidity 0.8.20, FHEVM</td>
                     <td>Encrypted eligibility computation, access control</td>
                   </tr>
                   <tr>
-                    <td><strong>Blockchain</strong></td>
+                    <td>
+                      <strong>Blockchain</strong>
+                    </td>
                     <td>Zama fhEVM</td>
                     <td>FHE-enabled execution environment</td>
                   </tr>
@@ -324,11 +389,22 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
 
               <h3>Security Architecture</h3>
               <ul>
-                <li><strong>Encryption at source</strong> - Data encrypted before leaving user's browser</li>
-                <li><strong>Encrypted storage</strong> - Only encrypted data stored on blockchain</li>
-                <li><strong>Encrypted computation</strong> - FHE operations on encrypted data</li>
-                <li><strong>Private decryption</strong> - EIP-712 signatures for authorized decryption</li>
-                <li><strong>Access control</strong> - ACL manages who can decrypt what data</li>
+                <li>
+                  <strong>Encryption at source</strong> - Data encrypted before leaving user's
+                  browser
+                </li>
+                <li>
+                  <strong>Encrypted storage</strong> - Only encrypted data stored on blockchain
+                </li>
+                <li>
+                  <strong>Encrypted computation</strong> - FHE operations on encrypted data
+                </li>
+                <li>
+                  <strong>Private decryption</strong> - EIP-712 signatures for authorized decryption
+                </li>
+                <li>
+                  <strong>Access control</strong> - ACL manages who can decrypt what data
+                </li>
               </ul>
             </section>
 
@@ -338,26 +414,60 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
 
               <h3>Frontend</h3>
               <ul>
-                <li><span className="docs-badge docs-badge-primary">Next.js 16.1.1</span> - React framework with App Router</li>
-                <li><span className="docs-badge docs-badge-primary">React 19.2.3</span> - UI library</li>
-                <li><span className="docs-badge docs-badge-primary">TypeScript 5</span> - Type safety</li>
-                <li><span className="docs-badge docs-badge-primary">TailwindCSS 4</span> - Styling</li>
-                <li><span className="docs-badge docs-badge-primary">ethers.js 6.9.0</span> - Web3 integration</li>
+                <li>
+                  <span className="docs-badge docs-badge-primary">Next.js 16.1.1</span> - React
+                  framework with App Router
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-primary">React 19.2.3</span> - UI library
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-primary">TypeScript 5</span> - Type safety
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-primary">TailwindCSS 4</span> - Styling
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-primary">ethers.js 6.9.0</span> - Web3
+                  integration
+                </li>
               </ul>
 
               <h3>Blockchain</h3>
               <ul>
-                <li><span className="docs-badge docs-badge-success">Solidity 0.8.20</span> - Smart contract language</li>
-                <li><span className="docs-badge docs-badge-success">Zama fhEVM</span> - FHE-enabled EVM</li>
-                <li><span className="docs-badge docs-badge-success">Hardhat 2.19.0</span> - Development framework</li>
-                <li><span className="docs-badge docs-badge-success">@zama-fhe/relayer-sdk 0.3.0-8</span> - FHE SDK</li>
+                <li>
+                  <span className="docs-badge docs-badge-success">Solidity 0.8.20</span> - Smart
+                  contract language
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-success">Zama fhEVM</span> - FHE-enabled
+                  EVM
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-success">Hardhat 2.19.0</span> -
+                  Development framework
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-success">
+                    @zama-fhe/relayer-sdk 0.3.0-8
+                  </span>{' '}
+                  - FHE SDK
+                </li>
               </ul>
 
               <h3>Development Tools</h3>
               <ul>
-                <li><span className="docs-badge docs-badge-warning">TypeChain</span> - TypeScript bindings</li>
-                <li><span className="docs-badge docs-badge-warning">Docker Compose</span> - Local fhEVM node</li>
-                <li><span className="docs-badge docs-badge-warning">ESLint 9</span> - Code linting</li>
+                <li>
+                  <span className="docs-badge docs-badge-warning">TypeChain</span> - TypeScript
+                  bindings
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-warning">Docker Compose</span> - Local
+                  fhEVM node
+                </li>
+                <li>
+                  <span className="docs-badge docs-badge-warning">ESLint 9</span> - Code linting
+                </li>
               </ul>
             </section>
 
@@ -365,9 +475,7 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
             <section id="getting-started">
               <h2>Getting Started</h2>
 
-              <p>
-                Follow these steps to get started with AegisCare development:
-              </p>
+              <p>Follow these steps to get started with AegisCare development:</p>
 
               <div className="docs-callout docs-callout-warning">
                 <p className="docs-callout-title">
@@ -385,9 +493,7 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
             <section id="quick-start">
               <h3>Quick Start</h3>
 
-              <p>
-                The development server is currently running at:
-              </p>
+              <p>The development server is currently running at:</p>
 
               <p style={{ fontSize: '18px', fontWeight: 600, color: '#3b82f6' }}>
                 🌐 http://localhost:3000
@@ -409,14 +515,19 @@ eligibilityResults[trialId][patientId] = isEligible;`}</code></pre>
                 </li>
                 <li>
                   <strong>Trial Admin Dashboard:</strong>{' '}
-                  <a href="http://localhost:3000/trial-admin" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="http://localhost:3000/trial-admin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     http://localhost:3000/trial-admin
                   </a>
                 </li>
               </ul>
 
               <h4>Server Commands:</h4>
-              <pre><code>{`# Check server status
+              <pre>
+                <code>{`# Check server status
 curl http://localhost:3000/
 
 # Restart server if needed
@@ -427,7 +538,8 @@ npm run dev
 npm run build
 
 # Start production server
-npm start`}</code></pre>
+npm start`}</code>
+              </pre>
             </section>
 
             {/* Development Setup */}
@@ -435,18 +547,23 @@ npm start`}</code></pre>
               <h3>Development Setup</h3>
 
               <h4>1. Clone the Repository</h4>
-              <pre><code>{`git clone <repository-url>
-cd aegiscare`}</code></pre>
+              <pre>
+                <code>{`git clone <repository-url>
+cd aegiscare`}</code>
+              </pre>
 
               <h4>2. Install Dependencies</h4>
-              <pre><code>{`npm install`}</code></pre>
+              <pre>
+                <code>{`npm install`}</code>
+              </pre>
 
               <h4>3. Configure Environment</h4>
               <p>
                 Create a <code>.env.local</code> file in the root directory:
               </p>
 
-              <pre><code>{`# Zama FHE Network Configuration
+              <pre>
+                <code>{`# Zama FHE Network Configuration
 NEXT_PUBLIC_FHE_NETWORK_URL=http://localhost:5010
 NEXT_PUBLIC_FHE_GATEWAY_URL=http://localhost:8100
 
@@ -458,13 +575,17 @@ NEXT_PUBLIC_CHAIN_ID=31337
 NEXT_PUBLIC_AEGISCARE_ADDRESS=
 
 # App Configuration
-NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code></pre>
+NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code>
+              </pre>
 
               <h4>4. Start Development Server</h4>
-              <pre><code>{`npm run dev`}</code></pre>
+              <pre>
+                <code>{`npm run dev`}</code>
+              </pre>
 
               <p>
-                The application will be available at <a href="http://localhost:3000">http://localhost:3000</a>.
+                The application will be available at{' '}
+                <a href="http://localhost:3000">http://localhost:3000</a>.
               </p>
             </section>
 
@@ -474,7 +595,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code></pre>
 
               <ul>
                 <li>
-                  <a href="#fhe-client-api">FHE Client API</a> - Learn about FHE encryption/decryption
+                  <a href="#fhe-client-api">FHE Client API</a> - Learn about FHE
+                  encryption/decryption
                 </li>
                 <li>
                   <a href="#web3-client-api">Web3 Client API</a> - Understand wallet integration
@@ -496,8 +618,11 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code></pre>
                   Need Help?
                 </p>
                 <div className="docs-callout-content">
-                  Join the <a href="https://discord.gg/CEzpKz3CkH" target="_blank" rel="noopener noreferrer">Zama Discord</a> community
-                  for support and discussions about FHE development.
+                  Join the{' '}
+                  <a href="https://discord.gg/CEzpKz3CkH" target="_blank" rel="noopener noreferrer">
+                    Zama Discord
+                  </a>{' '}
+                  community for support and discussions about FHE development.
                 </div>
               </div>
             </section>
@@ -512,15 +637,18 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code></pre>
               <h4>initFHE()</h4>
               <p>Initialize the FHE instance for encryption/decryption operations.</p>
 
-              <pre><code>{`import { initFHE } from '@/lib/fheClient';
+              <pre>
+                <code>{`import { initFHE } from '@/lib/fheClient';
 
 await initFHE();
-// Returns: true if successful`}</code></pre>
+// Returns: true if successful`}</code>
+              </pre>
 
               <h4>encryptPatientData()</h4>
               <p>Encrypt patient medical data client-side before submission.</p>
 
-              <pre><code>{`import { encryptPatientData } from '@/lib/fheClient';
+              <pre>
+                <code>{`import { encryptPatientData } from '@/lib/fheClient';
 
 const encryptedData = await encryptPatientData({
   age: 35,
@@ -536,12 +664,14 @@ const encryptedData = await encryptPatientData({
 //   bmiScore: euint256,
 //   hasMedicalCondition: euint256,
 //   conditionCode: euint256
-// }`}</code></pre>
+// }`}</code>
+              </pre>
 
               <h4>encryptTrialCriteria()</h4>
               <p>Encrypt trial eligibility criteria client-side.</p>
 
-              <pre><code>{`import { encryptTrialCriteria } from '@/lib/fheClient';
+              <pre>
+                <code>{`import { encryptTrialCriteria } from '@/lib/fheClient';
 
 const encryptedCriteria = await encryptTrialCriteria({
   trialName: "Diabetes Treatment Study 2025",
@@ -553,19 +683,25 @@ const encryptedCriteria = await encryptTrialCriteria({
   maxBMIScore: 40,
   hasSpecificCondition: true,
   conditionCode: "E11"
-});`}</code></pre>
+});`}</code>
+              </pre>
 
               <h4>decryptEligibilityResult()</h4>
-              <p>Decrypt eligibility result using EIP-712 signature (only patient can decrypt their own result).</p>
+              <p>
+                Decrypt eligibility result using EIP-712 signature (only patient can decrypt their
+                own result).
+              </p>
 
-              <pre><code>{`import { decryptEligibilityResult } from '@/lib/fheClient';
+              <pre>
+                <code>{`import { decryptEligibilityResult } from '@/lib/fheClient';
 
 const isEligible = await decryptEligibilityResult(
   encryptedHandle,
   contractAddress,
   signer
 );
-// Returns: boolean`}</code></pre>
+// Returns: boolean`}</code>
+              </pre>
             </section>
 
             <section id="web3-client-api">
@@ -576,17 +712,20 @@ const isEligible = await decryptEligibilityResult(
               <h4>connectWallet()</h4>
               <p>Connect to user's Ethereum wallet (MetaMask).</p>
 
-              <pre><code>{`import { connectWallet } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { connectWallet } from '@/lib/web3Client';
 
 const { provider, signer, address } = await connectWallet();
-console.log('Connected:', address);`}</code></pre>
+console.log('Connected:', address);`}</code>
+              </pre>
 
               <h3>Contract Interactions - Trials</h3>
 
               <h4>registerTrial()</h4>
               <p>Register a new clinical trial with encrypted eligibility criteria.</p>
 
-              <pre><code>{`import { registerTrial } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { registerTrial } from '@/lib/web3Client';
 
 const receipt = await registerTrial(
   signer,
@@ -594,46 +733,54 @@ const receipt = await registerTrial(
   description,
   encryptedCriteria
 );
-console.log('Trial registered:', receipt.transactionHash);`}</code></pre>
+console.log('Trial registered:', receipt.transactionHash);`}</code>
+              </pre>
 
               <h4>getTrialPublicInfo()</h4>
               <p>Get public information about a trial.</p>
 
-              <pre><code>{`import { getTrialPublicInfo } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { getTrialPublicInfo } from '@/lib/web3Client';
 
 const trial = await getTrialPublicInfo(provider, trialId);
-console.log('Trial:', trial.trialName);`}</code></pre>
+console.log('Trial:', trial.trialName);`}</code>
+              </pre>
 
               <h3>Contract Interactions - Patients</h3>
 
               <h4>registerPatient()</h4>
               <p>Register a new patient with encrypted medical data.</p>
 
-              <pre><code>{`import { registerPatient } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { registerPatient } from '@/lib/web3Client';
 
 const receipt = await registerPatient(
   signer,
   encryptedMedicalData,
   publicKeyHash
-);`}</code></pre>
+);`}</code>
+              </pre>
 
               <h3>Contract Interactions - Eligibility</h3>
 
               <h4>computeEligibility()</h4>
               <p>Compute eligibility for a patient-trial pair (FHE computation on-chain).</p>
 
-              <pre><code>{`import { computeEligibility } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { computeEligibility } from '@/lib/web3Client';
 
 const receipt = await computeEligibility(
   signer,
   trialId,
   patientAddress
-);`}</code></pre>
+);`}</code>
+              </pre>
 
               <h4>getEligibilityResult()</h4>
               <p>Get encrypted eligibility result (only patient can decrypt).</p>
 
-              <pre><code>{`import { getEligibilityResult } from '@/lib/web3Client';
+              <pre>
+                <code>{`import { getEligibilityResult } from '@/lib/web3Client';
 
 const encryptedResult = await getEligibilityResult(
   signer,
@@ -646,15 +793,16 @@ const isEligible = await decryptEligibilityResult(
   encryptedResult,
   contractAddress,
   signer
-);`}</code></pre>
+);`}</code>
+              </pre>
             </section>
 
             <section id="contract-api">
               <h2 id="contract-api">Smart Contract API Reference</h2>
 
               <p>
-                The AegisCare smart contract is deployed at <code>NEXT_PUBLIC_AEGISCARE_ADDRESS</code>.
-                Below are the main functions:
+                The AegisCare smart contract is deployed at{' '}
+                <code>NEXT_PUBLIC_AEGISCARE_ADDRESS</code>. Below are the main functions:
               </p>
 
               <h3>Owner Functions</h3>
@@ -673,14 +821,16 @@ const isEligible = await decryptEligibilityResult(
               <h4>registerPatient(...)</h4>
               <p>Register a new patient with encrypted medical data.</p>
 
-              <pre><code>{`function registerPatient(
+              <pre>
+                <code>{`function registerPatient(
     euint256 calldata _age,
     euint256 calldata _gender,
     euint256 calldata _bmiScore,
     euint256 calldata _hasMedicalCondition,
     euint256 calldata _conditionCode,
     bytes32 _publicKeyHash
-) external`}</code></pre>
+) external`}</code>
+              </pre>
 
               <h4>patientExists(address)</h4>
               <p>Check if a patient exists.</p>
@@ -690,7 +840,8 @@ const isEligible = await decryptEligibilityResult(
               <h4>registerTrial(...)</h4>
               <p>Register a new clinical trial with encrypted eligibility criteria.</p>
 
-              <pre><code>{`function registerTrial(
+              <pre>
+                <code>{`function registerTrial(
     string calldata _trialName,
     string calldata _description,
     euint256 calldata _minAge,
@@ -700,7 +851,8 @@ const isEligible = await decryptEligibilityResult(
     euint256 calldata _maxBMIScore,
     euint256 calldata _hasSpecificCondition,
     euint256 calldata _conditionCode
-) external`}</code></pre>
+) external`}</code>
+              </pre>
 
               <h4>getTrialPublicInfo(uint256 trialId)</h4>
               <p>Get public information about a trial.</p>
@@ -726,7 +878,8 @@ const isEligible = await decryptEligibilityResult(
 
               <h3>Events</h3>
 
-              <pre><code>{`event PatientRegistered(
+              <pre>
+                <code>{`event PatientRegistered(
     uint256 indexed patientId,
     address indexed patientAddress,
     bytes32 publicKeyHash,
@@ -745,7 +898,8 @@ event EligibilityComputed(
     uint256 indexed patientId,
     bool eligible,
     uint256 timestamp
-);`}</code></pre>
+);`}</code>
+              </pre>
             </section>
 
             {/* Page Navigation */}

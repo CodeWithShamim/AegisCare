@@ -3,10 +3,10 @@
  * @module lib/web3Client
  *
  * Handles Ethereum wallet connection and smart contract interaction
- * Uses ethers.js v5 for blockchain operations
+ * Uses ethers.js v6 for blockchain operations
  */
 
-import { ethers, Contract, Signer } from 'ethers';
+import { ethers, Contract, BrowserProvider, JsonRpcSigner } from 'ethers';
 import AegisCareABI from '@/contracts/AegisCare.json';
 
 // ============================================
@@ -19,6 +19,8 @@ export interface Trial {
   description: string;
   sponsor: string;
   isActive: boolean;
+  createdAt: number;
+  participantCount: number;
 }
 
 export interface Patient {
@@ -36,7 +38,7 @@ export const WEB3_CONFIG = {
   AEGISCARE_ADDRESS: process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS || '',
 
   // Network configuration
-  CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '1337'), // Default to local development
+  CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '31337'), // Default to local development
 
   // Required methods for wallet connection
   REQUIRED_METHODS: ['eth_requestAccounts', 'personal_sign'],
@@ -52,8 +54,8 @@ export const WEB3_CONFIG = {
  * @returns Provider and signer
  */
 export async function connectWallet(): Promise<{
-  provider: ethers.providers.Web3Provider;
-  signer: Signer;
+  provider: BrowserProvider;
+  signer: JsonRpcSigner;
   address: string;
 }> {
   // Check if MetaMask or other wallet is available
@@ -67,9 +69,9 @@ export async function connectWallet(): Promise<{
     // Request account access
     await ethereum.request({ method: 'eth_requestAccounts' });
 
-    // Create Web3 provider
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
+    // Create Web3 provider (ethers v6)
+    const provider = new BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
     const address = await signer.getAddress();
 
     console.log('[Web3] Wallet connected:', address);
@@ -85,16 +87,17 @@ export async function connectWallet(): Promise<{
  * Get the current provider and signer (assuming already connected)
  */
 export async function getProviderAndSigner(): Promise<{
-  provider: ethers.providers.Web3Provider;
-  signer: Signer;
+  provider: BrowserProvider;
+  signer: JsonRpcSigner;
   address: string;
 }> {
   if (typeof window === 'undefined' || !(window as any).ethereum) {
     throw new Error('No Ethereum wallet detected.');
   }
 
-  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-  const signer = provider.getSigner();
+  const ethereum = (window as any).ethereum;
+  const provider = new BrowserProvider(ethereum);
+  const signer = await provider.getSigner();
   const address = await signer.getAddress();
 
   return { provider, signer, address };
@@ -105,7 +108,7 @@ export async function getProviderAndSigner(): Promise<{
  */
 export function getAegisCareContract(
   address: string,
-  signer: Signer
+  signer: JsonRpcSigner
 ): Contract {
   if (!WEB3_CONFIG.AEGISCARE_ADDRESS) {
     throw new Error('AegisCare contract address not configured. Check environment variables.');
@@ -122,7 +125,7 @@ export function getAegisCareContract(
  * Get contract instance with provider (for read-only operations)
  */
 export function getAegisCareContractReadOnly(
-  provider: ethers.providers.Provider
+  provider: BrowserProvider
 ): Contract {
   if (!WEB3_CONFIG.AEGISCARE_ADDRESS) {
     throw new Error('AegisCare contract address not configured. Check environment variables.');
@@ -149,7 +152,7 @@ export function getAegisCareContractReadOnly(
  * @returns Transaction receipt
  */
 export async function registerTrial(
-  signer: Signer,
+  signer: JsonRpcSigner,
   trialName: string,
   description: string,
   encryptedCriteria: {
@@ -161,7 +164,7 @@ export async function registerTrial(
     hasSpecificCondition: any;
     conditionCode: any;
   }
-): Promise<ethers.providers.TransactionReceipt> {
+): Promise<any> {
   try {
     const contract = getAegisCareContract('', signer);
 
@@ -183,7 +186,7 @@ export async function registerTrial(
 
     const receipt = await tx.wait();
 
-    console.log('[Contract] Trial registered successfully. Trial ID:', receipt.events?.[0].args?.trialId);
+    console.log('[Contract] Trial registered successfully. Trial ID:', receipt?.logs?.[0]);
 
     return receipt;
   } catch (error: any) {
@@ -196,20 +199,22 @@ export async function registerTrial(
  * Get public information about a trial
  */
 export async function getTrialPublicInfo(
-  provider: ethers.providers.Provider,
+  provider: BrowserProvider,
   trialId: number
 ): Promise<Trial> {
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const [trialName, description, sponsor, isActive] = await contract.getTrialPublicInfo(trialId);
+    const info = await contract.getTrialPublicInfo(trialId);
 
     return {
       trialId,
-      trialName,
-      description,
-      sponsor,
-      isActive,
+      trialName: info.trialName,
+      description: info.description,
+      sponsor: info.sponsor,
+      isActive: info.isActive,
+      createdAt: Number(info.createdAt),
+      participantCount: Number(info.participantCount)
     };
   } catch (error: any) {
     console.error('[Contract] Failed to get trial info:', error);
@@ -221,7 +226,7 @@ export async function getTrialPublicInfo(
  * Get all trials for a sponsor
  */
 export async function getSponsorTrials(
-  provider: ethers.providers.Provider,
+  provider: BrowserProvider,
   sponsorAddress: string
 ): Promise<number[]> {
   try {
@@ -229,7 +234,7 @@ export async function getSponsorTrials(
 
     const trialIds = await contract.getSponsorTrials(sponsorAddress);
 
-    return trialIds;
+    return trialIds.map((id: any) => Number(id));
   } catch (error: any) {
     console.error('[Contract] Failed to get sponsor trials:', error);
     throw new Error(`Failed to fetch trials: ${error.message}`);
@@ -240,14 +245,14 @@ export async function getSponsorTrials(
  * Get total number of trials
  */
 export async function getTrialCount(
-  provider: ethers.providers.Provider
+  provider: BrowserProvider
 ): Promise<number> {
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const count = await contract.trialCount();
+    const count = await contract.getTrialCount();
 
-    return count.toNumber();
+    return Number(count);
   } catch (error: any) {
     console.error('[Contract] Failed to get trial count:', error);
     return 0;
@@ -267,7 +272,7 @@ export async function getTrialCount(
  * @returns Transaction receipt
  */
 export async function registerPatient(
-  signer: Signer,
+  signer: JsonRpcSigner,
   encryptedMedicalData: {
     age: any;
     gender: any;
@@ -276,7 +281,7 @@ export async function registerPatient(
     conditionCode: any;
   },
   publicKeyHash: string
-): Promise<ethers.providers.TransactionReceipt> {
+): Promise<any> {
   try {
     const contract = getAegisCareContract('', signer);
 
@@ -308,7 +313,7 @@ export async function registerPatient(
  * Check if a patient exists
  */
 export async function patientExists(
-  provider: ethers.providers.Provider,
+  provider: BrowserProvider,
   patientAddress: string
 ): Promise<boolean> {
   try {
@@ -327,14 +332,14 @@ export async function patientExists(
  * Get total number of patients
  */
 export async function getPatientCount(
-  provider: ethers.providers.Provider
+  provider: BrowserProvider
 ): Promise<number> {
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const count = await contract.patientCount();
+    const count = await contract.getPatientCount();
 
-    return count.toNumber();
+    return Number(count);
   } catch (error: any) {
     console.error('[Contract] Failed to get patient count:', error);
     return 0;
@@ -357,10 +362,10 @@ export async function getPatientCount(
  * @returns Transaction receipt with result ID
  */
 export async function computeEligibility(
-  signer: Signer,
+  signer: JsonRpcSigner,
   trialId: number,
   patientAddress: string
-): Promise<ethers.providers.TransactionReceipt> {
+): Promise<any> {
   try {
     const contract = getAegisCareContract('', signer);
 
@@ -392,7 +397,7 @@ export async function computeEligibility(
  * @returns Encrypted result handle
  */
 export async function getEligibilityResult(
-  signer: Signer,
+  signer: JsonRpcSigner,
   trialId: number,
   patientAddress: string
 ): Promise<any> {
@@ -428,7 +433,7 @@ export function formatAddress(address: string): string {
  * Validate Ethereum address
  */
 export function isValidAddress(address: string): boolean {
-  return ethers.utils.isAddress(address);
+  return ethers.isAddress(address);
 }
 
 /**
