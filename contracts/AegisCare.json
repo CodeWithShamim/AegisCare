@@ -1,0 +1,173 @@
+[
+  {
+    "inputs": [],
+    "name": "UnauthorizedAccess",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TrialNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PatientNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidEncryptedInput",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAuthorized",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "name": "trialId", "type": "uint256"},
+      {"indexed": false, "name": "trialName", "type": "string"},
+      {"indexed": true, "name": "sponsor", "type": "address"},
+      {"indexed": false, "name": "encryptedCriteriaHash", "type": "bytes32"}
+    ],
+    "name": "TrialRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "name": "patientId", "type": "uint256"},
+      {"indexed": true, "name": "patientAddress", "type": "address"},
+      {"indexed": false, "name": "publicKeyHash", "type": "bytes32"}
+    ],
+    "name": "PatientRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {"indexed": true, "name": "resultId", "type": "uint256"},
+      {"indexed": true, "name": "trialId", "type": "uint256"},
+      {"indexed": true, "name": "patientId", "type": "uint256"},
+      {"indexed": false, "name": "encryptedResultHash", "type": "bytes32"}
+    ],
+    "name": "EligibilityComputed",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {"name": "_trialName", "type": "string"},
+      {"name": "_description", "type": "string"},
+      {"name": "_minAge", "type": "einput"},
+      {"name": "_maxAge", "type": "einput"},
+      {"name": "_requiredGender", "type": "einput"},
+      {"name": "_minBMIScore", "type": "einput"},
+      {"name": "_maxBMIScore", "type": "einput"},
+      {"name": "_hasSpecificCondition", "type": "einput"},
+      {"name": "_conditionCode", "type": "einput"}
+    ],
+    "name": "registerTrial",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"name": "_age", "type": "einput"},
+      {"name": "_gender", "type": "einput"},
+      {"name": "_bmiScore", "type": "einput"},
+      {"name": "_hasMedicalCondition", "type": "einput"},
+      {"name": "_conditionCode", "type": "einput"},
+      {"name": "_publicKeyHash", "type": "bytes32"}
+    ],
+    "name": "registerPatient",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"name": "_trialId", "type": "uint256"},
+      {"name": "_patientAddress", "type": "address"}
+    ],
+    "name": "computeEligibility",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"name": "_trialId", "type": "uint256"},
+      {"name": "_patientAddress", "type": "address"}
+    ],
+    "name": "getEligibilityResult",
+    "outputs": [{"name": "", "type": "euint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {"name": "_trialId", "type": "uint256"},
+      {"name": "_minAge", "type": "einput"},
+      {"name": "_maxAge", "type": "einput"},
+      {"name": "_requiredGender", "type": "einput"},
+      {"name": "_minBMIScore", "type": "einput"},
+      {"name": "_maxBMIScore", "type": "einput"},
+      {"name": "_hasSpecificCondition", "type": "einput"},
+      {"name": "_conditionCode", "type": "einput"}
+    ],
+    "name": "updateTrialCriteria",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"name": "_trialId", "type": "uint256"}],
+    "name": "deactivateTrial",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{"name": "_trialId", "type": "uint256"}],
+    "name": "getTrialPublicInfo",
+    "outputs": [
+      {"name": "trialName", "type": "string"},
+      {"name": "description", "type": "string"},
+      {"name": "sponsor", "type": "address"},
+      {"name": "isActive", "type": "bool"}
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"name": "_sponsor", "type": "address"}],
+    "name": "getSponsorTrials",
+    "outputs": [{"name": "", "type": "uint256[]"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{"name": "_patientAddress", "type": "address"}],
+    "name": "patientExists",
+    "outputs": [{"name": "", "type": "bool"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "trialCount",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "patientCount",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
