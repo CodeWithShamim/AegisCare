@@ -83,7 +83,8 @@ export function getFHEInstance(): any {
 
 export function getPublicKeyHash(): string {
   // Mock implementation - returns a hash
-  return ethers.utils.formatBytes32String('mock_public_key_hash');
+  // In ethers v6, we use solidityPackedKeccak256 for keccak256
+  return ethers.keccak256(ethers.toUtf8Bytes('mock_public_key_hash'));
 }
 
 // ============================================

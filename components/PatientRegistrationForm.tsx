@@ -14,7 +14,8 @@
 
 import { useState } from 'react';
 import { encryptPatientData, getPublicKeyHash, validatePatientData, type PatientData } from '@/lib/fheClient';
-import { registerPatient, connectWallet, type Signer } from '@/lib/web3Client';
+import { registerPatient, connectWallet } from '@/lib/web3Client';
+import type { Signer } from 'ethers';
 
 interface PatientRegistrationFormProps {
   onRegistrationSuccess?: (patientId: number) => void;

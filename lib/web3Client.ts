@@ -9,6 +9,10 @@
 import { ethers, Contract, BrowserProvider, JsonRpcSigner } from 'ethers';
 import AegisCareABI from '@/contracts/AegisCare.json';
 
+// Re-export common types for convenience
+export type { BrowserProvider, JsonRpcSigner };
+export type Signer = JsonRpcSigner;
+
 // ============================================
 // TYPES
 // ============================================

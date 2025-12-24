@@ -1,60 +1,89 @@
 # 🛡️ AegisCare
 
-**Privacy-Preserving Clinical Trial Matching powered by Zama FHEVM**
+<div align="center">
 
-AegisCare is a decentralized platform that matches patients with clinical trials using **Fully Homomorphic Encryption (FHE)**, ensuring that medical data remains **completely private** throughout the entire matching process.
+**Privacy-Preserving Clinical Trial Matching Platform**
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.2.3-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity)](https://soliditylang.org/)
+[![Zama FHE](https://img.shields.io/badge/Zama-FHEVM-6A0DAD?style=for-the-badge)](https://docs.zama.ai/)
+
+**Revolutionizing healthcare with Fully Homomorphic Encryption**
+
+[Features](#-key-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Architecture](#-architecture) • [Contributing](#-contributing)
+
+</div>
+
+---
+
+## 📖 Overview
+
+**AegisCare** is a groundbreaking clinical trial matching platform that leverages **Zama's Fully Homomorphic Encryption (FHE)** to enable privacy-preserving patient-trial matching. Unlike traditional systems where patient medical data must be revealed to determine eligibility, AegisCare performs matching computations on **encrypted data**, ensuring **zero plaintext leakage**.
+
+### 🎯 The Problem
+
+Traditional clinical trial matching requires patients to:
+- Share sensitive medical data in plaintext
+- Trust multiple third parties with their information
+- Risk data breaches and privacy violations
+- Face discrimination based on medical history
+
+### 💡 Our Solution
+
+AegisCare uses **FHE to compute eligibility on encrypted data**:
+- ✅ Medical data **never leaves the patient's browser in plaintext**
+- ✅ Eligibility computed **entirely in the encrypted domain**
+- ✅ **Only the patient** can decrypt their own results
+- ✅ Trial sponsors **never see patient medical data**
+- ✅ Compliant with **HIPAA, GDPR, and healthcare regulations**
+
+---
 
 ## ✨ Key Features
 
-- 🔒 **Zero-Plaintext Leakage**: Medical data is never revealed in plaintext
-- 🔐 **FHE-Powered Computation**: Eligibility matching on encrypted data
-- 👤 **Private Decryption**: Only patients can decrypt their results using EIP-712 signatures
-- ⚡ **Blockchain-Based**: Transparent, auditable, and censorship-resistant
-- 🏥 **HIPAA/GDPR Compliant**: Privacy-by-design architecture
+### 🔐 Privacy-Preserving Architecture
 
-## 🏗️ Architecture
+- **Client-side encryption** - All medical data encrypted before submission
+- **FHE operations** - Computations performed on encrypted data
+- **Zero plaintext leakage** - No medical data ever revealed in plaintext
+- **EIP-712 signatures** - Private decryption with typed data signing
+- **ACL-based access control** - Granular decryption permissions
 
-```
-Patient Browser                    Blockchain                    Zama FHE Network
-──────────────                    ──────────                    ─────────────────
-Medical Data
-     ↓
-FHE Encryption (Client-side)
-     ↓
-Encrypted Input (einput)
-     ↓
-Smart Contract (AegisCare)
-     ↓
-Store as euint256 (Encrypted)
-     ↓
-FHE Comparison Operations
-(age >= minAge) AND (age <= maxAge)
-(All encrypted!)
-     ↓
-Encrypted Result (ebool)
-     ↓
-Patient Requests Decryption
-     ↓
-EIP-712 Signature (Proof of Ownership)
-     ↓
-Zama Gateway Validates
-     ↓
-Return Decrypted Result (to patient only)
-```
+### ⚡ Smart Contract Features
+
+- **FHE eligibility computation** - Encrypted comparisons on-chain
+- **Owner management** - Pause/unpause functionality
+- **Enhanced metadata** - Timestamps, participant counts, history tracking
+- **Gas optimization** - Custom errors for efficient execution
+- **Comprehensive events** - Full audit trail
+
+### 🎨 Frontend Features
+
+- **Beautiful responsive UI** - TailwindCSS v4 styling
+- **Patient dashboard** - Registration and eligibility checking
+- **Trial admin dashboard** - Trial creation and management
+- **Real-time wallet connection** - MetaMask integration
+- **Comprehensive error handling** - User-friendly messages
+- **GitBook-style documentation** - Professional docs site
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+
-- MetaMask or Web3 wallet
-- Zama FHEVM access (devnet or mainnet)
+- **Node.js** 20+ and **npm**
+- **MetaMask** or compatible Web3 wallet
+- Basic understanding of **Ethereum** and **smart contracts**
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone <repository-url>
 cd aegiscare
 
 # Install dependencies
@@ -62,280 +91,392 @@ npm install
 
 # Configure environment
 cp .env.example .env.local
-# Edit .env.local with your configuration
 
-# Run development server
+# Start development server
 npm run dev
 ```
 
-Visit `http://localhost:3000`
+### Access the Application
 
-## 📁 Project Structure
+- **Application:** http://localhost:3000
+- **Patient Dashboard:** http://localhost:3000/patient
+- **Trial Admin:** http://localhost:3000/trial-admin
+- **Documentation:** http://localhost:3000/docs
+
+---
+
+## 🏗️ Architecture
+
+### System Overview
 
 ```
-aegiscare/
-├── app/                      # Next.js App Router pages
-│   ├── page.tsx             # Landing page
-│   ├── patient/             # Patient dashboard
-│   └── trial-admin/         # Trial sponsor dashboard
-├── components/               # React components
-│   ├── PatientRegistrationForm.tsx
-│   ├── TrialRegistrationForm.tsx
-│   └── EligibilityChecker.tsx
-├── contracts/                # Solidity smart contracts
-│   └── AegisCare.sol       # Main FHE smart contract
-├── lib/                      # Utility libraries
-│   ├── fheClient.ts        # FHE encryption/decryption
-│   └── web3Client.ts       # Web3 contract interactions
-├── SECURITY.md              # Detailed security documentation
-├── DEPLOYMENT.md            # Deployment guide
-└── README.md                # This file
+┌─────────────────────────────────────────────────────────────┐
+│                         Patient Browser                      │
+├─────────────────────────────────────────────────────────────┤
+│  Medical Data → FHE Encryption → Encrypted Data Upload      │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────┐
+│                       Zama fhEVM                             │
+├─────────────────────────────────────────────────────────────┤
+│  Smart Contract: AegisCare.sol                              │
+│  • Encrypted Patient Data (euint256 values)                │
+│  • Encrypted Trial Criteria (euint256 values)               │
+│  • FHE Eligibility Computation                               │
+│  • Encrypted Results Storage                                │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────┐
+│                     EIP-712 Decryption                       │
+├─────────────────────────────────────────────────────────────┤
+│  Patient Signs → Private Decryption → Eligibility Result     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## 🔧 Smart Contract Overview
+### Technology Stack
 
-The `AegisCare` smart contract implements:
+#### Frontend
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16.1.1 | React framework with App Router |
+| **React** | 19.2.3 | UI library |
+| **TypeScript** | 5.x | Type safety |
+| **TailwindCSS** | 4.x | Styling |
+| **ethers.js** | 6.9.0 | Web3 integration |
 
-1. **Encrypted Patient Registration**: Store encrypted medical data (age, gender, BMI, conditions)
-2. **Encrypted Trial Creation**: Define encrypted eligibility criteria
-3. **FHE Eligibility Computation**: Match patients to trials on encrypted data
-4. **Access Control**: Only patients can decrypt their own results
+#### Blockchain
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Solidity** | 0.8.20 | Smart contract language |
+| **Zama fhEVM** | Latest | FHE-enabled EVM |
+| **Hardhat** | 2.19.0 | Development framework |
+| **@zama-fhe/relayer-sdk** | 0.3.0-8 | FHE SDK |
 
-### Key FHE Operations
+#### Development Tools
+- **TypeChain** - TypeScript bindings
+- **Docker Compose** - Local fhEVM node
+- **ESLint** - Code linting
 
-```solidity
-// Encrypted comparison
-ebool ageInRange = FHE.and(
-    FHE.ge(patient.age, trial.minAge),    // Greater-or-equal
-    FHE.le(patient.age, trial.maxAge)     // Less-or-equal
-);
+---
 
-// Encrypted logic
-ebool isEligible = FHE.and(
-    ageInRange,
-    FHE.and(genderMatch, bmiInRange)
-);
-```
+## 📚 Documentation
 
-## 🔐 Security Features
+Comprehensive documentation is available at **[http://localhost:3000/docs](http://localhost:3000/docs)**
 
-### For Patients
+### Core Documentation
 
-✅ **Medical Data Confidentiality**
-- Encrypted in browser before transmission
-- Never appears in plaintext on-chain
-- Never logged or stored in plaintext
+- **[Getting Started](QUICKSTART.md)** - Quick start guide
+- **[Architecture Overview](#-architecture)** - System architecture
+- **[API Reference](docs/)** - Complete API docs
+- **[Security Guide](SECURITY.md)** - Threat model and best practices
+- **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
 
-✅ **Eligibility Privacy**
-- Results encrypted and only decryptable by patient
-- Trial sponsors never see individual patient results
+### Key Resources
 
-✅ **Control**
-- Patient owns decryption private key
-- EIP-712 signature required for decryption
+- **[Zama FHEVM Documentation](https://docs.zama.ai/)** - Learn about FHE
+- **[FHE Relayer SDK](https://docs.zama.org/protocol/relayer-sdk-guides)** - SDK guide
+- **[fhEVM GitHub](https://github.com/zama-ai/fhevm)** - Source code
 
-### For Trial Sponsors
+---
 
-✅ **Regulatory Compliance**
-- No plaintext medical data in possession
-- HIPAA/GDPR compliant by design
-
-✅ **Trial Integrity**
-- Eligibility criteria enforced in smart contract
-- Transparent and auditable
-
-See [SECURITY.md](SECURITY.md) for detailed security analysis.
-
-## 📚 How It Works
+## 🔧 How It Works
 
 ### 1. Patient Registration
 
 ```typescript
-// 1. Patient enters medical data
-const patientData = {
+// Patient encrypts medical data client-side
+const encryptedData = await encryptPatientData({
   age: 35,
-  gender: 2,  // female
-  bmiScore: 245,  // 24.5 * 10
+  gender: 1, // 1=male, 2=female, 3=other
+  bmiScore: 24.5,
   hasMedicalCondition: true,
-  conditionCode: 'E11'  // Type 2 diabetes
-};
+  conditionCode: "E11" // ICD-10 code
+});
 
-// 2. Encrypt client-side
-const encrypted = await encryptPatientData(patientData);
-
-// 3. Submit to smart contract
-await registerPatient(signer, encrypted, publicKeyHash);
+// Register on blockchain (still encrypted)
+await registerPatient(signer, encryptedData, publicKeyHash);
 ```
 
 ### 2. Trial Creation
 
 ```typescript
-// 1. Sponsor defines eligibility criteria
-const criteria = {
-  trialName: 'Diabetes Treatment Study',
+// Sponsor encrypts eligibility criteria
+const encryptedCriteria = await encryptTrialCriteria({
+  trialName: "Diabetes Study 2025",
   minAge: 18,
-  maxAge: 75,
-  requiredGender: 0,  // all
-  minBMIScore: 185,   // 18.5
-  maxBMIScore: 400,   // 40.0
-  hasSpecificCondition: true,
-  conditionCode: 'E11'
-};
+  maxAge: 65,
+  requiredGender: 0, // 0=all
+  minBMIScore: 18.5,
+  maxBMIScore: 40
+});
 
-// 2. Encrypt client-side
-const encrypted = await encryptTrialCriteria(criteria);
-
-// 3. Submit to smart contract
-await registerTrial(signer, criteria.trialName, criteria.description, encrypted);
+// Create trial on blockchain
+await registerTrial(signer, trialName, description, encryptedCriteria);
 ```
 
-### 3. Eligibility Check
+### 3. Eligibility Computation
+
+```solidity
+// Smart Contract: AegisCare.sol
+
+// All values are encrypted (euint256)
+function computeEligibility(uint256 _trialId, address _patientAddress) external {
+    // Get encrypted patient data
+    Patient storage patient = patients[_patientAddress];
+
+    // Get encrypted trial criteria
+    Trial storage trial = trials[_trialId];
+
+    // FHE: Compare encrypted values
+    ebool ageInRange = FHE.and(
+        FHE.ge(patient.age, trial.minAge),
+        FHE.le(patient.age, trial.maxAge)
+    );
+
+    ebool genderMatch = FHE.eq(patient.gender, trial.requiredGender);
+    ebool bmiInRange = FHE.and(
+        FHE.ge(patient.bmiScore, trial.minBMIScore),
+        FHE.le(patient.bmiScore, trial.maxBMIScore)
+    );
+
+    // Final encrypted result
+    ebool isEligible = FHE.and(
+        ageInRange,
+        FHE.and(genderMatch, bmiInRange)
+    );
+
+    // Store encrypted result
+    eligibilityResults[_trialId][patient.patientId] = EligibilityResult({
+        isEligible: FHE.asEuint256(isEligible),
+        decryptable: FHE.asEbool(true),
+        computed: true,
+        computedAt: block.timestamp
+    });
+}
+```
+
+### 4. Private Result Decryption
 
 ```typescript
-// 1. Compute eligibility on encrypted data
-await computeEligibility(signer, trialId, patientAddress);
-
-// 2. Get encrypted result
+// Only patient can decrypt their own result
 const encryptedResult = await getEligibilityResult(signer, trialId, patientAddress);
 
-// 3. Decrypt with EIP-712 signature
-const isEligible = await decryptEligibilityResult(encryptedResult, contractAddress, signer);
+// Decrypt with EIP-712 signature
+const isEligible = await decryptEligibilityResult(
+  encryptedResult,
+  contractAddress,
+  signer
+);
 
-console.log('Eligible:', isEligible);  // true or false
+console.log("Eligible:", isEligible); // true or false
 ```
-
-## 🚢 Deployment
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
-
-### Quick Deploy (Vercel)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Environment Variables
-
-```bash
-NEXT_PUBLIC_FHE_NETWORK_URL=https://devnet.zama.ai/
-NEXT_PUBLIC_FHE_GATEWAY_URL=https://gateway.devnet.zama.ai/
-NEXT_PUBLIC_BLOCKCHAIN_URL=https://devnet.zama.ai/
-NEXT_PUBLIC_CHAIN_ID=1337
-NEXT_PUBLIC_AEGISCARE_ADDRESS=0xYourContractAddress
-```
-
-## 🧪 Testing
-
-### Smart Contract Testing
-
-```bash
-# Start local FHEVM node
-npm run node
-
-# Run tests
-npx hardhat test
-
-# Deploy locally
-npx hardhat run scripts/deploy.js --network localhost
-```
-
-### Frontend Testing
-
-```bash
-# Run development server
-npm run dev
-
-# Visit http://localhost:3000
-# Test:
-# 1. Patient registration
-# 2. Trial creation
-# 3. Eligibility checking
-# 4. Result decryption
-```
-
-## 📊 Technology Stack
-
-- **Frontend**: Next.js 16, React 19, TypeScript, TailwindCSS
-- **Blockchain**: Ethereum (via Zama FHEVM)
-- **FHE**: Zama Fully Homomorphic Encryption
-- **Web3**: ethers.js v5, viem
-- **Cryptography**: EIP-712 signatures, TFHE
-
-## 🔍 Zero-Knowledge Properties
-
-✅ **Trial sponsors learn NOTHING about patients:**
-- No patient medical data in plaintext
-- No patient identity linked to eligibility
-- No way to identify specific patients
-
-✅ **Public learns NOTHING about sensitive data:**
-- Only trial names/descriptions are public
-- All criteria encrypted
-- All patient data encrypted
-- All results encrypted
-
-## 🛡️ Threat Model
-
-AegisCare protects against:
-
-- ❌ Malicious blockchain observers extracting medical data
-- ❌ Curious trial sponsors accessing patient data
-- ❌ Compromised relayer/gateway decrypting results
-- ❌ Hacker intercepting plaintext data
-- ❌ Blockchain validators seeing sensitive information
-
-See [SECURITY.md](SECURITY.md) for complete threat model.
-
-## 📖 Documentation
-
-- **[SECURITY.md](SECURITY.md)**: Detailed security analysis and threat model
-- **[DEPLOYMENT.md](DEPLOYMENT.md)**: Step-by-step deployment guide
-- **[Zama FHEVM Docs](https://docs.zama.ai/)**: FHE documentation
-- **[fhevmjs](https://www.npmjs.com/package/fhevmjs)**: JavaScript SDK
-
-## 🤝 Contributing
-
-Contributions welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## 📜 License
-
-MIT License - see LICENSE file for details
-
-## 🙏 Acknowledgments
-
-- **Zama** for FHEVM and FHE tooling
-- **Ethereum Foundation** for blockchain infrastructure
-- **FHE Research Community** for groundbreaking work
-
-## ⚠️ Disclaimer
-
-This is a demonstration project. For production use in clinical settings:
-
-- Obtain security audit
-- Ensure regulatory compliance
-- Implement proper key management
-- Set up monitoring and incident response
-- Obtain necessary approvals from ethics committees
-
-## 📧 Contact
-
-For questions or support:
-- GitHub Issues: [Create an issue](../../issues)
-- Documentation: [See docs](./SECURITY.md)
 
 ---
 
-**Built with ❤️ for privacy-preserving healthcare**
+## 🎬 Demo Video
 
-Powered by **Zama FHEVM** - Making encrypted computation a reality
-# AegisCare
+Watch AegisCare in action:
+
+[![AegisCare Demo](https://img.youtube.com/vi/sSwq-D9JzhE/0.jpg)](https://www.youtube.com/watch?v=sSwq-D9JzhE)
+
+**[▶ Watch on YouTube](https://www.youtube.com/watch?v=sSwq-D9JzhE)**
+
+---
+
+## 🗂️ Project Structure
+
+```
+aegiscare/
+├── contracts/                    # Smart contracts
+│   ├── AegisCare.sol            # Main FHE contract (676 lines)
+│   └── AegisCare.json           # Contract ABI
+│
+├── scripts/                      # Deployment scripts
+│   ├── deploy.ts                # Automated deployment
+│   └── showAccounts.ts          # Account viewer
+│
+├── test/                        # Test suite
+│   └── AegisCare.test.ts        # Comprehensive tests
+│
+├── lib/                         # Core libraries
+│   ├── fheClient.ts             # FHE utilities (400+ lines)
+│   └── web3Client.ts            # Web3 utilities (500+ lines)
+│
+├── components/                  # React components
+│   ├── Header.tsx               # Navigation header
+│   ├── PatientRegistrationForm.tsx
+│   ├── TrialRegistrationForm.tsx
+│   └── EligibilityChecker.tsx
+│
+├── app/                         # Next.js pages
+│   ├── page.tsx                 # Landing page
+│   ├── patient/                 # Patient dashboard
+│   ├── trial-admin/             # Trial admin dashboard
+│   └── docs/                    # Documentation
+│
+├── styles/                      # Stylesheets
+│   └── docs.css                 # GitBook-style docs CSS
+│
+├── .env.local                   # Environment configuration
+├── package.json                 # Dependencies
+├── hardhat.config.ts           # Hardhat configuration
+└── docker-compose.yml          # fhEVM setup
+```
+
+---
+
+## 🔐 Security
+
+### Security Features
+
+- **Encryption at source** - Data encrypted before leaving browser
+- **FHE computation** - Operations on encrypted data only
+- **Private decryption** - EIP-712 signatures required
+- **Access control** - ACL manages decryption permissions
+- **No plaintext storage** - Only encrypted data on-chain
+
+### Threat Model
+
+See **[SECURITY.md](SECURITY.md)** for comprehensive threat model and security analysis.
+
+---
+
+## 🚢 Deployment
+
+### Local Development
+
+```bash
+# Start fhEVM node (optional)
+docker-compose up -d fhevm
+
+# Deploy contract locally
+npm run deploy:local
+
+# Update .env.local with contract address
+NEXT_PUBLIC_AEGISCARE_ADDRESS=0x...
+
+# Start development server
+npm run dev
+```
+
+### FHEVM Devnet
+
+```bash
+# Set up FHEVM devnet
+docker-compose up -d fhevm
+
+# Deploy to devnet
+npm run deploy
+
+# Verify deployment
+npm run test
+```
+
+### Production Deployment
+
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for comprehensive production deployment guide.
+
+---
+
+## 🧪 Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run with gas reporting
+REPORT_GAS=true npm test
+```
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our contributing guidelines for details.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **[Zama](https://www.zama.ai/)** - For pioneering FHE technology
+- **[FHEVM Team](https://github.com/zama-ai/fhevm)** - For the fhEVM implementation
+- **[FHE Relayer SDK](https://docs.zama.org/protocol/relayer-sdk-guides)** - For excellent documentation
+- **[FHE Raffle](https://github.com/dordunu1/Raffle)** - For production-ready FHE patterns
+
+---
+
+## 📞 Support & Community
+
+### Get Help
+
+- **Documentation:** [http://localhost:3000/docs](http://localhost:3000/docs)
+- **Issues:** [GitHub Issues](https://github.com/your-repo/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/your-repo/discussions)
+
+### Community
+
+- **[Zama Discord](https://discord.gg/CEzpKz3CkH)** - Join the FHE community
+- **[Zama Forum](https://forum.zama.ai/)** - Ask questions and share knowledge
+
+---
+
+## 🗺️ Roadmap
+
+### Current Release (v0.1.0)
+
+- ✅ Patient registration with encrypted medical data
+- ✅ Trial creation with encrypted criteria
+- ✅ FHE eligibility computation
+- ✅ Private result decryption
+- ✅ Beautiful responsive UI
+- ✅ Comprehensive documentation
+
+### Upcoming Features
+
+- [ ] Multi-condition matching
+- [ ] Geographic location matching
+- [ ] Trial sponsor analytics
+- [ ] Patient notification system
+- [ ] Mobile app (React Native)
+
+---
+
+## 📄 Additional Documentation
+
+- **[SECURITY.md](SECURITY.md)** - Security architecture and threat model
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment guide
+- **[QUICKSTART.md](QUICKSTART.md)** - Getting started guide
+- **[TESTING_STATUS.md](TESTING_STATUS.md)** - Test results and verification
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Zama FHEVM**
+
+**Privacy-Preserving Clinical Trial Matching**
+
+[⬆ Back to Top](#-aegiscare)
+
+</div>
