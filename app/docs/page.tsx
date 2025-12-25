@@ -10,15 +10,23 @@ export default function DocsPage() {
 
   const tableOfContents = [
     { id: 'introduction', title: 'Introduction', level: 2 },
-    { id: 'what-is-aegiscare', title: 'What is AegisCare?', level: 2 },
-    { id: 'key-features', title: 'Key Features', level: 2 },
+    { id: 'test-data', title: 'Test Data Guide', level: 2 },
+    { id: 'patient-data', title: 'Sample Patients', level: 3 },
+    { id: 'trial-data', title: 'Sample Trials', level: 3 },
+    { id: 'medical-codes', title: 'Medical Codes', level: 3 },
     { id: 'how-it-works', title: 'How It Works', level: 2 },
-    { id: 'architecture', title: 'Architecture Overview', level: 2 },
+    { id: 'patient-workflow', title: 'Patient Workflow', level: 3 },
+    { id: 'trial-workflow', title: 'Trial Sponsor Workflow', level: 3 },
+    { id: 'eligibility-workflow', title: 'Eligibility Workflow', level: 3 },
+    { id: 'architecture', title: 'Architecture', level: 2 },
     { id: 'tech-stack', title: 'Technology Stack', level: 2 },
-    { id: 'getting-started', title: 'Getting Started', level: 2 },
-    { id: 'quick-start', title: 'Quick Start', level: 3 },
-    { id: 'development-setup', title: 'Development Setup', level: 3 },
-    { id: 'next-steps', title: 'Next Steps', level: 2 },
+    { id: 'api-reference', title: 'API Reference', level: 2 },
+    { id: 'fhe-api', title: 'FHE Client API', level: 3 },
+    { id: 'web3-api', title: 'Web3 Client API', level: 3 },
+    { id: 'contract-api', title: 'Smart Contract API', level: 3 },
+    { id: 'troubleshooting', title: 'Troubleshooting', level: 2 },
+    { id: 'security', title: 'Security & Privacy', level: 2 },
+    { id: 'deployment', title: 'Deployment', level: 2 },
   ];
 
   useEffect(() => {
@@ -43,10 +51,8 @@ export default function DocsPage() {
 
   return (
     <div className="docs-container">
-      {/* Header */}
       <Header />
 
-      {/* Sidebar */}
       <aside className="docs-sidebar mt-[-3%]">
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Documentation</h3>
@@ -56,12 +62,15 @@ export default function DocsPage() {
         </div>
 
         <div className="docs-sidebar-section">
-          <h3 className="docs-sidebar-section-title">Getting Started</h3>
-          <Link href="/docs#getting-started" className="docs-sidebar-link">
-            Quick Start
+          <h3 className="docs-sidebar-section-title">Quick Links</h3>
+          <Link href="/docs#test-data" className="docs-sidebar-link">
+            📊 Test Data
           </Link>
-          <Link href="/docs#development-setup" className="docs-sidebar-link">
-            Development Setup
+          <Link href="/docs#how-it-works" className="docs-sidebar-link">
+            🚀 How It Works
+          </Link>
+          <Link href="/docs#troubleshooting" className="docs-sidebar-link">
+            🐛 Troubleshooting
           </Link>
         </div>
 
@@ -73,14 +82,20 @@ export default function DocsPage() {
           <Link href="/docs#tech-stack" className="docs-sidebar-link">
             Technology Stack
           </Link>
+          <Link href="/docs#security" className="docs-sidebar-link">
+            Security & Privacy
+          </Link>
         </div>
 
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">API Reference</h3>
-          <a href="#fhe-client-api" className="docs-sidebar-link">
+          <Link href="/docs#api-reference" className="docs-sidebar-link">
+            API Overview
+          </Link>
+          <a href="#fhe-api" className="docs-sidebar-link">
             FHE Client API
           </a>
-          <a href="#web3-client-api" className="docs-sidebar-link">
+          <a href="#web3-api" className="docs-sidebar-link">
             Web3 Client API
           </a>
           <a href="#contract-api" className="docs-sidebar-link">
@@ -99,840 +114,763 @@ export default function DocsPage() {
             Zama FHEVM Docs
           </a>
           <a
-            href="https://github.com/zama-ai/fhevm"
+            href="https://sepolia.etherscan.io/address/0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3"
             target="_blank"
             rel="noopener noreferrer"
             className="docs-sidebar-link"
           >
-            FHEVM GitHub
+            Contract on Etherscan
           </a>
+          <Link href="/QUICKSTART.md" className="docs-sidebar-link">
+            Quick Start Guide
+          </Link>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="docs-main">
-        <div className="docs-content-wrapper">
-          <div className="docs-content">
-            {/* Breadcrumbs */}
-            <nav className="docs-breadcrumbs">
-              <Link href="/" className="docs-breadcrumb-item">
-                Home
-              </Link>
-              <span className="docs-breadcrumb-separator">/</span>
-              <span className="docs-breadcrumb-current">Documentation</span>
-            </nav>
+      <main className="docs-content">
+        <div className="prose prose-lg max-w-none">
+          {/* Introduction */}
+          <section id="introduction" className="docs-section mb-16">
+            <h2 className="docs-section-title">Introduction to AegisCare</h2>
 
-            {/* Main Content */}
-            <h1>AegisCare Documentation</h1>
+            <div className="docs-card">
+              <h3 className="text-xl font-bold mb-4">🛡️ What is AegisCare?</h3>
+              <p className="mb-4">
+                <strong>AegisCare</strong> is a revolutionary clinical trial matching platform that uses
+                <strong> Fully Homomorphic Encryption (FHE)</strong> to enable privacy-preserving
+                patient-trial matching. Unlike traditional systems, AegisCare performs eligibility
+                computations on <strong>encrypted data</strong>, ensuring <strong>zero plaintext leakage</strong>.
+              </p>
 
-            <p
-              className="lead"
-              style={{ fontSize: '20px', color: '#64748b', marginBottom: '32px' }}
-            >
-              Welcome to the AegisCare documentation. Learn how to build privacy-preserving clinical
-              trial matching applications using Fully Homomorphic Encryption (FHE).
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                <p className="font-semibold">🔒 Privacy Guarantee:</p>
+                <ul className="list-disc ml-6 mt-2">
+                  <li>Medical data <strong>never leaves the browser in plaintext</strong></li>
+                  <li>Eligibility computed <strong>entirely in the encrypted domain</strong></li>
+                  <li><strong>Only the patient</strong> can decrypt their own results</li>
+                  <li>Trial sponsors <strong>never see patient medical data</strong></li>
+                </ul>
+              </div>
+
+              <h4 className="text-lg font-bold mb-2">✨ Key Features</h4>
+              <ul className="list-disc ml-6 space-y-2">
+                <li><strong>Client-Side Encryption:</strong> All medical data encrypted before submission</li>
+                <li><strong>FHE Operations:</strong> Computations on encrypted data only</li>
+                <li><strong>Private Decryption:</strong> EIP-712 signatures for secure access</li>
+                <li><strong>Zero Knowledge:</strong> Trial sponsors learn nothing about patient data</li>
+                <li><strong>Testnet Deployed:</strong> Live on Sepolia at <code className="bg-gray-100 px-2 py-1 rounded">0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</code></li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Test Data Guide */}
+          <section id="test-data" className="docs-section mb-16">
+            <h2 className="docs-section-title">📊 Test Data Guide</h2>
+            <p className="mb-6 text-lg">
+              Use these pre-configured test patients and trials to explore the platform without entering real medical data.
             </p>
 
-            {/* Introduction */}
-            <section id="introduction">
-              <div className="docs-callout docs-callout-info">
-                <p className="docs-callout-title">
-                  <span>ℹ️</span>
-                  New to FHE?
-                </p>
-                <div className="docs-callout-content">
-                  If you're new to Fully Homomorphic Encryption, we recommend starting with our
-                  <a href="#what-is-fhe"> What is FHE?</a> guide to understand the core concepts.
+            <div className="docs-card">
+              <h3 className="text-xl font-bold mb-4">Quick Test Scenarios</h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <h4 className="font-bold text-green-800 mb-2">✅ Perfect Match</h4>
+                  <p className="text-sm mb-2"><strong>Patient:</strong> John (Age 45, Diabetes E11, BMI 28.5)</p>
+                  <p className="text-sm mb-2"><strong>Trial:</strong> Diabetes Study (Age 18-65, E11, BMI 18.5-35)</p>
+                  <p className="text-sm font-semibold text-green-700">Result: ELIGIBLE ✅</p>
+                </div>
+
+                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                  <h4 className="font-bold text-red-800 mb-2">❌ Age Mismatch</h4>
+                  <p className="text-sm mb-2"><strong>Patient:</strong> Jane (Age 75, Diabetes E11, BMI 22.0)</p>
+                  <p className="text-sm mb-2"><strong>Trial:</strong> Diabetes Study (Age 18-65, E11, BMI 18.5-35)</p>
+                  <p className="text-sm font-semibold text-red-700">Result: NOT ELIGIBLE (too old)</p>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                  <h4 className="font-bold text-yellow-800 mb-2">⚠️ Condition Mismatch</h4>
+                  <p className="text-sm mb-2"><strong>Patient:</strong> Bob (Age 50, No Condition, BMI 25.0)</p>
+                  <p className="text-sm mb-2"><strong>Trial:</strong> Diabetes Study (Requires E11, Age 18-65)</p>
+                  <p className="text-sm font-semibold text-yellow-700">Result: NOT ELIGIBLE (no diabetes)</p>
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <h4 className="font-bold text-green-800 mb-2">✅ Healthy Trial Match</h4>
+                  <p className="text-sm mb-2"><strong>Patient:</strong> Jane (Age 30, No Condition, BMI 22.0)</p>
+                  <p className="text-sm mb-2"><strong>Trial:</strong> Wellness Study (Age 18-65, No Condition, BMI 18.5-30)</p>
+                  <p className="text-sm font-semibold text-green-700">Result: ELIGIBLE ✅</p>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            {/* What is AegisCare */}
-            <section id="what-is-aegiscare">
-              <h2>What is AegisCare?</h2>
-              <p>
-                AegisCare is a revolutionary clinical trial matching platform that leverages
-                <strong> Zama FHEVM</strong> to enable privacy-preserving patient-trial matching.
-                Unlike traditional systems where patient medical data must be revealed to determine
-                eligibility, AegisCare performs matching computations on{' '}
-                <strong>encrypted data</strong>, ensuring zero plaintext leakage.
-              </p>
+          {/* Sample Patients */}
+          <section id="patient-data" className="docs-section mb-16">
+            <h3 className="text-2xl font-bold mb-6">Sample Patient Data</h3>
 
-              <p>
-                Built with <strong>Next.js 16</strong>, <strong>React 19</strong>,{' '}
-                <strong>TypeScript</strong>, and <strong>TailwindCSS</strong>, AegisCare provides a
-                modern, responsive user interface for both patients and clinical trial sponsors.
-              </p>
-
-              <div className="docs-callout docs-callout-success">
-                <p className="docs-callout-title">
-                  <span>✅</span>
-                  Production-Ready
-                </p>
-                <div className="docs-callout-content">
-                  AegisCare is production-ready for localhost development and ready for FHEVM
-                  deployment when infrastructure is available. All smart contracts are audited and
-                  tested.
+            <div className="space-y-6">
+              {/* Patient 1 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3 flex items-center">
+                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mr-3">Patient 1</span>
+                  John Doe - Diabetes Patient
+                </h4>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "name": "John Doe",
+  "age": 45,
+  "gender": 1,
+  "bmiScore": 28.5,
+  "hasMedicalCondition": true,
+  "conditionCode": "E11",
+  "description": "Type 2 Diabetes, age 45, BMI 28.5 (overweight)"
+}`}</code></pre>
+                </div>
+                <div className="mt-4">
+                  <p className="font-semibold mb-2">Matches:</p>
+                  <ul className="list-disc ml-6">
+                    <li>✅ Diabetes Treatment Study 2025</li>
+                  </ul>
                 </div>
               </div>
-            </section>
 
-            {/* Key Features */}
-            <section id="key-features">
-              <h2>Key Features</h2>
+              {/* Patient 2 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3 flex items-center">
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm mr-3">Patient 2</span>
+                  Jane Smith - Healthy Adult
+                </h4>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "name": "Jane Smith",
+  "age": 32,
+  "gender": 2,
+  "bmiScore": 22.1,
+  "hasMedicalCondition": false,
+  "conditionCode": "Z00",
+  "description": "Healthy adult, age 32, normal BMI"
+}`}</code></pre>
+                </div>
+                <div className="mt-4">
+                  <p className="font-semibold mb-2">Matches:</p>
+                  <ul className="list-disc ml-6">
+                    <li>✅ General Wellness Study</li>
+                  </ul>
+                </div>
+              </div>
 
-              <h3>🔐 Privacy-Preserving Architecture</h3>
-              <ul>
-                <li>
-                  <strong>Client-side encryption</strong> - All medical data encrypted before
-                  submission
-                </li>
-                <li>
-                  <strong>FHE operations</strong> - Computations performed on encrypted data
-                </li>
-                <li>
-                  <strong>Zero plaintext leakage</strong> - No medical data ever revealed in
-                  plaintext
-                </li>
-                <li>
-                  <strong>EIP-712 signatures</strong> - Private decryption with typed data signing
-                </li>
-                <li>
-                  <strong>ACL-based access control</strong> - Granular decryption permissions
-                </li>
-              </ul>
+              {/* Patient 3 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3 flex items-center">
+                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm mr-3">Patient 3</span>
+                  Bob Johnson - Hypertension Patient
+                </h4>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "name": "Bob Johnson",
+  "age": 58,
+  "gender": 1,
+  "bmiScore": 31.2,
+  "hasMedicalCondition": true,
+  "conditionCode": "I10",
+  "description": "Hypertension, age 58, BMI 31.2 (obese)"
+}`}</code></pre>
+                </div>
+                <div className="mt-4">
+                  <p className="font-semibold mb-2">Matches:</p>
+                  <ul className="list-disc ml-6">
+                    <li>✅ Cardiovascular Health Research</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
 
-              <h3>⚡ Smart Contract Features</h3>
-              <ul>
-                <li>
-                  <strong>FHE eligibility computation</strong> - Encrypted comparisons on-chain
-                </li>
-                <li>
-                  <strong>Owner management</strong> - Pause/unpause functionality
-                </li>
-                <li>
-                  <strong>Enhanced metadata</strong> - Timestamps, participant counts, history
-                  tracking
-                </li>
-                <li>
-                  <strong>Gas optimization</strong> - Custom errors for efficient execution
-                </li>
-                <li>
-                  <strong>Comprehensive events</strong> - Full audit trail
-                </li>
-              </ul>
+          {/* Sample Trials */}
+          <section id="trial-data" className="docs-section mb-16">
+            <h3 className="text-2xl font-bold mb-6">Sample Trial Data</h3>
 
-              <h3>🎨 Frontend Features</h3>
-              <ul>
-                <li>
-                  <strong>Beautiful responsive UI</strong> - TailwindCSS v4 styling
-                </li>
-                <li>
-                  <strong>Patient dashboard</strong> - Registration and eligibility checking
-                </li>
-                <li>
-                  <strong>Trial admin dashboard</strong> - Trial creation and management
-                </li>
-                <li>
-                  <strong>Real-time wallet connection</strong> - MetaMask integration
-                </li>
-                <li>
-                  <strong>Comprehensive error handling</strong> - User-friendly messages
-                </li>
-              </ul>
-            </section>
+            <div className="space-y-6">
+              {/* Trial 1 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3">Trial 1: Diabetes Treatment Study 2025</h4>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "trialName": "Diabetes Treatment Study 2025",
+  "description": "Testing new treatment for Type 2 diabetes in adults",
+  "criteria": {
+    "minAge": 18,
+    "maxAge": 65,
+    "requiredGender": 0,
+    "minBMIScore": 18.5,
+    "maxBMIScore": 35,
+    "hasSpecificCondition": true,
+    "conditionCode": "E11"
+  }
+}`}</code></pre>
+                </div>
+                <div className="bg-blue-50 p-3 rounded">
+                  <p className="font-semibold">📊 Eligible Patients:</p>
+                  <ul className="list-disc ml-6 mt-2">
+                    <li>John Doe (Age 45, BMI 28.5, E11)</li>
+                  </ul>
+                </div>
+              </div>
 
-            {/* How It Works */}
-            <section id="how-it-works">
-              <h2>How It Works</h2>
+              {/* Trial 2 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3">Trial 2: Cardiovascular Health Research</h4>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "trialName": "Cardiovascular Health Research",
+  "description": "Study on heart health in adults 40-70",
+  "criteria": {
+    "minAge": 40,
+    "maxAge": 70,
+    "requiredGender": 0,
+    "minBMIScore": 20,
+    "maxBMIScore": 40,
+    "hasSpecificCondition": true,
+    "conditionCode": "I10"
+  }
+}`}</code></pre>
+                </div>
+                <div className="bg-blue-50 p-3 rounded">
+                  <p className="font-semibold">📊 Eligible Patients:</p>
+                  <ul className="list-disc ml-6 mt-2">
+                    <li>Bob Johnson (Age 58, BMI 31.2, I10)</li>
+                  </ul>
+                </div>
+              </div>
 
-              <p>
-                AegisCare uses a revolutionary approach to clinical trial matching that preserves
-                patient privacy through FHE:
-              </p>
+              {/* Trial 3 */}
+              <div className="docs-card">
+                <h4 className="text-lg font-bold mb-3">Trial 3: General Wellness Study</h4>
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <pre className="overflow-x-auto text-sm"><code>{`{
+  "trialName": "General Wellness Study",
+  "description": "Open study for healthy adults",
+  "criteria": {
+    "minAge": 18,
+    "maxAge": 65,
+    "requiredGender": 0,
+    "minBMIScore": 18.5,
+    "maxBMIScore": 30,
+    "hasSpecificCondition": false,
+    "conditionCode": "Z00"
+  }
+}`}</code></pre>
+                </div>
+                <div className="bg-blue-50 p-3 rounded">
+                  <p className="font-semibold">📊 Eligible Patients:</p>
+                  <ul className="list-disc ml-6 mt-2">
+                    <li>Jane Smith (Age 32, BMI 22.1, Z00)</li>
+                    <li>John Doe (if no diabetes - but he has E11, so no match)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
 
-              <ol>
-                <li>
-                  <strong>Patient Registration</strong>
-                  <p>
-                    Patients encrypt their medical data (age, gender, BMI, conditions) client-side
-                    using Zama FHE before registering on the platform. The encrypted data is stored
-                    on the blockchain without anyone (including the patient) being able to decrypt
-                    it.
-                  </p>
-                </li>
+          {/* Medical Codes Reference */}
+          <section id="medical-codes" className="docs-section mb-16">
+            <h3 className="text-2xl font-bold mb-6">Medical Codes Reference</h3>
 
-                <li>
-                  <strong>Trial Creation</strong>
-                  <p>
-                    Clinical trial sponsors create trials with encrypted eligibility criteria. The
-                    criteria (age range, gender requirements, BMI limits, medical conditions) are
-                    encrypted before submission to the blockchain.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Eligibility Computation</strong>
-                  <p>
-                    When checking eligibility, the smart contract performs FHE operations to compare
-                    the patient's encrypted medical data with the trial's encrypted criteria. All
-                    comparisons happen <strong>entirely in the encrypted domain</strong>.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Private Result Decryption</strong>
-                  <p>
-                    The eligibility result is encrypted and stored on-chain. Only the patient can
-                    decrypt their own result using an EIP-712 signature. Trial sponsors never see
-                    the patient's medical data or the result.
-                  </p>
-                </li>
-              </ol>
-
-              <pre>
-                <code>{`// Example: FHE Eligibility Computation
-// All values are encrypted (euint256)
-
-// Patient's encrypted data
-euint256 patientAge = patient.age;
-euint256 patientGender = patient.gender;
-euint256 patientBMI = patient.bmiScore;
-euint256 hasCondition = patient.hasMedicalCondition;
-
-// Trial's encrypted criteria
-euint256 minAge = trial.minAge;
-euint256 maxAge = trial.maxAge;
-euint256 requiredGender = trial.requiredGender;
-euint256 minBMI = trial.minBMIScore;
-euint256 maxBMI = trial.maxBMIScore;
-
-// Encrypted comparisons
-ebool ageInRange = FHE.and(
-    FHE.ge(patientAge, minAge),
-    FHE.le(patientAge, maxAge)
-);
-
-ebool genderMatch = FHE.eq(patientGender, requiredGender);
-ebool bmiInRange = FHE.and(
-    FHE.ge(patientBMI, minBMI),
-    FHE.le(patientBMI, maxBMI)
-);
-
-ebool conditionMatch = FHE.eq(hasCondition, trial.hasSpecificCondition);
-
-// Final encrypted result
-ebool isEligible = FHE.and(
-    ageInRange,
-    FHE.and(genderMatch, FHE.and(bmiInRange, conditionMatch))
-);
-
-// Store encrypted result - only patient can decrypt
-eligibilityResults[trialId][patientId] = isEligible;`}</code>
-              </pre>
-            </section>
-
-            {/* Architecture */}
-            <section id="architecture">
-              <h2>Architecture Overview</h2>
-
-              <p>
-                AegisCare follows a modern full-stack architecture with clear separation of
-                concerns:
-              </p>
-
-              <table>
-                <thead>
+            <div className="docs-card overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th>Layer</th>
-                    <th>Technology</th>
-                    <th>Responsibility</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                   <tr>
-                    <td>
-                      <strong>Frontend</strong>
-                    </td>
-                    <td>Next.js 16, React 19, TypeScript, TailwindCSS</td>
-                    <td>User interface, client-side encryption, wallet connection</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">E11</td>
+                    <td className="px-6 py-4 text-sm">Type 2 diabetes mellitus</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-red-100 text-red-800 rounded">Endocrine</span></td>
                   </tr>
                   <tr>
-                    <td>
-                      <strong>FHE Client</strong>
-                    </td>
-                    <td>@zama-fhe/relayer-sdk (mock)</td>
-                    <td>FHE instance management, encryption/decryption operations</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">E10</td>
+                    <td className="px-6 py-4 text-sm">Type 1 diabetes mellitus</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-red-100 text-red-800 rounded">Endocrine</span></td>
                   </tr>
                   <tr>
-                    <td>
-                      <strong>Web3 Client</strong>
-                    </td>
-                    <td>ethers.js v6</td>
-                    <td>Wallet connection, smart contract interaction</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">I10</td>
+                    <td className="px-6 py-4 text-sm">Essential (primary) hypertension</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">Circulatory</span></td>
                   </tr>
                   <tr>
-                    <td>
-                      <strong>Smart Contract</strong>
-                    </td>
-                    <td>Solidity 0.8.20, FHEVM</td>
-                    <td>Encrypted eligibility computation, access control</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">I50</td>
+                    <td className="px-6 py-4 text-sm">Heart failure</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-purple-100 text-purple-800 rounded">Circulatory</span></td>
                   </tr>
                   <tr>
-                    <td>
-                      <strong>Blockchain</strong>
-                    </td>
-                    <td>Zama fhEVM</td>
-                    <td>FHE-enabled execution environment</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">J45</td>
+                    <td className="px-6 py-4 text-sm">Asthma</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">Respiratory</span></td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">M54</td>
+                    <td className="px-6 py-4 text-sm">Dorsalgia (back pain)</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">Musculoskeletal</span></td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">Z00</td>
+                    <td className="px-6 py-4 text-sm">General medical examination (healthy)</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-green-100 text-green-800 rounded">Health</span></td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">Z01</td>
+                    <td className="px-6 py-4 text-sm">Special examinations and investigations</td>
+                    <td className="px-6 py-4 text-sm"><span className="px-2 py-1 bg-green-100 text-green-800 rounded">Health</span></td>
                   </tr>
                 </tbody>
               </table>
+            </div>
 
-              <h3>Security Architecture</h3>
-              <ul>
-                <li>
-                  <strong>Encryption at source</strong> - Data encrypted before leaving user's
-                  browser
-                </li>
-                <li>
-                  <strong>Encrypted storage</strong> - Only encrypted data stored on blockchain
-                </li>
-                <li>
-                  <strong>Encrypted computation</strong> - FHE operations on encrypted data
-                </li>
-                <li>
-                  <strong>Private decryption</strong> - EIP-712 signatures for authorized decryption
-                </li>
-                <li>
-                  <strong>Access control</strong> - ACL manages who can decrypt what data
-                </li>
-              </ul>
-            </section>
+            <div className="docs-card mt-6">
+              <h4 className="font-bold mb-3">Gender Codes</h4>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">0</td>
+                    <td className="px-6 py-4 text-sm">All genders (no preference)</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">1</td>
+                    <td className="px-6 py-4 text-sm">Male</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">2</td>
+                    <td className="px-6 py-4 text-sm">Female</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 whitespace-nowrap font-mono text-sm">3</td>
+                    <td className="px-6 py-4 text-sm">Other / Prefer not to say</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-            {/* Tech Stack */}
-            <section id="tech-stack">
-              <h2>Technology Stack</h2>
+          {/* How It Works */}
+          <section id="how-it-works" className="docs-section mb-16">
+            <h2 className="docs-section-title">🚀 How It Works</h2>
 
-              <h3>Frontend</h3>
-              <ul>
-                <li>
-                  <span className="docs-badge docs-badge-primary">Next.js 16.1.1</span> - React
-                  framework with App Router
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-primary">React 19.2.3</span> - UI library
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-primary">TypeScript 5</span> - Type safety
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-primary">TailwindCSS 4</span> - Styling
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-primary">ethers.js 6.9.0</span> - Web3
-                  integration
-                </li>
-              </ul>
-
-              <h3>Blockchain</h3>
-              <ul>
-                <li>
-                  <span className="docs-badge docs-badge-success">Solidity 0.8.20</span> - Smart
-                  contract language
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-success">Zama fhEVM</span> - FHE-enabled
-                  EVM
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-success">Hardhat 2.19.0</span> -
-                  Development framework
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-success">
-                    @zama-fhe/relayer-sdk 0.3.0-8
-                  </span>{' '}
-                  - FHE SDK
-                </li>
-              </ul>
-
-              <h3>Development Tools</h3>
-              <ul>
-                <li>
-                  <span className="docs-badge docs-badge-warning">TypeChain</span> - TypeScript
-                  bindings
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-warning">Docker Compose</span> - Local
-                  fhEVM node
-                </li>
-                <li>
-                  <span className="docs-badge docs-badge-warning">ESLint 9</span> - Code linting
-                </li>
-              </ul>
-            </section>
-
-            {/* Getting Started */}
-            <section id="getting-started">
-              <h2>Getting Started</h2>
-
-              <p>Follow these steps to get started with AegisCare development:</p>
-
-              <div className="docs-callout docs-callout-warning">
-                <p className="docs-callout-title">
-                  <span>⚠️</span>
-                  Prerequisites
-                </p>
-                <div className="docs-callout-content">
-                  Make sure you have <strong>Node.js 20+</strong> and <strong>npm</strong> installed
-                  on your machine before proceeding.
+            <div className="space-y-6">
+              <div className="docs-card">
+                <h3 className="text-xl font-bold mb-4">Patient Workflow</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-4">1</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Register Medical Data</p>
+                      <p className="text-sm text-gray-600">Enter your medical information on the patient dashboard</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-4">2</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Client-Side Encryption 🔒</p>
+                      <p className="text-sm text-gray-600">Your data is encrypted in the browser using FHE before being sent</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-4">3</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Blockchain Registration</p>
+                      <p className="text-sm text-gray-600">Encrypted data stored on Sepolia testnet via smart contract</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-4">4</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Check Eligibility</p>
+                      <p className="text-sm text-gray-600">Select a trial and trigger encrypted eligibility computation</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-4">5</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Private Decryption 🔑</p>
+                      <p className="text-sm text-gray-600">Only YOU can decrypt your result with your private key</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </section>
 
-            {/* Quick Start */}
-            <section id="quick-start">
-              <h3>Quick Start</h3>
-
-              <p>The development server is currently running at:</p>
-
-              <p style={{ fontSize: '18px', fontWeight: 600, color: '#3b82f6' }}>
-                🌐 http://localhost:3000
-              </p>
-
-              <h4>Available Pages:</h4>
-              <ul>
-                <li>
-                  <strong>Landing Page:</strong>{' '}
-                  <a href="http://localhost:3000/" target="_blank" rel="noopener noreferrer">
-                    http://localhost:3000/
-                  </a>
-                </li>
-                <li>
-                  <strong>Patient Dashboard:</strong>{' '}
-                  <a href="http://localhost:3000/patient" target="_blank" rel="noopener noreferrer">
-                    http://localhost:3000/patient
-                  </a>
-                </li>
-                <li>
-                  <strong>Trial Admin Dashboard:</strong>{' '}
-                  <a
-                    href="http://localhost:3000/trial-admin"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    http://localhost:3000/trial-admin
-                  </a>
-                </li>
-              </ul>
-
-              <h4>Server Commands:</h4>
-              <pre>
-                <code>{`# Check server status
-curl http://localhost:3000/
-
-# Restart server if needed
-pkill -f "next dev"
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start`}</code>
-              </pre>
-            </section>
-
-            {/* Development Setup */}
-            <section id="development-setup">
-              <h3>Development Setup</h3>
-
-              <h4>1. Clone the Repository</h4>
-              <pre>
-                <code>{`git clone <repository-url>
-cd aegiscare`}</code>
-              </pre>
-
-              <h4>2. Install Dependencies</h4>
-              <pre>
-                <code>{`npm install`}</code>
-              </pre>
-
-              <h4>3. Configure Environment</h4>
-              <p>
-                Create a <code>.env.local</code> file in the root directory:
-              </p>
-
-              <pre>
-                <code>{`# Zama FHE Network Configuration
-NEXT_PUBLIC_FHE_NETWORK_URL=http://localhost:5010
-NEXT_PUBLIC_FHE_GATEWAY_URL=http://localhost:8100
-
-# Blockchain Configuration
-NEXT_PUBLIC_BLOCKCHAIN_URL=http://localhost:5010
-NEXT_PUBLIC_CHAIN_ID=31337
-
-# Smart Contract Address
-NEXT_PUBLIC_AEGISCARE_ADDRESS=
-
-# App Configuration
-NEXT_PUBLIC_APP_URL=http://localhost:3000`}</code>
-              </pre>
-
-              <h4>4. Start Development Server</h4>
-              <pre>
-                <code>{`npm run dev`}</code>
-              </pre>
-
-              <p>
-                The application will be available at{' '}
-                <a href="http://localhost:3000">http://localhost:3000</a>.
-              </p>
-            </section>
-
-            {/* Next Steps */}
-            <section id="next-steps">
-              <h2>Next Steps</h2>
-
-              <ul>
-                <li>
-                  <a href="#fhe-client-api">FHE Client API</a> - Learn about FHE
-                  encryption/decryption
-                </li>
-                <li>
-                  <a href="#web3-client-api">Web3 Client API</a> - Understand wallet integration
-                </li>
-                <li>
-                  <a href="#contract-api">Smart Contract API</a> - Explore contract functions
-                </li>
-                <li>
-                  <a href="https://docs.zama.ai/" target="_blank" rel="noopener noreferrer">
-                    Zama FHEVM Documentation
-                  </a>{' '}
-                  - Deep dive into FHE concepts
-                </li>
-              </ul>
-
-              <div className="docs-callout docs-callout-info">
-                <p className="docs-callout-title">
-                  <span>💡</span>
-                  Need Help?
-                </p>
-                <div className="docs-callout-content">
-                  Join the{' '}
-                  <a href="https://discord.gg/CEzpKz3CkH" target="_blank" rel="noopener noreferrer">
-                    Zama Discord
-                  </a>{' '}
-                  community for support and discussions about FHE development.
+              <div className="docs-card">
+                <h3 className="text-xl font-bold mb-4">Trial Sponsor Workflow</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold mr-4">1</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Create Trial</p>
+                      <p className="text-sm text-gray-600">Define trial name, description, and eligibility criteria</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold mr-4">2</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Encrypt Criteria 🔒</p>
+                      <p className="text-sm text-gray-600">Trial criteria encrypted before being sent to blockchain</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold mr-4">3</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Smart Contract Storage</p>
+                      <p className="text-sm text-gray-600">Encrypted trial stored on Sepolia testnet</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold mr-4">4</div>
+                    <div className="flex-1">
+                      <p className="font-semibold">Wait for Patients</p>
+                      <p className="text-sm text-gray-600">Patients can now check their eligibility against your trial</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            {/* API References */}
-            <section id="fhe-client-api">
-              <hr />
-              <h2 id="fhe-client-api">FHE Client API Reference</h2>
+          {/* Architecture */}
+          <section id="architecture" className="docs-section mb-16">
+            <h2 className="docs-section-title">🏗️ Architecture Overview</h2>
 
-              <h3>Core Functions</h3>
+            <div className="docs-card">
+              <h3 className="text-xl font-bold mb-4">System Architecture</h3>
+              <div className="bg-gray-50 p-6 rounded-lg font-mono text-sm">
+                <pre><code>{`┌─────────────────────────────────────────┐
+│           Patient Browser                 │
+│  ┌──────────────────────────────────┐   │
+│  │ Medical Data (Plaintext)         │   │
+│  └────────────┬─────────────────────┘   │
+│               │                          │
+│               ▼                          │
+│  ┌──────────────────────────────────┐   │
+│  │ FHE Encryption (Client-Side)    │   │
+│  │ • Zama RelayerSDK v0.3.0-8      │   │
+│  │ • Encrypted handles + proofs     │   │
+│  └────────────┬─────────────────────┘   │
+└───────────────┼──────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│     Ethereum Sepolia Testnet            │
+│  ┌──────────────────────────────────┐   │
+│  │ AegisCare Smart Contract          │   │
+│  │ 0x86eC51d...7AdC35c3             │   │
+│  │                                  │   │
+│  │ • Encrypted Patient Data         │   │
+│  │ • Encrypted Trial Criteria       │   │
+│  │ • FHE Eligibility Computation    │   │
+│  │ • Encrypted Results Storage      │   │
+│  └────────────┬─────────────────────┘   │
+└───────────────┼──────────────────────────┘
+                │
+                ▼
+┌─────────────────────────────────────────┐
+│      EIP-712 Private Decryption         │
+│  ┌──────────────────────────────────┐   │
+│  │ Patient Signs EIP-712 Message   │   │
+│  │ → Private Key Decrypts Result   │   │
+│  └────────────┬─────────────────────┘   │
+└───────────────┼──────────────────────────┘
+                │
+                ▼
+         ┌──────────┐
+         │ ELIGIBLE │
+         │ YES / NO │
+         └─────────┘`}</code></pre>
+              </div>
 
-              <h4>initFHE()</h4>
-              <p>Initialize the FHE instance for encryption/decryption operations.</p>
+              <div className="mt-6">
+                <h4 className="font-bold mb-2">Key Components:</h4>
+                <ul className="space-y-2">
+                  <li><strong>Frontend:</strong> Next.js 16, React 19, TypeScript, TailwindCSS 4</li>
+                  <li><strong>FHE SDK:</strong> Zama RelayerSDK v0.3.0-8 for client-side encryption</li>
+                  <li><strong>Web3:</strong> ethers.js v6, Wagmi for wallet connection</li>
+                  <li><strong>Blockchain:</strong> Solidity 0.8.27, fhEVM, Sepolia testnet</li>
+                  <li><strong>Smart Contract:</strong> AegisCare.sol with FHE operations</li>
+                </ul>
+              </div>
+            </div>
+          </section>
 
-              <pre>
-                <code>{`import { initFHE } from '@/lib/fheClient';
+          {/* API Reference */}
+          <section id="api-reference" className="docs-section mb-16">
+            <h2 className="docs-section-title">📚 API Reference</h2>
 
-await initFHE();
-// Returns: true if successful`}</code>
-              </pre>
+            <div id="fhe-api" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">FHE Client API</h3>
+              <p className="mb-4">Client-side encryption utilities in <code className="bg-gray-100 px-2 py-1 rounded">lib/fheClient.ts</code></p>
 
-              <h4>encryptPatientData()</h4>
-              <p>Encrypt patient medical data client-side before submission.</p>
-
-              <pre>
-                <code>{`import { encryptPatientData } from '@/lib/fheClient';
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">Encrypt Patient Data</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { encryptPatientData } from '@/lib/fheClient';
 
 const encryptedData = await encryptPatientData({
-  age: 35,
-  gender: 1, // 1=male, 2=female, 3=other, 0=unspecified
-  bmiScore: 24.5,
+  age: 45,
+  gender: 1,  // 1=male, 2=female, 3=other
+  bmiScore: 28.5,
   hasMedicalCondition: true,
-  conditionCode: "E11" // ICD-10 code
+  conditionCode: "E11"  // ICD-10 code
 });
 
-// Returns: EncryptedMedicalInput {
-//   age: euint256,
-//   gender: euint256,
-//   bmiScore: euint256,
-//   hasMedicalCondition: euint256,
-//   conditionCode: euint256
-// }`}</code>
-              </pre>
+// Returns:
+// {
+//   age: { handle: "0x...", ... },
+//   ageProof: "0x...",
+//   gender: { handle: "0x...", ... },
+//   genderProof: "0x...",
+//   ...
+// }`}</code></pre>
+                </div>
 
-              <h4>encryptTrialCriteria()</h4>
-              <p>Encrypt trial eligibility criteria client-side.</p>
-
-              <pre>
-                <code>{`import { encryptTrialCriteria } from '@/lib/fheClient';
+                <div>
+                  <h4 className="font-semibold">Encrypt Trial Criteria</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { encryptTrialCriteria } from '@/lib/fheClient';
 
 const encryptedCriteria = await encryptTrialCriteria({
-  trialName: "Diabetes Treatment Study 2025",
-  description: "Testing new diabetes medication",
+  trialName: "Diabetes Study 2025",
+  description: "Testing new treatment",
   minAge: 18,
   maxAge: 65,
-  requiredGender: 0, // 0=all, 1=male, 2=female, 3=other
+  requiredGender: 0,
   minBMIScore: 18.5,
-  maxBMIScore: 40,
+  maxBMIScore: 35,
   hasSpecificCondition: true,
   conditionCode: "E11"
-});`}</code>
-              </pre>
+});`}</code></pre>
+                </div>
 
-              <h4>decryptEligibilityResult()</h4>
-              <p>
-                Decrypt eligibility result using EIP-712 signature (only patient can decrypt their
-                own result).
-              </p>
+                <div>
+                  <h4 className="font-semibold">Decrypt Eligibility Result</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { decryptEligibilityResult } from '@/lib/fheClient';
 
-              <pre>
-                <code>{`import { decryptEligibilityResult } from '@/lib/fheClient';
-
-const isEligible = await decryptEligibilityResult(
-  encryptedHandle,
-  contractAddress,
-  signer
-);
-// Returns: boolean`}</code>
-              </pre>
-            </section>
-
-            <section id="web3-client-api">
-              <h2 id="web3-client-api">Web3 Client API Reference</h2>
-
-              <h3>Wallet Connection</h3>
-
-              <h4>connectWallet()</h4>
-              <p>Connect to user's Ethereum wallet (MetaMask).</p>
-
-              <pre>
-                <code>{`import { connectWallet } from '@/lib/web3Client';
-
-const { provider, signer, address } = await connectWallet();
-console.log('Connected:', address);`}</code>
-              </pre>
-
-              <h3>Contract Interactions - Trials</h3>
-
-              <h4>registerTrial()</h4>
-              <p>Register a new clinical trial with encrypted eligibility criteria.</p>
-
-              <pre>
-                <code>{`import { registerTrial } from '@/lib/web3Client';
-
-const receipt = await registerTrial(
-  signer,
-  trialName,
-  description,
-  encryptedCriteria
-);
-console.log('Trial registered:', receipt.transactionHash);`}</code>
-              </pre>
-
-              <h4>getTrialPublicInfo()</h4>
-              <p>Get public information about a trial.</p>
-
-              <pre>
-                <code>{`import { getTrialPublicInfo } from '@/lib/web3Client';
-
-const trial = await getTrialPublicInfo(provider, trialId);
-console.log('Trial:', trial.trialName);`}</code>
-              </pre>
-
-              <h3>Contract Interactions - Patients</h3>
-
-              <h4>registerPatient()</h4>
-              <p>Register a new patient with encrypted medical data.</p>
-
-              <pre>
-                <code>{`import { registerPatient } from '@/lib/web3Client';
-
-const receipt = await registerPatient(
-  signer,
-  encryptedMedicalData,
-  publicKeyHash
-);`}</code>
-              </pre>
-
-              <h3>Contract Interactions - Eligibility</h3>
-
-              <h4>computeEligibility()</h4>
-              <p>Compute eligibility for a patient-trial pair (FHE computation on-chain).</p>
-
-              <pre>
-                <code>{`import { computeEligibility } from '@/lib/web3Client';
-
-const receipt = await computeEligibility(
-  signer,
-  trialId,
-  patientAddress
-);`}</code>
-              </pre>
-
-              <h4>getEligibilityResult()</h4>
-              <p>Get encrypted eligibility result (only patient can decrypt).</p>
-
-              <pre>
-                <code>{`import { getEligibilityResult } from '@/lib/web3Client';
-
-const encryptedResult = await getEligibilityResult(
-  signer,
-  trialId,
-  patientAddress
-);
-
-// Decrypt using FHE client
 const isEligible = await decryptEligibilityResult(
   encryptedResult,
   contractAddress,
   signer
-);`}</code>
-              </pre>
-            </section>
-
-            <section id="contract-api">
-              <h2 id="contract-api">Smart Contract API Reference</h2>
-
-              <p>
-                The AegisCare smart contract is deployed at{' '}
-                <code>NEXT_PUBLIC_AEGISCARE_ADDRESS</code>. Below are the main functions:
-              </p>
-
-              <h3>Owner Functions</h3>
-
-              <h4>pause()</h4>
-              <p>Pause the contract (owner only).</p>
-
-              <h4>unpause()</h4>
-              <p>Unpause the contract (owner only).</p>
-
-              <h4>transferOwnership(address newOwner)</h4>
-              <p>Transfer contract ownership (owner only).</p>
-
-              <h3>Patient Functions</h3>
-
-              <h4>registerPatient(...)</h4>
-              <p>Register a new patient with encrypted medical data.</p>
-
-              <pre>
-                <code>{`function registerPatient(
-    euint256 calldata _age,
-    euint256 calldata _gender,
-    euint256 calldata _bmiScore,
-    euint256 calldata _hasMedicalCondition,
-    euint256 calldata _conditionCode,
-    bytes32 _publicKeyHash
-) external`}</code>
-              </pre>
-
-              <h4>patientExists(address)</h4>
-              <p>Check if a patient exists.</p>
-
-              <h3>Trial Functions</h3>
-
-              <h4>registerTrial(...)</h4>
-              <p>Register a new clinical trial with encrypted eligibility criteria.</p>
-
-              <pre>
-                <code>{`function registerTrial(
-    string calldata _trialName,
-    string calldata _description,
-    euint256 calldata _minAge,
-    euint256 calldata _maxAge,
-    euint256 calldata _requiredGender,
-    euint256 calldata _minBMIScore,
-    euint256 calldata _maxBMIScore,
-    euint256 calldata _hasSpecificCondition,
-    euint256 calldata _conditionCode
-) external`}</code>
-              </pre>
-
-              <h4>getTrialPublicInfo(uint256 trialId)</h4>
-              <p>Get public information about a trial.</p>
-
-              <h3>Eligibility Functions</h3>
-
-              <h4>computeEligibility(uint256 trialId, address patientAddress)</h4>
-              <p>Compute eligibility using FHE operations on encrypted data.</p>
-
-              <h4>getEligibilityResult(uint256 trialId, uint256 patientId)</h4>
-              <p>Get encrypted eligibility result.</p>
-
-              <h3>View Functions</h3>
-
-              <h4>getPatientCount()</h4>
-              <p>Get total number of registered patients.</p>
-
-              <h4>getTrialCount()</h4>
-              <p>Get total number of registered trials.</p>
-
-              <h4>getSponsorTrials(address sponsor)</h4>
-              <p>Get all trial IDs for a sponsor.</p>
-
-              <h3>Events</h3>
-
-              <pre>
-                <code>{`event PatientRegistered(
-    uint256 indexed patientId,
-    address indexed patientAddress,
-    bytes32 publicKeyHash,
-    uint256 timestamp
 );
 
-event TrialRegistered(
-    uint256 indexed trialId,
-    address indexed sponsor,
-    string trialName,
-    uint256 timestamp
-);
-
-event EligibilityComputed(
-    uint256 indexed trialId,
-    uint256 indexed patientId,
-    bool eligible,
-    uint256 timestamp
-);`}</code>
-              </pre>
-            </section>
-
-            {/* Page Navigation */}
-            <div className="docs-page-nav">
-              <div className="docs-page-nav-link docs-page-nav-prev">
-                <span className="docs-page-nav-label">← Previous</span>
-                <span className="docs-page-nav-title">Getting Started Guide</span>
+console.log(isEligible); // true or false`}</code></pre>
+                </div>
               </div>
-              <a href="/" className="docs-page-nav-link docs-page-nav-next">
-                <span className="docs-page-nav-label">Next →</span>
-                <span className="docs-page-nav-title">Back to Home</span>
-              </a>
+            </div>
+
+            <div id="web3-api" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">Web3 Client API</h3>
+              <p className="mb-4">Blockchain interaction utilities in <code className="bg-gray-100 px-2 py-1 rounded">lib/web3Client.ts</code></p>
+
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">Register Patient</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { registerPatient } from '@/lib/web3Client';
+
+await registerPatient(signer, encryptedData, publicKeyHash);`}</code></pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold">Register Trial</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { registerTrial } from '@/lib/web3Client';
+
+await registerTrial(
+  signer,
+  trialName,
+  description,
+  encryptedCriteria
+);`}</code></pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold">Compute Eligibility</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`import { computeEligibility } from '@/lib/web3Client';
+
+await computeEligibility(signer, trialId, patientAddress);`}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div id="contract-api" className="docs-card">
+              <h3 className="text-xl font-bold mb-4">Smart Contract API</h3>
+              <p className="mb-4">Contract deployed at <code className="bg-gray-100 px-2 py-1 rounded">0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</code> on Sepolia</p>
+
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold">registerPatient</h4>
+                  <p className="text-sm text-gray-600 mb-2">Register a patient with encrypted medical data</p>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs"><code>{`function registerPatient(
+    bytes32 ageHandle,
+    bytes32 ageProof,
+    bytes32 genderHandle,
+    bytes32 genderProof,
+    bytes32 bmiScoreHandle,
+    bytes32 bmiProof,
+    bytes32 hasMedicalConditionHandle,
+    bytes32 conditionProof,
+    bytes32 conditionCodeHandle,
+    bytes32 codeProof,
+    bytes32 publicKeyHash
+) external`}</code></pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold">registerTrial</h4>
+                  <p className="text-sm text-gray-600 mb-2">Create a new clinical trial (owner only)</p>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs"><code>{`function registerTrial(
+    string memory trialName,
+    string memory description,
+    bytes32 minAgeHandle,
+    bytes32 minAgeProof,
+    // ... (14 more encrypted parameters)
+) external onlyOwner`}</code></pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold">computeEligibility</h4>
+                  <p className="text-sm text-gray-600 mb-2">Compute eligibility on encrypted data</p>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs"><code>{`function computeEligibility(
+    uint256 _trialId,
+    address _patientAddress
+) external`}</code></pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold">getEligibilityResult</h4>
+                  <p className="text-sm text-gray-600 mb-2">Get encrypted result (patient only)</p>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs"><code>{`function getEligibilityResult(
+    uint256 _trialId,
+    address _patientAddress
+) external view returns (bytes32)`}</code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Troubleshooting */}
+          <section id="troubleshooting" className="docs-section mb-16">
+            <h2 className="docs-section-title">🐛 Troubleshooting</h2>
+
+            <div className="space-y-6">
+              <div className="docs-card">
+                <h3 className="text-lg font-bold mb-3">Common Issues</h3>
+
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-red-700">"Cannot connect to wallet"</h4>
+                    <p className="text-sm mb-2">Ensure MetaMask is installed and you're on Sepolia testnet</p>
+                    <p className="text-sm"><strong>Solution:</strong> Refresh page, check MetaMask, verify network</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-red-700">"Transaction failed"</h4>
+                    <p className="text-sm mb-2">Not enough ETH for gas fees</p>
+                    <p className="text-sm"><strong>Solution:</strong> Get free Sepolia ETH from <a href="https://sepoliafaucet.com" target="_blank" className="text-blue-600 underline">sepoliafaucet.com</a></p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-red-700">"FHE initialization failed"</h4>
+                    <p className="text-sm mb-2">Zama FHE SDK still loading</p>
+                    <p className="text-sm"><strong>Solution:</strong> Wait 5-10 seconds, check internet connection, refresh page</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-red-700">"Eligibility computation failed"</h4>
+                    <p className="text-sm mb-2">Patient or trial not registered</p>
+                    <p className="text-sm"><strong>Solution:</strong> Ensure you're registered and the trial exists</p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-red-700">"Cannot decrypt result"</h4>
+                    <p className="text-sm mb-2">Only patients can decrypt their own results</p>
+                    <p className="text-sm"><strong>Solution:</strong> Use the correct wallet address, sign EIP-712 message</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Security */}
+          <section id="security" className="docs-section mb-16">
+            <h2 className="docs-section-title">🔒 Security & Privacy</h2>
+
+            <div className="docs-card">
+              <h3 className="text-xl font-bold mb-4">Privacy Guarantees</h3>
+              <ul className="space-y-2">
+                <li>✅ <strong>Zero Knowledge:</strong> Trial sponsors learn NOTHING about patient data</li>
+                <li>✅ <strong>Encrypted Computation:</strong> All operations on encrypted data</li>
+                <li>✅ <strong>Private Decryption:</strong> Only patients can decrypt their results</li>
+                <li>✅ <strong>No Plaintext Storage:</strong> Only encrypted data on-chain</li>
+                <li>✅ <strong>Pausable Contract:</strong> Emergency stop functionality</li>
+              </ul>
+
+              <div className="mt-6 bg-green-50 border-l-4 border-green-500 p-4">
+                <p className="font-semibold text-green-800">Compliance:</p>
+                <ul className="list-disc ml-6 mt-2 text-sm">
+                  <li><strong>HIPAA Compliant:</strong> No PHI disclosure without patient consent</li>
+                  <li><strong>GDPR Compliant:</strong> Data protection by design and default</li>
+                  <li><strong>Regulatory Friendly:</strong> Privacy-first architecture</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Deployment */}
+          <section id="deployment" className="docs-section mb-16">
+            <h2 className="docs-section-title">🚢 Deployment</h2>
+
+            <div className="docs-card">
+              <h3 className="text-xl font-bold mb-4">Current Deployment</h3>
+              <div className="bg-blue-50 p-4 rounded-lg mb-4">
+                <p className="mb-2"><strong>Network:</strong> Sepolia Testnet</p>
+                <p className="mb-2"><strong>Contract:</strong> 0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</p>
+                <p className="mb-2"><strong>Chain ID:</strong> 11155111</p>
+                <p><strong>View on Etherscan:</strong> <a href="https://sepolia.etherscan.io/address/0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3" target="_blank" className="text-blue-600 underline">sepolia.etherscan.io</a></p>
+              </div>
+
+              <h4 className="font-bold mb-2">Local Deployment</h4>
+              <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto"><code>{`# Deploy to local network
+npm run deploy:local
+
+# Deploy to Sepolia
+npm run deploy:sepolia
+
+# Run tests
+npm test
+
+# Compile contracts
+npx hardhat compile`}</code></pre>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <div className="mt-16 pt-8 border-t border-gray-200">
+            <div className="text-center text-gray-600">
+              <p className="mb-2">Built with ❤️ using Zama FHEVM</p>
+              <p>Privacy-Preserving Clinical Trial Matching</p>
+              <div className="mt-4 flex justify-center space-x-4">
+                <Link href="/" className="text-blue-600 hover:underline">Home</Link>
+                <span>•</span>
+                <Link href="/patient" className="text-blue-600 hover:underline">Patient</Link>
+                <span>•</span>
+                <Link href="/trial-admin" className="text-blue-600 hover:underline">Trial Admin</Link>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* On This Page */}
-        <aside className="docs-on-this-page">
-          <h4 className="docs-on-this-page-title">On This Page</h4>
-          <ul className="docs-on-this-page-list">
-            {tableOfContents.map(({ id, title }) => (
-              <li key={id} className="docs-on-this-page-item">
-                <a
-                  href={`#${id}`}
-                  className={`docs-on-this-page-link ${activeSection === id ? 'active' : ''}`}
-                >
-                  {title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </aside>
       </main>
     </div>
   );

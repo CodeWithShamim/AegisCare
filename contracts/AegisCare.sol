@@ -2,8 +2,14 @@
 pragma solidity ^0.8.27; // Updated for fhevm v0.10 compatibility
 
 import {
+    externalEuint8,
+    externalEuint128,
+    externalEuint32,
     externalEuint256,
     externalEbool,
+    euint8,
+    euint128,
+    euint32,
     euint256,
     ebool,
     FHE
@@ -48,11 +54,11 @@ contract AegisCare {
 
     struct EncryptedPatient {
         uint256 patientId;
-        euint256 age;
-        euint256 gender;
-        euint256 bmiScore;
-        euint256 hasMedicalCondition;
-        euint256 conditionCode;
+        euint8 age;
+        euint8 gender;
+        euint128 bmiScore;
+        euint8 hasMedicalCondition;
+        euint32 conditionCode;
         bytes32 publicKeyHash;
         uint256 registeredAt;
     }
@@ -170,16 +176,17 @@ contract AegisCare {
     /// @param _conditionCode Encrypted medical condition code
     /// @param _codeProof Proof of encryption for condition code
     /// @param _publicKeyHash Hash of the patient's public key for verification
+
     function registerPatient(
-        externalEuint256 _age,
+        externalEuint8 _age,
         bytes calldata _ageProof,
-        externalEuint256 _gender,
+        externalEuint8 _gender,
         bytes calldata _genderProof,
-        externalEuint256 _bmiScore,
+        externalEuint128 _bmiScore,
         bytes calldata _bmiProof,
-        externalEuint256 _hasMedicalCondition,
+        externalEuint8 _hasMedicalCondition,
         bytes calldata _conditionProof,
-        externalEuint256 _conditionCode,
+        externalEuint32 _conditionCode,
         bytes calldata _codeProof,
         bytes32 _publicKeyHash
     ) external whenNotPaused {
@@ -189,15 +196,15 @@ contract AegisCare {
 
         patientCount++;
 
-        // Convert external encrypted types to internal encrypted types
-        euint256 ageInternal = FHE.fromExternal(_age, _ageProof);
-        euint256 genderInternal = FHE.fromExternal(_gender, _genderProof);
-        euint256 bmiScoreInternal = FHE.fromExternal(_bmiScore, _bmiProof);
-        euint256 hasMedicalConditionInternal = FHE.fromExternal(
+        // Convert external encrypted types to internal encrypted types (matching types)
+        euint8 ageInternal = FHE.fromExternal(_age, _ageProof);
+        euint8 genderInternal = FHE.fromExternal(_gender, _genderProof);
+        euint128 bmiScoreInternal = FHE.fromExternal(_bmiScore, _bmiProof);
+        euint8 hasMedicalConditionInternal = FHE.fromExternal(
             _hasMedicalCondition,
             _conditionProof
         );
-        euint256 conditionCodeInternal = FHE.fromExternal(
+        euint32 conditionCodeInternal = FHE.fromExternal(
             _conditionCode,
             _codeProof
         );
@@ -322,9 +329,56 @@ contract AegisCare {
     }
 
     // ============================================
-    // ELIGIBILITY CHECKING
+    // ELIGIBILITY COMPUTING
     // ============================================
 
+    /// @notice Compute eligibility for a patient-trial pair
+    /// @param _trialId The ID of the trial
+    /// @param _patientAddress The address of the patient
+    function computeEligibility(
+        uint256 _trialId,
+        address _patientAddress
+    ) external whenNotPaused {
+        EncryptedPatient storage patient = patients[_patientAddress];
+        if (patient.patientId == 0) {
+            revert PatientNotFound();
+        }
+
+        EncryptedTrial storage trial = trials[_trialId];
+        if (trial.trialId == 0) {
+            revert TrialNotFound();
+        }
+
+        trial.participantCount++;
+
+        // Perform FHE comparisons
+        // Note: In production, these would be real FHE comparison operations
+        // For now, we create a placeholder encrypted result
+        ebool isEligibleEnc = FHE.asEbool(true);
+
+        uint256 resultId = _trialId * 1000000 + patient.patientId;
+        eligibilityResults[_trialId][patient.patientId] = EligibilityResult({
+            resultId: resultId,
+            trialId: _trialId,
+            patientId: patient.patientId,
+            isEligible: isEligibleEnc,
+            decryptable: true,
+            computed: true,
+            computedAt: block.timestamp
+        });
+
+        patientEligibilityChecks[_patientAddress].push(resultId);
+
+        emit EligibilityComputed(
+            resultId,
+            _trialId,
+            patient.patientId,
+            block.timestamp
+        );
+    }
+
+    /// @notice Check eligibility (called by patient)
+    /// @param _trialId The ID of the trial
     function checkEligibility(uint256 _trialId) external whenNotPaused {
         EncryptedPatient storage patient = patients[msg.sender];
         if (patient.patientId == 0) {
@@ -338,7 +392,9 @@ contract AegisCare {
 
         trial.participantCount++;
 
-        // Store encrypted result - in production this would use FHE comparisons
+        // Perform FHE comparisons
+        // Note: In production, these would be real FHE comparison operations
+        // For now, we create a placeholder encrypted result
         ebool isEligibleEnc = FHE.asEbool(true);
 
         uint256 resultId = _trialId * 1000000 + patient.patientId;
@@ -362,19 +418,38 @@ contract AegisCare {
         );
     }
 
+    /// @notice Get eligibility result (patient only)
+    /// @param _trialId The ID of the trial
+    /// @param _patientAddress The address of the patient
+    /// @return The encrypted eligibility result
+    function getEligibilityResult(
+        uint256 _trialId,
+        address _patientAddress
+    ) external view returns (ebool) {
+        // Only the patient can access their own result
+        if (msg.sender != _patientAddress) {
+            revert NotAuthorized();
+        }
+
+        EligibilityResult storage result = eligibilityResults[_trialId][
+            patients[_patientAddress].patientId
+        ];
+        return result.isEligible;
+    }
+
     // ============================================
     // VIEW FUNCTIONS
     // ============================================
 
-    /// @notice Get trial information
+    /// @notice Get trial public information
     /// @param _trialId The ID of the trial
     /// @return trialId The trial ID
     /// @return trialName The trial name
     /// @return description The trial description
     /// @return sponsor The sponsor address
     /// @return isActive Whether the trial is active
-    /// @return participantCount The number of participants
     /// @return createdAt The creation timestamp
+    /// @return participantCount The number of participants
     function getTrialInfo(
         uint256 _trialId
     )
@@ -386,8 +461,8 @@ contract AegisCare {
             string memory description,
             address sponsor,
             bool isActive,
-            uint256 participantCount,
-            uint256 createdAt
+            uint256 createdAt,
+            uint256 participantCount
         )
     {
         EncryptedTrial storage trial = trials[_trialId];
@@ -397,8 +472,30 @@ contract AegisCare {
             trial.description,
             trial.sponsor,
             trial.isActive,
-            trial.participantCount,
-            trial.createdAt
+            trial.createdAt,
+            trial.participantCount
+        );
+    }
+
+    /// @notice Get trial public info (alias for compatibility)
+    function getTrialPublicInfo(
+        uint256 _trialId
+    )
+        external
+        view
+        returns (
+            string memory trialName,
+            string memory description,
+            address sponsor,
+            bool isActive
+        )
+    {
+        EncryptedTrial storage trial = trials[_trialId];
+        return (
+            trial.trialName,
+            trial.description,
+            trial.sponsor,
+            trial.isActive
         );
     }
 

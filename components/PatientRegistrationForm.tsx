@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
@@ -19,7 +21,7 @@ export default function PatientRegistrationForm({
   onRegistrationSuccess,
 }: PatientRegistrationFormProps) {
   // FHE context
-  const { isInitialized: fheInitialized, initFHE } = useFHE()
+  const { isInitialized: fheInitialized, initFHE } = useFHE();
 
   // Form state
   const [formData, setFormData] = useState<PatientData>({
@@ -95,10 +97,12 @@ export default function PatientRegistrationForm({
       // Check FHE initialization
       if (!fheInitialized) {
         setError('Initializing FHEVM encryption... Please wait.');
-        await initFHE()
+        await initFHE();
         // Give it a moment to complete
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
+
+      console.log({ formData });
 
       // Validate form data
       const errors = validatePatientData(formData);
@@ -123,7 +127,9 @@ export default function PatientRegistrationForm({
       // Get contract address from environment
       const contractAddress = process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS;
       if (!contractAddress) {
-        throw new Error('Contract address not configured. Please check NEXT_PUBLIC_AEGISCARE_ADDRESS in .env');
+        throw new Error(
+          'Contract address not configured. Please check NEXT_PUBLIC_AEGISCARE_ADDRESS in .env',
+        );
       }
 
       // Encrypt medical data client-side
@@ -135,6 +141,8 @@ export default function PatientRegistrationForm({
 
       // Get public key hash for ACL
       const publicKeyHash = getPublicKeyHash();
+
+      console.log({ publicKeyHash });
 
       // Submit encrypted data to smart contract
       const receipt = await registerPatient(signer, encryptedData, publicKeyHash);

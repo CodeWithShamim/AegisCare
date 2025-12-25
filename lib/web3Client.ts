@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Web3 Client Utilities
  * @module lib/web3Client
@@ -8,6 +10,13 @@
 
 import { ethers, Contract, BrowserProvider, JsonRpcSigner } from "ethers";
 import AegisCareABI from "@/contracts/AegisCare.json";
+import {
+  registerPatient as registerPatientContract,
+  registerTrial as registerTrialContract,
+  getAegisCareContract as getContract,
+  type PatientRegistrationParams,
+  type TrialRegistrationParams,
+} from "./contractInteractions";
 
 // Extract ABI from the imported JSON
 const ABI = AegisCareABI.abi;
@@ -162,29 +171,69 @@ export async function registerTrial(
   description: string,
   encryptedCriteria: {
     minAge: any;
+    minAgeProof: any;
     maxAge: any;
+    maxAgeProof: any;
     requiredGender: any;
+    genderProof: any;
     minBMIScore: any;
+    minBMIProof: any;
     maxBMIScore: any;
+    maxBMIProof: any;
     hasSpecificCondition: any;
+    conditionProof: any;
     conditionCode: any;
+    codeProof: any;
   }
 ): Promise<any> {
   try {
     const contract = getAegisCareContract("", signer);
 
     console.log("[Contract] Registering trial:", trialName);
+    console.log("[Contract] Encrypted data structure:", {
+      trialName,
+      description,
+      minAgeHandle: encryptedCriteria.minAge.handle,
+      minAgeProof: encryptedCriteria.minAgeProof,
+      maxAgeHandle: encryptedCriteria.maxAge.handle,
+      maxAgeProof: encryptedCriteria.maxAgeProof,
+      genderHandle: encryptedCriteria.requiredGender.handle,
+      genderProof: encryptedCriteria.genderProof,
+      minBMIHandle: encryptedCriteria.minBMIScore.handle,
+      minBMIProof: encryptedCriteria.minBMIProof,
+      maxBMIHandle: encryptedCriteria.maxBMIScore.handle,
+      maxBMIProof: encryptedCriteria.maxBMIProof,
+      conditionHandle: encryptedCriteria.hasSpecificCondition.handle,
+      conditionProof: encryptedCriteria.conditionProof,
+      codeHandle: encryptedCriteria.conditionCode.handle,
+      codeProof: encryptedCriteria.codeProof,
+    });
 
+    // Contract expects: trialName, description, then 7 pairs of (handle, proof)
     const tx = await contract.registerTrial(
       trialName,
       description,
-      encryptedCriteria.minAge,
-      encryptedCriteria.maxAge,
-      encryptedCriteria.requiredGender,
-      encryptedCriteria.minBMIScore,
-      encryptedCriteria.maxBMIScore,
-      encryptedCriteria.hasSpecificCondition,
-      encryptedCriteria.conditionCode
+      // Min age (handle + proof)
+      encryptedCriteria.minAge.handle,
+      encryptedCriteria.minAgeProof,
+      // Max age (handle + proof)
+      encryptedCriteria.maxAge.handle,
+      encryptedCriteria.maxAgeProof,
+      // Required gender (handle + proof)
+      encryptedCriteria.requiredGender.handle,
+      encryptedCriteria.genderProof,
+      // Min BMI (handle + proof)
+      encryptedCriteria.minBMIScore.handle,
+      encryptedCriteria.minBMIProof,
+      // Max BMI (handle + proof)
+      encryptedCriteria.maxBMIScore.handle,
+      encryptedCriteria.maxBMIProof,
+      // Has specific condition (handle + proof)
+      encryptedCriteria.hasSpecificCondition.handle,
+      encryptedCriteria.conditionProof,
+      // Condition code (handle + proof)
+      encryptedCriteria.conditionCode.handle,
+      encryptedCriteria.codeProof
     );
 
     console.log("[Contract] Transaction submitted:", tx.hash);
@@ -258,7 +307,7 @@ export async function getTrialCount(
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const count = await contract.getTrialCount();
+    const count = await contract.trialCount();
 
     return Number(count);
   } catch (error: any) {
@@ -283,10 +332,15 @@ export async function registerPatient(
   signer: JsonRpcSigner,
   encryptedMedicalData: {
     age: any;
+    ageProof: any;
     gender: any;
+    genderProof: any;
     bmiScore: any;
+    bmiProof: any;
     hasMedicalCondition: any;
+    conditionProof: any;
     conditionCode: any;
+    codeProof: any;
   },
   publicKeyHash: string
 ): Promise<any> {
@@ -294,14 +348,90 @@ export async function registerPatient(
     const contract = getAegisCareContract("", signer);
 
     console.log("[Contract] Registering patient");
+    console.log("[Contract] Contract address:", WEB3_CONFIG.AEGISCARE_ADDRESS);
 
+    // Log all parameters being sent
+    console.log("[Contract] Parameters to be sent:");
+    console.log("  Age handle:", encryptedMedicalData.age.handle);
+    console.log("  Age handle type:", typeof encryptedMedicalData.age.handle);
+    console.log(
+      "  Age handle length:",
+      encryptedMedicalData.age.handle?.length
+    );
+    console.log("  Age proof length:", encryptedMedicalData.ageProof?.length);
+
+    console.log("  Gender handle:", encryptedMedicalData.gender.handle);
+    console.log(
+      "  Gender handle length:",
+      encryptedMedicalData.gender.handle?.length
+    );
+
+    console.log("  BMI handle:", encryptedMedicalData.bmiScore.handle);
+    console.log(
+      "  BMI handle length:",
+      encryptedMedicalData.bmiScore.handle?.length
+    );
+
+    console.log(
+      "  Condition handle:",
+      encryptedMedicalData.hasMedicalCondition.handle
+    );
+    console.log(
+      "  Condition handle length:",
+      encryptedMedicalData.hasMedicalCondition.handle?.length
+    );
+
+    console.log("  Code handle:", encryptedMedicalData.conditionCode.handle);
+    console.log(
+      "  Code handle length:",
+      encryptedMedicalData.conditionCode.handle?.length
+    );
+
+    console.log("  Public key hash:", publicKeyHash);
+    console.log("  Public key hash length:", publicKeyHash?.length);
+
+    // Verify all handles are properly formatted
+    const allHandles = [
+      encryptedMedicalData.age.handle,
+      encryptedMedicalData.gender.handle,
+      encryptedMedicalData.bmiScore.handle,
+      encryptedMedicalData.hasMedicalCondition.handle,
+      encryptedMedicalData.conditionCode.handle,
+    ];
+
+    const invalidHandles = allHandles.filter(
+      (h) => !h || !h.startsWith("0x") || h.length !== 66
+    );
+
+    if (invalidHandles.length > 0) {
+      console.error("[Contract] ❌ Invalid handles detected:", invalidHandles);
+      throw new Error("Some handles are not properly formatted as bytes32");
+    }
+
+    console.log(
+      "[Contract] ✅ All handles properly formatted (0x prefix, 66 chars)"
+    );
+
+    // Contract expects 5 pairs of (handle, proof) + publicKeyHash
     const tx = await contract.registerPatient(
-      encryptedMedicalData.age,
-      encryptedMedicalData.gender,
-      encryptedMedicalData.bmiScore,
-      encryptedMedicalData.hasMedicalCondition,
-      encryptedMedicalData.conditionCode,
-      publicKeyHash
+      // Age (handle + proof)
+      encryptedMedicalData.age.handle,
+      encryptedMedicalData.ageProof,
+      // Gender (handle + proof)
+      encryptedMedicalData.gender.handle,
+      encryptedMedicalData.genderProof,
+      // BMI (handle + proof)
+      encryptedMedicalData.bmiScore.handle,
+      encryptedMedicalData.bmiProof,
+      // Has medical condition (handle + proof)
+      encryptedMedicalData.hasMedicalCondition.handle,
+      encryptedMedicalData.conditionProof,
+      // Condition code (handle + proof)
+      encryptedMedicalData.conditionCode.handle,
+      encryptedMedicalData.codeProof,
+      // Public key hash
+      publicKeyHash,
+      { gasLimit: 10_000_000 }
     );
 
     console.log("[Contract] Transaction submitted:", tx.hash);
@@ -327,7 +457,7 @@ export async function patientExists(
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const exists = await contract.patientExists(patientAddress);
+    const exists = await contract.isPatientRegistered(patientAddress);
 
     return exists;
   } catch (error: any) {
@@ -345,7 +475,7 @@ export async function getPatientCount(
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const count = await contract.getPatientCount();
+    const count = await contract.patientCount();
 
     return Number(count);
   } catch (error: any) {

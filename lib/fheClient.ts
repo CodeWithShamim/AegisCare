@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * FHEVM Client SDK - Production Implementation
  * @module lib/fheClient
@@ -17,6 +19,39 @@ let fheInstance: any = null;
 // ============================================
 // TYPES
 // ============================================
+
+/**
+ * Format an FHE handle as proper bytes32
+ * Pads to 64 hex characters (32 bytes) with 0x prefix
+ */
+function formatHandle(handle: string | Uint8Array | any): string {
+  let handleStr: string;
+
+  // Convert handle to string based on type
+  if (typeof handle === 'string') {
+    handleStr = handle;
+  } else if (handle instanceof Uint8Array) {
+    // Convert Uint8Array to hex string
+    handleStr = '0x' + Array.from(handle)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  } else if (handle && typeof handle.toString === 'function') {
+    // Try to convert to string
+    handleStr = handle.toString();
+  } else {
+    // Fallback: try to convert to string
+    handleStr = String(handle);
+  }
+
+  // Remove 0x prefix if present
+  const cleanHex = handleStr.replace("0x", "");
+
+  // Pad to 64 characters (32 bytes)
+  const padded = cleanHex.padStart(64, "0");
+
+  // Add 0x prefix
+  return "0x" + padded;
+}
 
 export interface EncryptedValue {
   handle: string;
@@ -70,7 +105,7 @@ export interface TrialCriteriaData {
   minBMIScore: number;
   maxBMIScore: number;
   hasSpecificCondition: boolean;
-  conditionCode: number;
+  conditionCode: number | string; // Accept both for flexibility
 }
 
 // ============================================
@@ -178,7 +213,38 @@ export function getFHEInstance(): any {
 export function generatePublicKeyHash(): string {
   const fhe = getFHEInstance();
   const keypair = fhe.generateKeypair();
-  return keypair.publicKey.slice(0, 66);
+
+  // Convert public key to proper hex string format
+  let pubKeyHex: string;
+
+  if (typeof keypair.publicKey === 'string') {
+    // Already a string
+    pubKeyHex = keypair.publicKey;
+  } else if (keypair.publicKey instanceof Uint8Array) {
+    // Convert Uint8Array to hex string
+    const bytes: number[] = [];
+    for (let i = 0; i < keypair.publicKey.length; i++) {
+      bytes.push(keypair.publicKey[i]);
+    }
+    pubKeyHex = '0x' + bytes
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  } else {
+    // Try to convert to string and add 0x
+    pubKeyHex = '0x' + String(keypair.publicKey);
+  }
+
+  // Ensure it has 0x prefix
+  if (!pubKeyHex.startsWith('0x')) {
+    pubKeyHex = '0x' + pubKeyHex.replace('0x', '');
+  }
+
+  // Take first 66 chars (0x + 64 hex chars = 32 bytes)
+  const result = pubKeyHex.slice(0, 66);
+
+  console.log("🔑 Public key hash generated:", result);
+
+  return result;
 }
 
 /**
@@ -186,7 +252,34 @@ export function generatePublicKeyHash(): string {
  * @deprecated Use generatePublicKeyHash() instead
  */
 export function getPublicKeyHash(): string {
-  return generatePublicKeyHash();
+  // Generate the key hash properly
+  const fhe = getFHEInstance();
+  const keypair = fhe.generateKeypair();
+
+  // Convert public key to proper hex string format
+  let pubKeyHex: string;
+
+  if (typeof keypair.publicKey === 'string') {
+    pubKeyHex = keypair.publicKey;
+  } else if (keypair.publicKey instanceof Uint8Array) {
+    const bytes: number[] = [];
+    for (let i = 0; i < keypair.publicKey.length; i++) {
+      bytes.push(keypair.publicKey[i]);
+    }
+    pubKeyHex = '0x' + bytes
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  } else {
+    pubKeyHex = '0x' + String(keypair.publicKey);
+  }
+
+  // Ensure it has 0x prefix
+  if (!pubKeyHex.startsWith('0x')) {
+    pubKeyHex = '0x' + pubKeyHex.replace('0x', '');
+  }
+
+  // Return first 66 chars (0x + 64 hex chars)
+  return pubKeyHex.slice(0, 66);
 }
 
 // ============================================
@@ -219,7 +312,7 @@ export async function encryptPatientData(
 
     // Add each value using appropriate data type methods
     // Scale BMI by 10 for precision (e.g., 24.5 becomes 245)
-    input.add8(BigInt(data.age)); // Age: 0-255
+    input.add32(BigInt(data.age)); // Age: 0-255 (euint32 to match contract)
     input.add8(BigInt(data.gender)); // Gender: 0-2
     input.add128(BigInt(Math.round(data.bmiScore * 10))); // BMI: scaled for precision
     input.add8(BigInt(data.hasMedicalCondition ? 1 : 0)); // Boolean as 0 or 1
@@ -233,29 +326,50 @@ export async function encryptPatientData(
     console.log("🔍 Encrypted handles:", ciphertexts.handles);
     console.log("🔍 Proof:", ciphertexts.inputProof);
 
+    // Debug: Log handle types
+    console.log("🔍 Handle types:");
+    ciphertexts.handles.forEach((handle: any, index: number) => {
+      console.log(`  Handle ${index}: type=${typeof handle}, instance=${handle?.constructor?.name}, value=`, handle);
+    });
+
+    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
+    const formattedAgeHandle = formatHandle(ciphertexts.handles[0]);
+    const formattedGenderHandle = formatHandle(ciphertexts.handles[1]);
+    const formattedBMIHandle = formatHandle(ciphertexts.handles[2]);
+    const formattedConditionHandle = formatHandle(ciphertexts.handles[3]);
+    const formattedCodeHandle = formatHandle(ciphertexts.handles[4]);
+
+    console.log("🔍 Formatted handles:");
+    console.log("  Age:", formattedAgeHandle, `(length: ${formattedAgeHandle.length})`);
+    console.log("  Gender:", formattedGenderHandle, `(length: ${formattedGenderHandle.length})`);
+    console.log("  BMI:", formattedBMIHandle, `(length: ${formattedBMIHandle.length})`);
+    console.log("  Condition:", formattedConditionHandle, `(length: ${formattedConditionHandle.length})`);
+    console.log("  Code:", formattedCodeHandle, `(length: ${formattedCodeHandle.length})`);
+
     // Return encrypted data with handles and proof
     // The handles array contains: [age, gender, bmi, hasCondition, conditionCode]
+    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
     return {
-      age: { handle: ciphertexts.handles[0], proof: ciphertexts.inputProof },
+      age: { handle: formattedAgeHandle, proof: ciphertexts.inputProof },
       ageProof: ciphertexts.inputProof,
 
-      gender: { handle: ciphertexts.handles[1], proof: ciphertexts.inputProof },
+      gender: { handle: formattedGenderHandle, proof: ciphertexts.inputProof },
       genderProof: ciphertexts.inputProof,
 
       bmiScore: {
-        handle: ciphertexts.handles[2],
+        handle: formattedBMIHandle,
         proof: ciphertexts.inputProof,
       },
       bmiProof: ciphertexts.inputProof,
 
       hasMedicalCondition: {
-        handle: ciphertexts.handles[3],
+        handle: formattedConditionHandle,
         proof: ciphertexts.inputProof,
       },
       conditionProof: ciphertexts.inputProof,
 
       conditionCode: {
-        handle: ciphertexts.handles[4],
+        handle: formattedCodeHandle,
         proof: ciphertexts.inputProof,
       },
       codeProof: ciphertexts.inputProof,
@@ -283,18 +397,24 @@ export async function encryptTrialCriteria(
   try {
     console.log("🔒 Encrypting trial criteria...");
 
+    // Convert conditionCode to number if it's a string
+    const conditionCodeNum =
+      typeof criteria.conditionCode === "string"
+        ? parseInt(criteria.conditionCode, 10) || 0
+        : criteria.conditionCode;
+
     // Create encrypted input buffer for trial criteria
     const input = fhe.createEncryptedInput(contractAddress, userAddress);
 
     // Add each value using appropriate data type methods
     // Scale BMI by 10 for precision
-    input.add8(BigInt(criteria.minAge)); // Min age: 0-255
-    input.add8(BigInt(criteria.maxAge)); // Max age: 0-255
+    input.add32(BigInt(criteria.minAge)); // Min age: euint32 to match contract
+    input.add32(BigInt(criteria.maxAge)); // Max age: euint32 to match contract
     input.add8(BigInt(criteria.requiredGender)); // Required gender: 0-2
     input.add128(BigInt(Math.round(criteria.minBMIScore * 10))); // Min BMI: scaled
     input.add128(BigInt(Math.round(criteria.maxBMIScore * 10))); // Max BMI: scaled
     input.add8(BigInt(criteria.hasSpecificCondition ? 1 : 0)); // Boolean as 0 or 1
-    input.add32(BigInt(criteria.conditionCode)); // Condition code: ICD-10
+    input.add32(BigInt(conditionCodeNum)); // Condition code: ICD-10
 
     console.log("🔐 Encrypting criteria values...");
     // Encrypt all values and generate proof
@@ -306,39 +426,40 @@ export async function encryptTrialCriteria(
 
     // Return encrypted data with handles and proof
     // The handles array contains: [minAge, maxAge, gender, minBMI, maxBMI, hasCondition, conditionCode]
+    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
     return {
-      minAge: { handle: ciphertexts.handles[0], proof: ciphertexts.inputProof },
+      minAge: { handle: formatHandle(ciphertexts.handles[0]), proof: ciphertexts.inputProof },
       minAgeProof: ciphertexts.inputProof,
 
-      maxAge: { handle: ciphertexts.handles[1], proof: ciphertexts.inputProof },
+      maxAge: { handle: formatHandle(ciphertexts.handles[1]), proof: ciphertexts.inputProof },
       maxAgeProof: ciphertexts.inputProof,
 
       requiredGender: {
-        handle: ciphertexts.handles[2],
+        handle: formatHandle(ciphertexts.handles[2]),
         proof: ciphertexts.inputProof,
       },
       genderProof: ciphertexts.inputProof,
 
       minBMIScore: {
-        handle: ciphertexts.handles[3],
+        handle: formatHandle(ciphertexts.handles[3]),
         proof: ciphertexts.inputProof,
       },
       minBMIProof: ciphertexts.inputProof,
 
       maxBMIScore: {
-        handle: ciphertexts.handles[4],
+        handle: formatHandle(ciphertexts.handles[4]),
         proof: ciphertexts.inputProof,
       },
       maxBMIProof: ciphertexts.inputProof,
 
       hasSpecificCondition: {
-        handle: ciphertexts.handles[5],
+        handle: formatHandle(ciphertexts.handles[5]),
         proof: ciphertexts.inputProof,
       },
       conditionProof: ciphertexts.inputProof,
 
       conditionCode: {
-        handle: ciphertexts.handles[6],
+        handle: formatHandle(ciphertexts.handles[6]),
         proof: ciphertexts.inputProof,
       },
       codeProof: ciphertexts.inputProof,
@@ -531,7 +652,13 @@ export function validateTrialCriteria(data: TrialCriteriaData): string[] {
     errors.push("Gender requirement must be 0 (all), 1 (male), or 2 (female)");
   }
 
-  if (data.conditionCode < 0 || data.conditionCode > 999999) {
+  // Handle string or number conditionCode
+  const conditionCodeNum =
+    typeof data.conditionCode === "string"
+      ? parseInt(data.conditionCode, 10) || 0
+      : data.conditionCode;
+
+  if (conditionCodeNum < 0 || conditionCodeNum > 999999) {
     errors.push("Condition code must be between 0 and 999999");
   }
 
