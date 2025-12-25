@@ -1,51 +1,62 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "@typechain/hardhat";
+import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-verify";
+import "@fhevm/hardhat-plugin";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
-import "solidity-coverage";
+import dotenv from "dotenv";
 
 // Load environment variables
-require("dotenv").config();
+dotenv.config();
+
+const MNEMONIC: string = process.env.MNEMONIC || "test test test test test test test test test test test junk";
+const INFURA_API_KEY: string = process.env.INFURA_API_KEY || "";
+const ETHERSCAN_API_KEY: string = process.env.ETHERSCAN_API_KEY || "";
 
 const config: HardhatUserConfig = {
-  solidity: {
-    version: "0.8.20",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200,
-      },
-    },
+  defaultNetwork: "hardhat",
+  namedAccounts: {
+    deployer: 0,
+  },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
+  },
+  gasReporter: {
+    currency: "USD",
+    enabled: process.env.REPORT_GAS === "true",
+    excludeContracts: [],
   },
   networks: {
-    // Local fhEVM node (for development)
     hardhat: {
-      chainId: 31337,
-      // fhEVM requires specific configuration
-      forking: {
-        url: process.env.FHEVM_RPC_URL || "http://localhost:8545",
+      accounts: {
+        mnemonic: MNEMONIC,
       },
-    },
-    // Zama fhEVM devnet
-    fhevm_devnet: {
-      url: process.env.FHEVM_RPC_URL || "http://localhost:8545",
       chainId: 31337,
-      accounts: process.env.MNEMONIC
-        ? {
-            mnemonic: process.env.MNEMONIC,
-          }
-        : [],
     },
-    // Zama fhEVM testnet (when available)
-    fhevm_testnet: {
-      url: process.env.FHEVM_TESTNET_URL || "",
-      chainId: 1410,
-      accounts: process.env.MNEMONIC
-        ? {
-            mnemonic: process.env.MNEMONIC,
-          }
-        : [],
+    anvil: {
+      accounts: {
+        mnemonic: MNEMONIC,
+        path: "m/44'/60'/0'/0/",
+        count: 10,
+      },
+      chainId: 31337,
+      url: "http://localhost:8545",
+    },
+    sepolia: {
+      accounts: {
+        mnemonic: MNEMONIC,
+        path: "m/44'/60'/0'/0/",
+        count: 10,
+      },
+      chainId: 11155111,
+      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
+    },
+    fhevm_devnet: {
+      url: process.env.FHEVM_DEVNET_URL || "https://devnet.zama.ai/",
+      accounts: {
+        mnemonic: MNEMONIC,
+      },
+      chainId: 31337,
     },
   },
   paths: {
@@ -54,21 +65,24 @@ const config: HardhatUserConfig = {
     cache: "./cache",
     artifacts: "./artifacts",
   },
-  // TypeChain configuration
+  solidity: {
+    version: "0.8.27", // Updated for fhevm v0.10 compatibility
+    settings: {
+      metadata: {
+        // Not including the metadata hash
+        bytecodeHash: "none",
+      },
+      optimizer: {
+        enabled: true,
+        runs: 100, // Minimize contract size
+      },
+      viaIR: true, // Enable IR-based compilation for better optimization
+      evmVersion: "cancun",
+    },
+  },
   typechain: {
-    outDir: "typechain-types",
-    target: "ethers-v5",
-  },
-  // Gas reporter
-  gasReporter: {
-    enabled: process.env.REPORT_GAS === "true",
-    currency: "USD",
-    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
-    token: "ETH",
-  },
-  // Solidity coverage
-  mocha: {
-    timeout: 40000,
+    outDir: "types",
+    target: "ethers-v6",
   },
 };
 

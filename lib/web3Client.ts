@@ -6,8 +6,11 @@
  * Uses ethers.js v6 for blockchain operations
  */
 
-import { ethers, Contract, BrowserProvider, JsonRpcSigner } from 'ethers';
-import AegisCareABI from '@/contracts/AegisCare.json';
+import { ethers, Contract, BrowserProvider, JsonRpcSigner } from "ethers";
+import AegisCareABI from "@/contracts/AegisCare.json";
+
+// Extract ABI from the imported JSON
+const ABI = AegisCareABI.abi;
 
 // Re-export common types for convenience
 export type { BrowserProvider, JsonRpcSigner };
@@ -39,13 +42,13 @@ export interface Patient {
 
 export const WEB3_CONFIG = {
   // Contract address (set from environment after deployment)
-  AEGISCARE_ADDRESS: process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS || '',
+  AEGISCARE_ADDRESS: process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS || "",
 
   // Network configuration
-  CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '31337'), // Default to local development
+  CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "31337"), // Default to local development
 
   // Required methods for wallet connection
-  REQUIRED_METHODS: ['eth_requestAccounts', 'personal_sign'],
+  REQUIRED_METHODS: ["eth_requestAccounts", "personal_sign"],
 };
 
 // ============================================
@@ -63,26 +66,28 @@ export async function connectWallet(): Promise<{
   address: string;
 }> {
   // Check if MetaMask or other wallet is available
-  if (typeof window === 'undefined' || !(window as any).ethereum) {
-    throw new Error('No Ethereum wallet detected. Please install MetaMask or another Web3 wallet.');
+  if (typeof window === "undefined" || !(window as any).ethereum) {
+    throw new Error(
+      "No Ethereum wallet detected. Please install MetaMask or another Web3 wallet."
+    );
   }
 
   const ethereum = (window as any).ethereum;
 
   try {
     // Request account access
-    await ethereum.request({ method: 'eth_requestAccounts' });
+    await ethereum.request({ method: "eth_requestAccounts" });
 
     // Create Web3 provider (ethers v6)
     const provider = new BrowserProvider(ethereum);
     const signer = await provider.getSigner();
     const address = await signer.getAddress();
 
-    console.log('[Web3] Wallet connected:', address);
+    console.log("[Web3] Wallet connected:", address);
 
     return { provider, signer, address };
   } catch (error: any) {
-    console.error('[Web3] Failed to connect wallet:', error);
+    console.error("[Web3] Failed to connect wallet:", error);
     throw new Error(`Wallet connection failed: ${error.message}`);
   }
 }
@@ -95,8 +100,8 @@ export async function getProviderAndSigner(): Promise<{
   signer: JsonRpcSigner;
   address: string;
 }> {
-  if (typeof window === 'undefined' || !(window as any).ethereum) {
-    throw new Error('No Ethereum wallet detected.');
+  if (typeof window === "undefined" || !(window as any).ethereum) {
+    throw new Error("No Ethereum wallet detected.");
   }
 
   const ethereum = (window as any).ethereum;
@@ -115,14 +120,12 @@ export function getAegisCareContract(
   signer: JsonRpcSigner
 ): Contract {
   if (!WEB3_CONFIG.AEGISCARE_ADDRESS) {
-    throw new Error('AegisCare contract address not configured. Check environment variables.');
+    throw new Error(
+      "AegisCare contract address not configured. Check environment variables."
+    );
   }
 
-  return new Contract(
-    WEB3_CONFIG.AEGISCARE_ADDRESS,
-    AegisCareABI,
-    signer
-  );
+  return new Contract(WEB3_CONFIG.AEGISCARE_ADDRESS, ABI, signer);
 }
 
 /**
@@ -132,14 +135,12 @@ export function getAegisCareContractReadOnly(
   provider: BrowserProvider
 ): Contract {
   if (!WEB3_CONFIG.AEGISCARE_ADDRESS) {
-    throw new Error('AegisCare contract address not configured. Check environment variables.');
+    throw new Error(
+      "AegisCare contract address not configured. Check environment variables."
+    );
   }
 
-  return new Contract(
-    WEB3_CONFIG.AEGISCARE_ADDRESS,
-    AegisCareABI,
-    provider
-  );
+  return new Contract(WEB3_CONFIG.AEGISCARE_ADDRESS, ABI, provider);
 }
 
 // ============================================
@@ -170,9 +171,9 @@ export async function registerTrial(
   }
 ): Promise<any> {
   try {
-    const contract = getAegisCareContract('', signer);
+    const contract = getAegisCareContract("", signer);
 
-    console.log('[Contract] Registering trial:', trialName);
+    console.log("[Contract] Registering trial:", trialName);
 
     const tx = await contract.registerTrial(
       trialName,
@@ -186,15 +187,18 @@ export async function registerTrial(
       encryptedCriteria.conditionCode
     );
 
-    console.log('[Contract] Transaction submitted:', tx.hash);
+    console.log("[Contract] Transaction submitted:", tx.hash);
 
     const receipt = await tx.wait();
 
-    console.log('[Contract] Trial registered successfully. Trial ID:', receipt?.logs?.[0]);
+    console.log(
+      "[Contract] Trial registered successfully. Trial ID:",
+      receipt?.logs?.[0]
+    );
 
     return receipt;
   } catch (error: any) {
-    console.error('[Contract] Failed to register trial:', error);
+    console.error("[Contract] Failed to register trial:", error);
     throw new Error(`Trial registration failed: ${error.message}`);
   }
 }
@@ -218,10 +222,10 @@ export async function getTrialPublicInfo(
       sponsor: info.sponsor,
       isActive: info.isActive,
       createdAt: Number(info.createdAt),
-      participantCount: Number(info.participantCount)
+      participantCount: Number(info.participantCount),
     };
   } catch (error: any) {
-    console.error('[Contract] Failed to get trial info:', error);
+    console.error("[Contract] Failed to get trial info:", error);
     throw new Error(`Failed to fetch trial: ${error.message}`);
   }
 }
@@ -240,7 +244,7 @@ export async function getSponsorTrials(
 
     return trialIds.map((id: any) => Number(id));
   } catch (error: any) {
-    console.error('[Contract] Failed to get sponsor trials:', error);
+    console.error("[Contract] Failed to get sponsor trials:", error);
     throw new Error(`Failed to fetch trials: ${error.message}`);
   }
 }
@@ -258,7 +262,7 @@ export async function getTrialCount(
 
     return Number(count);
   } catch (error: any) {
-    console.error('[Contract] Failed to get trial count:', error);
+    console.error("[Contract] Failed to get trial count:", error);
     return 0;
   }
 }
@@ -287,9 +291,9 @@ export async function registerPatient(
   publicKeyHash: string
 ): Promise<any> {
   try {
-    const contract = getAegisCareContract('', signer);
+    const contract = getAegisCareContract("", signer);
 
-    console.log('[Contract] Registering patient');
+    console.log("[Contract] Registering patient");
 
     const tx = await contract.registerPatient(
       encryptedMedicalData.age,
@@ -300,15 +304,15 @@ export async function registerPatient(
       publicKeyHash
     );
 
-    console.log('[Contract] Transaction submitted:', tx.hash);
+    console.log("[Contract] Transaction submitted:", tx.hash);
 
     const receipt = await tx.wait();
 
-    console.log('[Contract] Patient registered successfully');
+    console.log("[Contract] Patient registered successfully");
 
     return receipt;
   } catch (error: any) {
-    console.error('[Contract] Failed to register patient:', error);
+    console.error("[Contract] Failed to register patient:", error);
     throw new Error(`Patient registration failed: ${error.message}`);
   }
 }
@@ -327,7 +331,7 @@ export async function patientExists(
 
     return exists;
   } catch (error: any) {
-    console.error('[Contract] Failed to check patient existence:', error);
+    console.error("[Contract] Failed to check patient existence:", error);
     return false;
   }
 }
@@ -345,7 +349,7 @@ export async function getPatientCount(
 
     return Number(count);
   } catch (error: any) {
-    console.error('[Contract] Failed to get patient count:', error);
+    console.error("[Contract] Failed to get patient count:", error);
     return 0;
   }
 }
@@ -371,21 +375,26 @@ export async function computeEligibility(
   patientAddress: string
 ): Promise<any> {
   try {
-    const contract = getAegisCareContract('', signer);
+    const contract = getAegisCareContract("", signer);
 
-    console.log('[Contract] Computing eligibility for trial:', trialId, 'patient:', patientAddress);
+    console.log(
+      "[Contract] Computing eligibility for trial:",
+      trialId,
+      "patient:",
+      patientAddress
+    );
 
     const tx = await contract.computeEligibility(trialId, patientAddress);
 
-    console.log('[Contract] Transaction submitted:', tx.hash);
+    console.log("[Contract] Transaction submitted:", tx.hash);
 
     const receipt = await tx.wait();
 
-    console.log('[Contract] Eligibility computed successfully');
+    console.log("[Contract] Eligibility computed successfully");
 
     return receipt;
   } catch (error: any) {
-    console.error('[Contract] Failed to compute eligibility:', error);
+    console.error("[Contract] Failed to compute eligibility:", error);
     throw new Error(`Eligibility computation failed: ${error.message}`);
   }
 }
@@ -406,17 +415,20 @@ export async function getEligibilityResult(
   patientAddress: string
 ): Promise<any> {
   try {
-    const contract = getAegisCareContract('', signer);
+    const contract = getAegisCareContract("", signer);
 
-    console.log('[Contract] Fetching eligibility result');
+    console.log("[Contract] Fetching eligibility result");
 
-    const encryptedResult = await contract.getEligibilityResult(trialId, patientAddress);
+    const encryptedResult = await contract.getEligibilityResult(
+      trialId,
+      patientAddress
+    );
 
-    console.log('[Contract] Eligibility result retrieved (encrypted)');
+    console.log("[Contract] Eligibility result retrieved (encrypted)");
 
     return encryptedResult;
   } catch (error: any) {
-    console.error('[Contract] Failed to get eligibility result:', error);
+    console.error("[Contract] Failed to get eligibility result:", error);
     throw new Error(`Failed to fetch eligibility result: ${error.message}`);
   }
 }
@@ -443,46 +455,50 @@ export function isValidAddress(address: string): boolean {
 /**
  * Listen for account changes
  */
-export function setupAccountChangeListener(callback: (accounts: string[]) => void): () => void {
-  if (typeof window === 'undefined' || !(window as any).ethereum) {
+export function setupAccountChangeListener(
+  callback: (accounts: string[]) => void
+): () => void {
+  if (typeof window === "undefined" || !(window as any).ethereum) {
     return () => {};
   }
 
   const ethereum = (window as any).ethereum;
 
   const handleAccountsChanged = (accounts: string[]) => {
-    console.log('[Web3] Accounts changed:', accounts);
+    console.log("[Web3] Accounts changed:", accounts);
     callback(accounts);
   };
 
-  ethereum.on('accountsChanged', handleAccountsChanged);
+  ethereum.on("accountsChanged", handleAccountsChanged);
 
   // Return cleanup function
   return () => {
-    ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    ethereum.removeListener("accountsChanged", handleAccountsChanged);
   };
 }
 
 /**
  * Listen for network changes
  */
-export function setupNetworkChangeListener(callback: (chainId: string) => void): () => void {
-  if (typeof window === 'undefined' || !(window as any).ethereum) {
+export function setupNetworkChangeListener(
+  callback: (chainId: string) => void
+): () => void {
+  if (typeof window === "undefined" || !(window as any).ethereum) {
     return () => {};
   }
 
   const ethereum = (window as any).ethereum;
 
   const handleChainChanged = (chainId: string) => {
-    console.log('[Web3] Network changed:', chainId);
+    console.log("[Web3] Network changed:", chainId);
     callback(chainId);
   };
 
-  ethereum.on('chainChanged', handleChainChanged);
+  ethereum.on("chainChanged", handleChainChanged);
 
   // Return cleanup function
   return () => {
-    ethereum.removeListener('chainChanged', handleChainChanged);
+    ethereum.removeListener("chainChanged", handleChainChanged);
   };
 }
 

@@ -1,15 +1,15 @@
-import { ethers } from "hardhat";
+import hre from "hardhat";
 
 async function main() {
   console.log("\n🚀 Deploying AegisCare smart contract...\n");
 
   // Get the deployer account
-  const [deployer] = await ethers.getSigners();
+  const [deployer] = await hre.ethers.getSigners();
   console.log("📝 Deploying with account:", deployer.address);
 
   // Get balance (ethers v6 API)
-  const balance = await ethers.provider.getBalance(deployer.address);
-  console.log("💰 Account balance:", ethers.formatEther(balance), "ETH\n");
+  const balance = await hre.ethers.provider.getBalance(deployer.address);
+  console.log("💰 Account balance:", hre.ethers.formatEther(balance), "ETH\n");
 
   if (balance === BigInt(0)) {
     console.error("❌ Deployer account has no ETH! Please fund the account.");
@@ -20,7 +20,7 @@ async function main() {
   console.log("─".repeat(60));
 
   // Deploy the contract
-  const AegisCare = await ethers.getContractFactory("AegisCare");
+  const AegisCare = await hre.ethers.getContractFactory("AegisCare");
   const aegisCare = await AegisCare.deploy();
 
   await aegisCare.waitForDeployment();
@@ -44,8 +44,8 @@ async function main() {
 
   // Save deployment info
   const deploymentInfo = {
-    network: (await ethers.provider.getNetwork()).name,
-    chainId: (await ethers.provider.getNetwork()).chainId.toString(),
+    network: (await hre.ethers.provider.getNetwork()).name,
+    chainId: (await hre.ethers.provider.getNetwork()).chainId.toString(),
     contractAddress: await aegisCare.getAddress(),
     deployer: deployer.address,
     timestamp: new Date().toISOString(),

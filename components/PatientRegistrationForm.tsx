@@ -1,27 +1,26 @@
 'use client';
 
-/**
- * Patient Registration Form Component
- *
- * Allows patients to register with encrypted medical data.
- * All medical data is encrypted client-side before submission.
- *
- * SECURITY:
- * - No plaintext medical data is transmitted to the blockchain
- * - Encryption happens in the browser using FHE
- * - Only encrypted values (einput) are sent to the smart contract
- */
-
 import { useState } from 'react';
-import { encryptPatientData, getPublicKeyHash, validatePatientData, type PatientData } from '@/lib/fheClient';
+import {
+  encryptPatientData,
+  getPublicKeyHash,
+  validatePatientData,
+  type PatientData,
+} from '@/lib/fheClient';
 import { registerPatient, connectWallet } from '@/lib/web3Client';
+import { useFHE } from '@/components/providers/FHEProvider';
 import type { Signer } from 'ethers';
 
 interface PatientRegistrationFormProps {
   onRegistrationSuccess?: (patientId: number) => void;
 }
 
-export default function PatientRegistrationForm({ onRegistrationSuccess }: PatientRegistrationFormProps) {
+export default function PatientRegistrationForm({
+  onRegistrationSuccess,
+}: PatientRegistrationFormProps) {
+  // FHE context
+  const { isInitialized: fheInitialized, initFHE } = useFHE()
+
   // Form state
   const [formData, setFormData] = useState<PatientData>({
     age: 0,
@@ -93,6 +92,14 @@ export default function PatientRegistrationForm({ onRegistrationSuccess }: Patie
     setIsLoading(true);
 
     try {
+      // Check FHE initialization
+      if (!fheInitialized) {
+        setError('Initializing FHEVM encryption... Please wait.');
+        await initFHE()
+        // Give it a moment to complete
+        await new Promise(resolve => setTimeout(resolve, 1000))
+      }
+
       // Validate form data
       const errors = validatePatientData(formData);
       if (errors.length > 0) {
@@ -110,15 +117,21 @@ export default function PatientRegistrationForm({ onRegistrationSuccess }: Patie
 
       console.log('[PatientForm] Encrypting medical data...');
 
+      // Get wallet signer and address
+      const { signer, address } = await connectWallet();
+
+      // Get contract address from environment
+      const contractAddress = process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS;
+      if (!contractAddress) {
+        throw new Error('Contract address not configured. Please check NEXT_PUBLIC_AEGISCARE_ADDRESS in .env');
+      }
+
       // Encrypt medical data client-side
       // This is the critical security step - all encryption happens here
-      const encryptedData = await encryptPatientData(formData);
+      const encryptedData = await encryptPatientData(formData, contractAddress, address);
 
       console.log('[PatientForm] Medical data encrypted successfully');
       console.log('[PatientForm] Submitting to smart contract...');
-
-      // Get wallet signer
-      const { signer } = await connectWallet();
 
       // Get public key hash for ACL
       const publicKeyHash = getPublicKeyHash();
@@ -129,7 +142,8 @@ export default function PatientRegistrationForm({ onRegistrationSuccess }: Patie
       console.log('[PatientForm] Patient registered successfully');
 
       // Extract patient ID from event logs
-      const patientId = receipt.events?.find((e: any) => e.event === 'PatientRegistered')?.args?.patientId;
+      const patientId = receipt.events?.find((e: any) => e.event === 'PatientRegistered')?.args
+        ?.patientId;
 
       setSuccess(true);
 
@@ -182,7 +196,8 @@ export default function PatientRegistrationForm({ onRegistrationSuccess }: Patie
       {success && (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm font-medium text-green-800">
-            ✓ Registration successful! Your encrypted medical data has been submitted to the blockchain.
+            ✓ Registration successful! Your encrypted medical data has been submitted to the
+            blockchain.
           </p>
           <p className="text-xs text-green-600 mt-2">
             You can now check your eligibility for clinical trials.
@@ -200,7 +215,9 @@ export default function PatientRegistrationForm({ onRegistrationSuccess }: Patie
       {/* Validation Errors */}
       {validationErrors.length > 0 && (
         <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <p className="text-sm font-medium text-yellow-800 mb-2">Please fix the following errors:</p>
+          <p className="text-sm font-medium text-yellow-800 mb-2">
+            Please fix the following errors:
+          </p>
           <ul className="text-sm text-yellow-700 list-disc list-inside">
             {validationErrors.map((error, index) => (
               <li key={index}>{error}</li>

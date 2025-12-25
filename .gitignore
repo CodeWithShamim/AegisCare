@@ -16,6 +16,10 @@
 # next.js
 /.next/
 /out/
+/artifacts
+cache
+/fhevmTemp
+/types
 
 # production
 /build

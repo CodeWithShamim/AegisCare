@@ -118,15 +118,21 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
 
       console.log('[TrialForm] Encrypting eligibility criteria...');
 
+      // Get wallet signer and address
+      const { signer, address } = await connectWallet();
+
+      // Get contract address from environment
+      const contractAddress = process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS;
+      if (!contractAddress) {
+        throw new Error('Contract address not configured. Please check NEXT_PUBLIC_AEGISCARE_ADDRESS in .env');
+      }
+
       // Encrypt eligibility criteria client-side
       // This is the critical security step - all encryption happens here
-      const encryptedCriteria = await encryptTrialCriteria(formData);
+      const encryptedCriteria = await encryptTrialCriteria(formData, contractAddress, address);
 
       console.log('[TrialForm] Eligibility criteria encrypted successfully');
       console.log('[TrialForm] Submitting to smart contract...');
-
-      // Get wallet signer
-      const { signer } = await connectWallet();
 
       // Submit encrypted criteria to smart contract
       const receipt = await registerTrial(
