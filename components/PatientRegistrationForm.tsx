@@ -143,7 +143,6 @@ export default function PatientRegistrationForm({
       const publicKeyHash = getPublicKeyHash();
 
       console.log({ publicKeyHash });
-      console.log({ encryptedData });
 
       // Submit encrypted data to smart contract
       const receipt = await registerPatient(signer, encryptedData, publicKeyHash);

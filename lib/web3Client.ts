@@ -169,81 +169,29 @@ export async function registerTrial(
   signer: JsonRpcSigner,
   trialName: string,
   description: string,
-  encryptedCriteria: {
-    minAge: any;
-    minAgeProof: any;
-    maxAge: any;
-    maxAgeProof: any;
-    requiredGender: any;
-    genderProof: any;
-    minBMIScore: any;
-    minBMIProof: any;
-    maxBMIScore: any;
-    maxBMIProof: any;
-    hasSpecificCondition: any;
-    conditionProof: any;
-    conditionCode: any;
-    codeProof: any;
-  }
+  encryptedData: any
 ): Promise<any> {
   try {
     const contract = getAegisCareContract("", signer);
 
-    console.log("[Contract] Registering trial:", trialName);
-    console.log("[Contract] Encrypted data structure:", {
-      trialName,
-      description,
-      minAgeHandle: encryptedCriteria.minAge.handle,
-      minAgeProof: encryptedCriteria.minAgeProof,
-      maxAgeHandle: encryptedCriteria.maxAge.handle,
-      maxAgeProof: encryptedCriteria.maxAgeProof,
-      genderHandle: encryptedCriteria.requiredGender.handle,
-      genderProof: encryptedCriteria.genderProof,
-      minBMIHandle: encryptedCriteria.minBMIScore.handle,
-      minBMIProof: encryptedCriteria.minBMIProof,
-      maxBMIHandle: encryptedCriteria.maxBMIScore.handle,
-      maxBMIProof: encryptedCriteria.maxBMIProof,
-      conditionHandle: encryptedCriteria.hasSpecificCondition.handle,
-      conditionProof: encryptedCriteria.conditionProof,
-      codeHandle: encryptedCriteria.conditionCode.handle,
-      codeProof: encryptedCriteria.codeProof,
-    });
-
-    // Contract expects: trialName, description, then 7 pairs of (handle, proof)
     const tx = await contract.registerTrial(
       trialName,
       description,
-      // Min age (handle + proof)
-      encryptedCriteria.minAge.handle,
-      encryptedCriteria.minAgeProof,
-      // Max age (handle + proof)
-      encryptedCriteria.maxAge.handle,
-      encryptedCriteria.maxAgeProof,
-      // Required gender (handle + proof)
-      encryptedCriteria.requiredGender.handle,
-      encryptedCriteria.genderProof,
-      // Min BMI (handle + proof)
-      encryptedCriteria.minBMIScore.handle,
-      encryptedCriteria.minBMIProof,
-      // Max BMI (handle + proof)
-      encryptedCriteria.maxBMIScore.handle,
-      encryptedCriteria.maxBMIProof,
-      // Has specific condition (handle + proof)
-      encryptedCriteria.hasSpecificCondition.handle,
-      encryptedCriteria.conditionProof,
-      // Condition code (handle + proof)
-      encryptedCriteria.conditionCode.handle,
-      encryptedCriteria.codeProof
+      encryptedData.handles[0], // minAge
+      encryptedData.handles[1], // maxAge
+      encryptedData.handles[2], // requiredGender
+      encryptedData.handles[3], // minBMIScore
+      encryptedData.handles[4], // maxBMIScore
+      encryptedData.handles[5], // hasSpecificCondition
+      encryptedData.handles[6], // conditionCode
+      encryptedData.inputProof
     );
 
     console.log("[Contract] Transaction submitted:", tx.hash);
 
     const receipt = await tx.wait();
 
-    console.log(
-      "[Contract] Trial registered successfully. Trial ID:",
-      receipt?.logs?.[0]
-    );
+    console.log("[Contract] Trial registered successfully");
 
     return receipt;
   } catch (error: any) {

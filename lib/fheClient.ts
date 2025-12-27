@@ -75,19 +75,12 @@ export interface EncryptedPatientData {
 
 export interface EncryptedTrialCriteria {
   minAge: EncryptedValue;
-  minAgeProof: string;
   maxAge: EncryptedValue;
-  maxAgeProof: string;
   requiredGender: EncryptedValue;
-  genderProof: string;
   minBMIScore: EncryptedValue;
-  minBMIProof: string;
   maxBMIScore: EncryptedValue;
-  maxBMIProof: string;
   hasSpecificCondition: EncryptedValue;
-  conditionProof: string;
   conditionCode: EncryptedValue;
-  codeProof: string;
 }
 
 export interface PatientData {
@@ -318,7 +311,7 @@ export async function encryptPatientData(
     input.add8(BigInt(data.gender)); // Gender: 0-2
     input.add128(BigInt(Math.round(data.bmiScore * 10))); // BMI: scaled for precision
     input.add8(BigInt(data.hasMedicalCondition ? 1 : 0)); // Boolean as 0 or 1
-    input.add32(BigInt(conditionCodeNum ? 1 : 0)); // Condition code: ICD-10
+    input.add32(BigInt(conditionCodeNum)); // Condition code: ICD-10
 
     console.log("🔐 Encrypting values...");
     // Encrypt all values and generate proof
@@ -356,13 +349,13 @@ export async function encryptPatientData(
  * @param criteria - Trial eligibility criteria
  * @param contractAddress - AegisCare contract address
  * @param userAddress - User's wallet address
- * @returns Encrypted criteria with proofs
+ * @returns Encrypted criteria with single proof
  */
 export async function encryptTrialCriteria(
   criteria: TrialCriteriaData,
   contractAddress: string,
   userAddress: string
-): Promise<EncryptedTrialCriteria> {
+): Promise<any> {
   const fhe = getFHEInstance();
 
   try {
@@ -376,6 +369,8 @@ export async function encryptTrialCriteria(
 
     // Create encrypted input buffer for trial criteria
     const input = fhe.createEncryptedInput(contractAddress, userAddress);
+
+    console.log({ criteria });
 
     // Add each value using appropriate data type methods
     // Scale BMI by 10 for precision
@@ -395,52 +390,9 @@ export async function encryptTrialCriteria(
     console.log("🔍 Encrypted handles:", ciphertexts.handles);
     console.log("🔍 Proof:", ciphertexts.inputProof);
 
-    // Return encrypted data with handles and proof
+    // Return ciphertexts directly (handles + inputProof)
     // The handles array contains: [minAge, maxAge, gender, minBMI, maxBMI, hasCondition, conditionCode]
-    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
-    return {
-      minAge: {
-        handle: formatHandle(ciphertexts.handles[0]),
-        proof: ciphertexts.inputProof,
-      },
-      minAgeProof: ciphertexts.inputProof,
-
-      maxAge: {
-        handle: formatHandle(ciphertexts.handles[1]),
-        proof: ciphertexts.inputProof,
-      },
-      maxAgeProof: ciphertexts.inputProof,
-
-      requiredGender: {
-        handle: formatHandle(ciphertexts.handles[2]),
-        proof: ciphertexts.inputProof,
-      },
-      genderProof: ciphertexts.inputProof,
-
-      minBMIScore: {
-        handle: formatHandle(ciphertexts.handles[3]),
-        proof: ciphertexts.inputProof,
-      },
-      minBMIProof: ciphertexts.inputProof,
-
-      maxBMIScore: {
-        handle: formatHandle(ciphertexts.handles[4]),
-        proof: ciphertexts.inputProof,
-      },
-      maxBMIProof: ciphertexts.inputProof,
-
-      hasSpecificCondition: {
-        handle: formatHandle(ciphertexts.handles[5]),
-        proof: ciphertexts.inputProof,
-      },
-      conditionProof: ciphertexts.inputProof,
-
-      conditionCode: {
-        handle: formatHandle(ciphertexts.handles[6]),
-        proof: ciphertexts.inputProof,
-      },
-      codeProof: ciphertexts.inputProof,
-    };
+    return ciphertexts;
   } catch (error) {
     console.error("❌ Encryption failed:", error);
     throw new Error("Failed to encrypt trial criteria");

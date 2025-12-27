@@ -24,7 +24,7 @@ export interface PatientRegistrationParams {
 export interface TrialRegistrationParams {
   trialName: string;
   description: string;
-  encryptedCriteria: EncryptedTrialCriteria;
+  encryptedData: any;
 }
 
 // ============================================
@@ -228,28 +228,19 @@ export async function registerTrial(
   contract: Contract,
   params: TrialRegistrationParams
 ): Promise<ethers.TransactionReceipt> {
-  const { trialName, description, encryptedCriteria } = params;
+  const { trialName, description, encryptedData } = params;
 
   logger.log("🏥 [Contract] Preparing trial registration...");
   logger.log(`  - Trial name: ${trialName}`);
   logger.log(`  - Description: ${description}`);
 
   // Validate required fields
-  const requiredFields = [
-    "minAge", "minAgeProof",
-    "maxAge", "maxAgeProof",
-    "requiredGender", "genderProof",
-    "minBMIScore", "minBMIProof",
-    "maxBMIScore", "maxBMIProof",
-    "hasSpecificCondition", "conditionProof",
-    "conditionCode", "codeProof",
-  ];
+  if (!encryptedData.handles || encryptedData.handles.length !== 7) {
+    throw new Error("Invalid encrypted data: expected 7 handles");
+  }
 
-  for (const field of requiredFields) {
-    const value = (encryptedCriteria as any)[field];
-    if (!value) {
-      throw new Error(`Missing required field: ${field}`);
-    }
+  if (!encryptedData.inputProof) {
+    throw new Error("Missing required field: inputProof");
   }
 
   logger.log("✅ [Contract] Trial criteria validated");
@@ -258,27 +249,14 @@ export async function registerTrial(
   const contractParams = [
     trialName,
     description,
-    // Min age (handle + proof)
-    encryptedCriteria.minAge.handle,
-    encryptedCriteria.minAgeProof,
-    // Max age (handle + proof)
-    encryptedCriteria.maxAge.handle,
-    encryptedCriteria.maxAgeProof,
-    // Required gender (handle + proof)
-    encryptedCriteria.requiredGender.handle,
-    encryptedCriteria.genderProof,
-    // Min BMI (handle + proof)
-    encryptedCriteria.minBMIScore.handle,
-    encryptedCriteria.minBMIProof,
-    // Max BMI (handle + proof)
-    encryptedCriteria.maxBMIScore.handle,
-    encryptedCriteria.maxBMIProof,
-    // Has specific condition (handle + proof)
-    encryptedCriteria.hasSpecificCondition.handle,
-    encryptedCriteria.conditionProof,
-    // Condition code (handle + proof)
-    encryptedCriteria.conditionCode.handle,
-    encryptedCriteria.codeProof,
+    encryptedData.handles[0], // minAge
+    encryptedData.handles[1], // maxAge
+    encryptedData.handles[2], // requiredGender
+    encryptedData.handles[3], // minBMIScore
+    encryptedData.handles[4], // maxBMIScore
+    encryptedData.handles[5], // hasSpecificCondition
+    encryptedData.handles[6], // conditionCode
+    encryptedData.inputProof,
   ];
 
   logger.log("📋 [Contract] Parameters prepared");

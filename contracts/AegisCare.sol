@@ -40,13 +40,13 @@ contract AegisCare is ZamaEthereumConfig {
         uint256 trialId;
         string trialName;
         string description;
-        euint256 minAge;
-        euint256 maxAge;
-        euint256 requiredGender;
-        euint256 minBMIScore;
-        euint256 maxBMIScore;
-        euint256 hasSpecificCondition;
-        euint256 conditionCode;
+        euint32 minAge;
+        euint32 maxAge;
+        euint8 requiredGender;
+        euint128 minBMIScore;
+        euint128 maxBMIScore;
+        euint8 hasSpecificCondition;
+        euint32 conditionCode;
         address sponsor;
         bool isActive;
         uint256 createdAt;
@@ -233,37 +233,25 @@ contract AegisCare is ZamaEthereumConfig {
     /// @param _trialName Name of the clinical trial
     /// @param _description Detailed description of the trial
     /// @param _minAge Encrypted minimum age requirement
-    /// @param _minAgeProof Proof of encryption for minimum age
     /// @param _maxAge Encrypted maximum age requirement
-    /// @param _maxAgeProof Proof of encryption for maximum age
     /// @param _requiredGender Encrypted gender requirement
-    /// @param _genderProof Proof of encryption for gender requirement
     /// @param _minBMIScore Encrypted minimum BMI score requirement
-    /// @param _minBMIProof Proof of encryption for minimum BMI
     /// @param _maxBMIScore Encrypted maximum BMI score requirement
-    /// @param _maxBMIProof Proof of encryption for maximum BMI
     /// @param _hasSpecificCondition Encrypted boolean for specific condition requirement
-    /// @param _conditionProof Proof of encryption for condition requirement
     /// @param _conditionCode Encrypted condition code for the trial
-    /// @param _codeProof Proof of encryption for condition code
+    /// @param _attestation Proof of encryption for all encrypted parameters
     /// @return The ID of the newly registered trial
     function registerTrial(
         string calldata _trialName,
         string calldata _description,
-        externalEuint256 _minAge,
-        bytes calldata _minAgeProof,
-        externalEuint256 _maxAge,
-        bytes calldata _maxAgeProof,
-        externalEuint256 _requiredGender,
-        bytes calldata _genderProof,
-        externalEuint256 _minBMIScore,
-        bytes calldata _minBMIProof,
-        externalEuint256 _maxBMIScore,
-        bytes calldata _maxBMIProof,
-        externalEuint256 _hasSpecificCondition,
-        bytes calldata _conditionProof,
-        externalEuint256 _conditionCode,
-        bytes calldata _codeProof
+        externalEuint32 _minAge,
+        externalEuint32 _maxAge,
+        externalEuint8 _requiredGender,
+        externalEuint128 _minBMIScore,
+        externalEuint128 _maxBMIScore,
+        externalEuint8 _hasSpecificCondition,
+        externalEuint32 _conditionCode,
+        bytes calldata _attestation
     ) external whenNotPaused returns (uint256) {
         uint256[] storage sponsorTrialList = sponsorTrials[msg.sender];
         if (sponsorTrialList.length >= MAX_TRIALS_PER_SPONSOR) {
@@ -273,28 +261,13 @@ contract AegisCare is ZamaEthereumConfig {
         trialCount++;
 
         // Convert external encrypted types to internal encrypted types
-        euint256 minAgeInternal = FHE.fromExternal(_minAge, _minAgeProof);
-        euint256 maxAgeInternal = FHE.fromExternal(_maxAge, _maxAgeProof);
-        euint256 requiredGenderInternal = FHE.fromExternal(
-            _requiredGender,
-            _genderProof
-        );
-        euint256 minBMIScoreInternal = FHE.fromExternal(
-            _minBMIScore,
-            _minBMIProof
-        );
-        euint256 maxBMIScoreInternal = FHE.fromExternal(
-            _maxBMIScore,
-            _maxBMIProof
-        );
-        euint256 hasSpecificConditionInternal = FHE.fromExternal(
-            _hasSpecificCondition,
-            _conditionProof
-        );
-        euint256 conditionCodeInternal = FHE.fromExternal(
-            _conditionCode,
-            _codeProof
-        );
+        euint32 minAgeInternal = FHE.fromExternal(_minAge, _attestation);
+        euint32 maxAgeInternal = FHE.fromExternal(_maxAge, _attestation);
+        euint8 requiredGenderInternal = FHE.fromExternal(_requiredGender, _attestation);
+        euint128 minBMIScoreInternal = FHE.fromExternal(_minBMIScore, _attestation);
+        euint128 maxBMIScoreInternal = FHE.fromExternal(_maxBMIScore, _attestation);
+        euint8 hasSpecificConditionInternal = FHE.fromExternal(_hasSpecificCondition, _attestation);
+        euint32 conditionCodeInternal = FHE.fromExternal(_conditionCode, _attestation);
 
         trials[trialCount] = EncryptedTrial({
             trialId: trialCount,
