@@ -14,89 +14,129 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        {/* Platform Statistics */}
-        <div className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Total Trials */}
-            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100 hover:shadow-xl transition-shadow">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Active Trials</p>
-                  {stats.isLoading ? (
-                    <div className="animate-pulse mt-2">
-                      <div className="h-8 bg-gray-200 rounded w-20"></div>
-                    </div>
-                  ) : (
-                    <p className="text-4xl font-bold text-indigo-600 mt-2">{stats.totalTrials}</p>
-                  )}
-                  <p className="text-xs text-gray-500 mt-1">Registered clinical trials</p>
-                </div>
-                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Total Patients */}
-            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-green-100 hover:shadow-xl transition-shadow">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Protected Patients</p>
-                  {stats.isLoading ? (
-                    <div className="animate-pulse mt-2">
-                      <div className="h-8 bg-gray-200 rounded w-20"></div>
-                    </div>
-                  ) : (
-                    <p className="text-4xl font-bold text-green-600 mt-2">{stats.totalPatients}</p>
-                  )}
-                  <p className="text-xs text-gray-500 mt-1">Privacy-preserving registrations</p>
-                </div>
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Privacy Score */}
-            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100 hover:shadow-xl transition-shadow">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Data Privacy</p>
-                  <p className="text-4xl font-bold text-purple-600 mt-2">100%</p>
-                  <p className="text-xs text-gray-500 mt-1">End-to-end encrypted</p>
-                </div>
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Live Activity Indicator */}
-          <div className="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-600">
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span>Platform active on Zama FHE Devnet</span>
-          </div>
-        </div>
-
         <div className="text-center">
-          <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-            Clinical Trial Matching with
-            <span className="block text-indigo-600 mt-2">Complete Privacy</span>
-          </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500">
-            AegisCare uses Fully Homomorphic Encryption (FHE) to match patients with clinical trials
-            without ever revealing medical data in plaintext.
-          </p>
+          <div className="py-16 md:py-36 lg:py-48">
+            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              Clinical Trial Matching with
+              <span className="block text-indigo-600 mt-2">Complete Privacy</span>
+            </h2>
+            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500">
+              AegisCare uses Fully Homomorphic Encryption (FHE) to match patients with clinical
+              trials without ever revealing medical data in plaintext.
+            </p>
+          </div>
+
+          {/* Platform Statistics */}
+          <div className="mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Total Trials */}
+              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100 hover:shadow-xl transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      Active Trials
+                    </p>
+                    {stats.isLoading ? (
+                      <div className="animate-pulse mt-2">
+                        <div className="h-8 bg-gray-200 rounded w-20"></div>
+                      </div>
+                    ) : (
+                      <p className="text-4xl font-bold text-indigo-600 mt-2">{stats.totalTrials}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">Registered clinical trials</p>
+                  </div>
+                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-indigo-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Total Patients */}
+              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-green-100 hover:shadow-xl transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      Protected Patients
+                    </p>
+                    {stats.isLoading ? (
+                      <div className="animate-pulse mt-2">
+                        <div className="h-8 bg-gray-200 rounded w-20"></div>
+                      </div>
+                    ) : (
+                      <p className="text-4xl font-bold text-green-600 mt-2">
+                        {stats.totalPatients}
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">Privacy-preserving registrations</p>
+                  </div>
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Privacy Score */}
+              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100 hover:shadow-xl transition-shadow">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      Data Privacy
+                    </p>
+                    <p className="text-4xl font-bold text-purple-600 mt-2">100%</p>
+                    <p className="text-xs text-gray-500 mt-1">End-to-end encrypted</p>
+                  </div>
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-purple-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Activity Indicator */}
+            <div className="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-600">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              </span>
+              <span>Platform active on Zama FHE Devnet</span>
+            </div>
+          </div>
 
           {/* Key Features */}
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -165,9 +205,7 @@ export default function Home() {
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
                       3
                     </span>
-                    <span>
-                      Check eligibility - computed on encrypted data on the blockchain
-                    </span>
+                    <span>Check eligibility - computed on encrypted data on the blockchain</span>
                   </li>
                   <li className="flex items-start">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
@@ -217,7 +255,8 @@ export default function Home() {
             <div className="text-center mb-10">
               <h3 className="text-3xl font-bold text-gray-900 mb-3">See AegisCare in Action</h3>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Watch how our platform revolutionizes clinical trial matching with complete privacy preservation
+                Watch how our platform revolutionizes clinical trial matching with complete privacy
+                preservation
               </p>
             </div>
 
@@ -257,11 +296,21 @@ export default function Home() {
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-2">
-                        <svg className="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-5 h-5 text-indigo-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                          <path
+                            fillRule="evenodd"
+                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
-                        <span className="text-sm text-gray-600">Learn how FHE protects patient data</span>
+                        <span className="text-sm text-gray-600">
+                          Learn how FHE protects patient data
+                        </span>
                       </div>
                     </div>
 
@@ -293,39 +342,77 @@ export default function Home() {
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100">
                 <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
                   </svg>
                 </div>
                 <h4 className="font-bold text-gray-900 mb-2">100% Encrypted</h4>
-                <p className="text-sm text-gray-600">Medical data stays encrypted throughout the entire process</p>
+                <p className="text-sm text-gray-600">
+                  Medical data stays encrypted throughout the entire process
+                </p>
               </div>
 
               <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
                 <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
                   </svg>
                 </div>
                 <h4 className="font-bold text-gray-900 mb-2">HIPAA Compliant</h4>
-                <p className="text-sm text-gray-600">Meets healthcare privacy regulations with FHE technology</p>
+                <p className="text-sm text-gray-600">
+                  Meets healthcare privacy regulations with FHE technology
+                </p>
               </div>
 
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                 </div>
                 <h4 className="font-bold text-gray-900 mb-2">Lightning Fast</h4>
-                <p className="text-sm text-gray-600">Real-time eligibility checking on encrypted data</p>
+                <p className="text-sm text-gray-600">
+                  Real-time eligibility checking on encrypted data
+                </p>
               </div>
             </div>
           </div>
 
           {/* Technology Stack */}
           <div className="mt-20 bg-white rounded-lg shadow-md p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Built with Privacy-First Technology</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">
+              Built with Privacy-First Technology
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <div className="text-2xl mb-2">⚡</div>
@@ -354,10 +441,10 @@ export default function Home() {
           <div className="mt-12 bg-indigo-50 rounded-lg p-6 border border-indigo-200">
             <h4 className="text-lg font-semibold text-indigo-900 mb-3">🔒 Security Guarantee</h4>
             <p className="text-sm text-indigo-800">
-              AegisCare ensures that <strong>no plaintext medical data ever appears</strong> on-chain,
-              in logs, or in the UI. All computation happens on encrypted data using FHE, and only the
-              patient can decrypt their eligibility results using their private key. This provides
-              unprecedented privacy protection for clinical trial matching.
+              AegisCare ensures that <strong>no plaintext medical data ever appears</strong>{' '}
+              on-chain, in logs, or in the UI. All computation happens on encrypted data using FHE,
+              and only the patient can decrypt their eligibility results using their private key.
+              This provides unprecedented privacy protection for clinical trial matching.
             </p>
           </div>
         </div>

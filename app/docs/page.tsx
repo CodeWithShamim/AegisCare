@@ -114,7 +114,7 @@ export default function DocsPage() {
             Zama FHEVM Docs
           </a>
           <a
-            href="https://sepolia.etherscan.io/address/0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3"
+            href="https://sepolia.etherscan.io/address/0xe790E247C5793AD4EDDE7C1cFd6582b45F603947"
             target="_blank"
             rel="noopener noreferrer"
             className="docs-sidebar-link"
@@ -158,7 +158,7 @@ export default function DocsPage() {
                 <li><strong>FHE Operations:</strong> Computations on encrypted data only</li>
                 <li><strong>Private Decryption:</strong> EIP-712 signatures for secure access</li>
                 <li><strong>Zero Knowledge:</strong> Trial sponsors learn nothing about patient data</li>
-                <li><strong>Testnet Deployed:</strong> Live on Sepolia at <code className="bg-gray-100 px-2 py-1 rounded">0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</code></li>
+                <li><strong>Testnet Deployed:</strong> Live on Sepolia at <code className="bg-gray-100 px-2 py-1 rounded">0xe790E247C5793AD4EDDE7C1cFd6582b45F603947</code></li>
               </ul>
             </div>
           </section>
@@ -570,7 +570,7 @@ export default function DocsPage() {
 │     Ethereum Sepolia Testnet            │
 │  ┌──────────────────────────────────┐   │
 │  │ AegisCare Smart Contract          │   │
-│  │ 0x86eC51d...7AdC35c3             │   │
+│  │ 0xe790E...45F603947             │   │
 │  │                                  │   │
 │  │ • Encrypted Patient Data         │   │
 │  │ • Encrypted Trial Criteria       │   │
@@ -706,7 +706,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code></pre>
 
             <div id="contract-api" className="docs-card">
               <h3 className="text-xl font-bold mb-4">Smart Contract API</h3>
-              <p className="mb-4">Contract deployed at <code className="bg-gray-100 px-2 py-1 rounded">0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</code> on Sepolia</p>
+              <p className="mb-4">Contract deployed at <code className="bg-gray-100 px-2 py-1 rounded">0xe790E247C5793AD4EDDE7C1cFd6582b45F603947</code> on Sepolia</p>
 
               <div className="space-y-4">
                 <div>
@@ -836,9 +836,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code></pre>
               <h3 className="text-xl font-bold mb-4">Current Deployment</h3>
               <div className="bg-blue-50 p-4 rounded-lg mb-4">
                 <p className="mb-2"><strong>Network:</strong> Sepolia Testnet</p>
-                <p className="mb-2"><strong>Contract:</strong> 0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3</p>
+                <p className="mb-2"><strong>Contract:</strong> 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947</p>
                 <p className="mb-2"><strong>Chain ID:</strong> 11155111</p>
-                <p><strong>View on Etherscan:</strong> <a href="https://sepolia.etherscan.io/address/0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3" target="_blank" className="text-blue-600 underline">sepolia.etherscan.io</a></p>
+                <p><strong>View on Etherscan:</strong> <a href="https://sepolia.etherscan.io/address/0xe790E247C5793AD4EDDE7C1cFd6582b45F603947" target="_blank" className="text-blue-600 underline">sepolia.etherscan.io</a></p>
               </div>
 
               <h4 className="font-bold mb-2">Local Deployment</h4>

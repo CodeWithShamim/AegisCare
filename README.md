@@ -60,7 +60,7 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **Enhanced metadata** - Timestamps, participant counts, history tracking
 - **Gas optimization** - Custom errors for efficient execution
 - **Comprehensive events** - Full audit trail
-- **Deployed on Sepolia** - Testnet deployment at `0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3`
+- **Deployed on Sepolia** - Testnet deployment at `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
 
 ### 🎨 Frontend Features
 
@@ -245,9 +245,11 @@ npm run dev
 
 **AegisCare is already deployed on Sepolia Testnet:**
 ```
-Address: 0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3
+Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
 Network: Sepolia Testnet
 Chain ID: 11155111
+Deployer: 0x7e1489fabCF51Fc9a4aCD221A574dD0D3eA8A6F8
+Deployment Date: December 27, 2025
 ```
 
 No need to deploy - just connect MetaMask to Sepolia and start testing!
@@ -330,7 +332,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 │              Ethereum Sepolia Testnet                        │
 ├─────────────────────────────────────────────────────────────┤
 │  Smart Contract: AegisCare.sol                              │
-│  Address: 0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3         │
+│  Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947         │
 │                                                                │
 │  • Encrypted Patient Data (euint256 values)                 │
 │  • Encrypted Trial Criteria (euint256 values)               │
@@ -601,17 +603,18 @@ console.log(isEligible); // true or false
 
 **✅ Deployed on Sepolia Testnet**
 ```
-Contract Address: 0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3
+Contract Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
 Network: Sepolia
 Chain ID: 11155111
-Deployer: 0x197BDAB29923e997672785d329fF063FF6591545
-Transaction: 0xabc... (verify on Etherscan)
+Deployer: 0x7e1489fabCF51Fc9a4aCD221A574dD0D3eA8A6F8
+Deployment Date: December 27, 2025
+Transaction: (verify on Etherscan)
 ```
 
 ### Verify on Etherscan
 
 1. Visit [Sepolia Etherscan](https://sepolia.etherscan.io/)
-2. Search for contract: `0x86eC51d826Ac059d97D44E8c30FF7F0c7AdC35c3`
+2. Search for contract: `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
 3. View contract code, transactions, and events
 
 ### Local Development Deployment
