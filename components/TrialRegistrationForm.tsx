@@ -23,6 +23,7 @@ import {
 } from '@/lib/fheClient';
 import { registerTrial, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
+import LoadingAnimation from '@/components/LoadingAnimation';
 
 interface TrialRegistrationFormProps {
   onRegistrationSuccess?: (trialId: number) => void;
@@ -47,6 +48,8 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
 
   // UI state
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<'encryption' | 'transaction' | 'blockchain' | null>(null);
+  const [loadingMessage, setLoadingMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -89,6 +92,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       if (errors.length > 0) {
         setValidationErrors(errors);
         setIsLoading(false);
+        setLoadingStep(null);
         return;
       }
 
@@ -96,10 +100,13 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       if (!isConnected || !address) {
         setError('Please connect your wallet from the header first');
         setIsLoading(false);
+        setLoadingStep(null);
         return;
       }
 
       console.log('[TrialForm] Encrypting eligibility criteria...');
+      setLoadingMessage('Encrypting eligibility criteria');
+      setLoadingStep('encryption');
 
       // Get wallet signer and address
       const { signer, address: walletAddress } = await connectWallet();
@@ -117,7 +124,12 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       console.log('[TrialForm] Eligibility criteria encrypted successfully');
       console.log('[TrialForm] Submitting to smart contract...');
 
+      setLoadingMessage('Preparing transaction');
+      setLoadingStep('transaction');
+
       // Submit encrypted criteria to smart contract
+      setLoadingMessage('Confirming transaction on blockchain');
+      setLoadingStep('blockchain');
       const receipt = await registerTrial(
         signer,
         formData.trialName,
@@ -157,11 +169,14 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       console.error('[TrialForm] Registration error:', err);
     } finally {
       setIsLoading(false);
+      setLoadingStep(null);
     }
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      {!isLoading ? (
+        <>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Register Clinical Trial</h2>
         <p className="text-sm text-gray-600">
@@ -430,6 +445,13 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
           </ul>
         </div>
       </form>
+        </>
+      ) : (
+        <LoadingAnimation
+          message={loadingMessage || 'Processing'}
+          type={loadingStep || 'default'}
+        />
+      )}
     </div>
   );
 }

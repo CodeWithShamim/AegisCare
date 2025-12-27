@@ -1,14 +1,5 @@
 'use client';
 
-/**
- * Patient Dashboard Page
- *
- * Allows patients to:
- * 1. Register with encrypted medical data
- * 2. Check eligibility for clinical trials
- * 3. View decrypted eligibility results
- */
-
 import { useState, useEffect } from 'react';
 import PatientRegistrationForm from '@/components/PatientRegistrationForm';
 import EligibilityChecker from '@/components/EligibilityChecker';
@@ -113,8 +104,8 @@ export default function PatientDashboard() {
                   🔒 Privacy First Registration
                 </h3>
                 <p className="text-xs text-blue-800">
-                  Your medical data is encrypted in your browser before submission. Only encrypted data
-                  is stored on the blockchain. You maintain full control of your private key.
+                  Your medical data is encrypted in your browser before submission. Only encrypted
+                  data is stored on the blockchain. You maintain full control of your private key.
                 </p>
               </div>
               <PatientRegistrationForm onRegistrationSuccess={handleRegistrationSuccess} />
@@ -125,9 +116,7 @@ export default function PatientDashboard() {
             <div>
               {isRegistered === false && (
                 <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h3 className="text-sm font-semibold text-yellow-900 mb-2">
-                    ⚠️ Not Registered
-                  </h3>
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Not Registered</h3>
                   <p className="text-xs text-yellow-800 mb-3">
                     You need to register with your medical data before checking eligibility.
                   </p>
@@ -145,8 +134,8 @@ export default function PatientDashboard() {
                   🔐 Private Eligibility Check
                 </h3>
                 <p className="text-xs text-green-800">
-                  Your eligibility is computed on encrypted data. The result is encrypted and only you
-                  can decrypt it using your private key. No one else knows if you're eligible.
+                  Your eligibility is computed on encrypted data. The result is encrypted and only
+                  you can decrypt it using your private key. No one else knows if you're eligible.
                 </p>
               </div>
 
@@ -164,7 +153,9 @@ export default function PatientDashboard() {
 
         {/* Security Notice */}
         <div className="mt-12 bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">How Your Privacy is Protected</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            How Your Privacy is Protected
+          </h3>
           <div className="space-y-4">
             <div className="flex items-start">
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3">

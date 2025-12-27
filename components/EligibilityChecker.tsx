@@ -20,6 +20,7 @@ import { computeEligibility, getEligibilityResult, connectWallet } from '@/lib/w
 import { decryptEligibilityResult } from '@/lib/fheClient';
 import { getTrialPublicInfo, getTrialCount } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
+import LoadingAnimation from '@/components/LoadingAnimation';
 
 interface Trial {
   trialId: number;
@@ -341,20 +342,20 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
 
       {/* Processing Indicator */}
       {(isComputing || isDecrypting) && (
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
-            <p className="text-sm text-blue-800">
-              {isComputing
-                ? 'Computing eligibility on encrypted blockchain data...'
-                : 'Decrypting your result with private key...'}
-            </p>
-          </div>
-          <p className="text-xs text-blue-600 mt-2 text-center">
-            {isComputing
-              ? 'This happens on the blockchain without revealing your medical data'
-              : 'Only you can decrypt this result'}
-          </p>
+        <div className="mb-6">
+          <LoadingAnimation
+            message={
+              isComputing
+                ? 'Computing eligibility on encrypted blockchain data'
+                : 'Decrypting your result with private key'
+            }
+            type={isComputing ? 'blockchain' : 'encryption'}
+            submessage={
+              isComputing
+                ? 'This happens on the blockchain without revealing your medical data'
+                : 'Only you can decrypt this result'
+            }
+          />
         </div>
       )}
 

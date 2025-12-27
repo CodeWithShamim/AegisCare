@@ -12,6 +12,7 @@ import {
 import { registerPatient, connectWallet } from '@/lib/web3Client';
 import { useFHE } from '@/components/providers/FHEProvider';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
+import LoadingAnimation from '@/components/LoadingAnimation';
 import type { Signer } from 'ethers';
 
 interface PatientRegistrationFormProps {
@@ -38,6 +39,8 @@ export default function PatientRegistrationForm({
 
   // UI state
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<'encryption' | 'transaction' | 'blockchain' | null>(null);
+  const [loadingMessage, setLoadingMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -77,7 +80,8 @@ export default function PatientRegistrationForm({
     try {
       // Check FHE initialization
       if (!fheInitialized) {
-        setError('Initializing FHEVM encryption... Please wait.');
+        setLoadingMessage('Initializing FHE encryption system');
+        setLoadingStep('encryption');
         await initFHE();
         // Give it a moment to complete
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -90,6 +94,7 @@ export default function PatientRegistrationForm({
       if (errors.length > 0) {
         setValidationErrors(errors);
         setIsLoading(false);
+        setLoadingStep(null);
         return;
       }
 
@@ -97,10 +102,13 @@ export default function PatientRegistrationForm({
       if (!isConnected || !address) {
         setError('Please connect your wallet from the header first');
         setIsLoading(false);
+        setLoadingStep(null);
         return;
       }
 
       console.log('[PatientForm] Encrypting medical data...');
+      setLoadingMessage('Encrypting your medical data');
+      setLoadingStep('encryption');
 
       // Get wallet signer and address
       const { signer, address: walletAddress } = await connectWallet();
@@ -120,12 +128,17 @@ export default function PatientRegistrationForm({
       console.log('[PatientForm] Medical data encrypted successfully');
       console.log('[PatientForm] Submitting to smart contract...');
 
+      setLoadingMessage('Preparing transaction');
+      setLoadingStep('transaction');
+
       // Get public key hash for ACL
       const publicKeyHash = getPublicKeyHash();
 
       console.log({ publicKeyHash });
 
       // Submit encrypted data to smart contract
+      setLoadingMessage('Confirming transaction on blockchain');
+      setLoadingStep('blockchain');
       const receipt = await registerPatient(signer, encryptedData, publicKeyHash);
 
       console.log('[PatientForm] Patient registered successfully');
@@ -147,56 +160,59 @@ export default function PatientRegistrationForm({
       console.error('[PatientForm] Registration error:', err);
     } finally {
       setIsLoading(false);
+      setLoadingStep(null);
     }
   };
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Registration</h2>
-        <p className="text-sm text-gray-600">
-          Register with your medical data to find matching clinical trials.
-          <br />
-          <span className="text-xs text-gray-500">
-            🔒 All medical data is encrypted before submission. Your privacy is protected.
-          </span>
-        </p>
-      </div>
+      {!isLoading ? (
+        <>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Registration</h2>
+            <p className="text-sm text-gray-600">
+              Register with your medical data to find matching clinical trials.
+              <br />
+              <span className="text-xs text-gray-500">
+                🔒 All medical data is encrypted before submission. Your privacy is protected.
+              </span>
+            </p>
+          </div>
 
-      {/* Wallet Connection */}
-      {!isConnected ? (
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800">
-            Please connect your wallet from the header to continue
-          </p>
-        </div>
-      ) : (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm text-green-800">
-            ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
-          </p>
-        </div>
-      )}
+          {/* Wallet Connection */}
+          {!isConnected ? (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                Please connect your wallet from the header to continue
+              </p>
+            </div>
+          ) : (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-green-800">
+                ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
+              </p>
+            </div>
+          )}
 
-      {/* Success Message */}
-      {success && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm font-medium text-green-800">
-            ✓ Registration successful! Your encrypted medical data has been submitted to the
-            blockchain.
-          </p>
-          <p className="text-xs text-green-600 mt-2">
-            You can now check your eligibility for clinical trials.
-          </p>
-        </div>
-      )}
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm font-medium text-green-800">
+                ✓ Registration successful! Your encrypted medical data has been submitted to the
+                blockchain.
+              </p>
+              <p className="text-xs text-green-600 mt-2">
+                You can now check your eligibility for clinical trials.
+              </p>
+            </div>
+          )}
 
-      {/* Error Messages */}
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-800">{error}</p>
-        </div>
-      )}
+          {/* Error Messages */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          )}
 
       {/* Validation Errors */}
       {validationErrors.length > 0 && (
@@ -351,6 +367,13 @@ export default function PatientRegistrationForm({
           </ul>
         </div>
       </form>
+        </>
+      ) : (
+        <LoadingAnimation
+          message={loadingMessage || 'Processing'}
+          type={loadingStep || 'default'}
+        />
+      )}
     </div>
   );
 }
