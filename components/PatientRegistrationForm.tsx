@@ -11,6 +11,7 @@ import {
 } from '@/lib/fheClient';
 import { registerPatient, connectWallet } from '@/lib/web3Client';
 import { useFHE } from '@/components/providers/FHEProvider';
+import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import type { Signer } from 'ethers';
 
 interface PatientRegistrationFormProps {
@@ -22,6 +23,9 @@ export default function PatientRegistrationForm({
 }: PatientRegistrationFormProps) {
   // FHE context
   const { isInitialized: fheInitialized, initFHE } = useFHE();
+
+  // Wallet connection
+  const { isConnected, address, isConnecting } = useWalletConnection();
 
   // Form state
   const [formData, setFormData] = useState<PatientData>({
@@ -36,8 +40,6 @@ export default function PatientRegistrationForm({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string>('');
 
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -52,27 +54,6 @@ export default function PatientRegistrationForm({
     }));
     setValidationErrors([]);
     setError(null);
-  };
-
-  /**
-   * Connect wallet
-   */
-  const handleConnectWallet = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const { address } = await connectWallet();
-      setWalletAddress(address);
-      setWalletConnected(true);
-
-      console.log('[PatientForm] Wallet connected:', address);
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-      console.error('[PatientForm] Wallet connection error:', err);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   /**
@@ -113,8 +94,8 @@ export default function PatientRegistrationForm({
       }
 
       // Ensure wallet is connected
-      if (!walletConnected) {
-        setError('Please connect your wallet first');
+      if (!isConnected || !address) {
+        setError('Please connect your wallet from the header first');
         setIsLoading(false);
         return;
       }
@@ -122,7 +103,7 @@ export default function PatientRegistrationForm({
       console.log('[PatientForm] Encrypting medical data...');
 
       // Get wallet signer and address
-      const { signer, address } = await connectWallet();
+      const { signer, address: walletAddress } = await connectWallet();
 
       // Get contract address from environment
       const contractAddress = process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS;
@@ -153,6 +134,8 @@ export default function PatientRegistrationForm({
       const patientId = receipt.events?.find((e: any) => e.event === 'PatientRegistered')?.args
         ?.patientId;
 
+      console.log({ patientId });
+
       setSuccess(true);
 
       // Notify parent component
@@ -181,21 +164,16 @@ export default function PatientRegistrationForm({
       </div>
 
       {/* Wallet Connection */}
-      {!walletConnected ? (
+      {!isConnected ? (
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800 mb-3">Connect your wallet to continue</p>
-          <button
-            onClick={handleConnectWallet}
-            disabled={isLoading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isLoading ? 'Connecting...' : 'Connect Wallet'}
-          </button>
+          <p className="text-sm text-blue-800">
+            Please connect your wallet from the header to continue
+          </p>
         </div>
       ) : (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-800">
-            ✓ Wallet connected: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+            ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
           </p>
         </div>
       )}
@@ -251,7 +229,7 @@ export default function PatientRegistrationForm({
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your age"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           />
         </div>
 
@@ -266,7 +244,7 @@ export default function PatientRegistrationForm({
             onChange={(e) => handleInputChange('gender', parseInt(e.target.value))}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           >
             <option value="0">Prefer not to say</option>
             <option value="1">Male</option>
@@ -294,7 +272,7 @@ export default function PatientRegistrationForm({
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="e.g., 24.5"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           />
           <p className="text-xs text-gray-500 mt-1">
             BMI will be encrypted. Enter your exact BMI value (e.g., 24.5 for 24.5 kg/m²)
@@ -314,7 +292,7 @@ export default function PatientRegistrationForm({
                 checked={formData.hasMedicalCondition === true}
                 onChange={() => handleInputChange('hasMedicalCondition', true)}
                 className="mr-2"
-                disabled={!walletConnected || isLoading}
+                disabled={!isConnected || isLoading}
               />
               <span className="text-sm">Yes</span>
             </label>
@@ -325,7 +303,7 @@ export default function PatientRegistrationForm({
                 checked={formData.hasMedicalCondition === false}
                 onChange={() => handleInputChange('hasMedicalCondition', false)}
                 className="mr-2"
-                disabled={!walletConnected || isLoading}
+                disabled={!isConnected || isLoading}
               />
               <span className="text-sm">No</span>
             </label>
@@ -345,7 +323,7 @@ export default function PatientRegistrationForm({
               onChange={(e) => handleInputChange('conditionCode', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="e.g., E11 (Type 2 diabetes)"
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
             <p className="text-xs text-gray-500 mt-1">
               Optional: Enter the ICD-10 code for your condition (e.g., E11, I10, J45)
@@ -356,7 +334,7 @@ export default function PatientRegistrationForm({
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={!walletConnected || isLoading}
+          disabled={!isConnected || isLoading}
           className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? 'Processing...' : 'Register with Encrypted Data'}

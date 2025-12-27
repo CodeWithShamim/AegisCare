@@ -24,36 +24,6 @@ let fheInstance: any = null;
  * Format an FHE handle as proper bytes32
  * Pads to 64 hex characters (32 bytes) with 0x prefix
  */
-function formatHandle(handle: string | Uint8Array | any): string {
-  let handleStr: string;
-
-  // Convert handle to string based on type
-  if (typeof handle === "string") {
-    handleStr = handle;
-  } else if (handle instanceof Uint8Array) {
-    // Convert Uint8Array to hex string
-    handleStr =
-      "0x" +
-      Array.from(handle)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-  } else if (handle && typeof handle.toString === "function") {
-    // Try to convert to string
-    handleStr = handle.toString();
-  } else {
-    // Fallback: try to convert to string
-    handleStr = String(handle);
-  }
-
-  // Remove 0x prefix if present
-  const cleanHex = handleStr.replace("0x", "");
-
-  // Pad to 64 characters (32 bytes)
-  const padded = cleanHex.padStart(64, "0");
-
-  // Add 0x prefix
-  return "0x" + padded;
-}
 
 export interface EncryptedValue {
   handle: string;
@@ -302,8 +272,6 @@ export async function encryptPatientData(
 
     // Create encrypted input buffer for patient data
     const input = fhe.createEncryptedInput(contractAddress, userAddress);
-
-    console.log({ data });
 
     // Add each value using appropriate data type methods
     // Scale BMI by 10 for precision (e.g., 24.5 becomes 245)

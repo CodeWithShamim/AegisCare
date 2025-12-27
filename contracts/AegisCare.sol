@@ -16,12 +16,6 @@ import {
 } from "@fhevm/solidity/lib/FHE.sol";
 import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
-/**
- * @title AegisCare - Privacy-Preserving Clinical Trial Matching
- * @notice Demonstrates FHE (Fully Homomorphic Encryption) for healthcare data privacy
- * @dev Uses Zama's fhEVM to enable private clinical trial eligibility checks
- * @author AegisCare Team
- */
 contract AegisCare is ZamaEthereumConfig {
     // ============================================
     // STATE VARIABLES
@@ -263,11 +257,26 @@ contract AegisCare is ZamaEthereumConfig {
         // Convert external encrypted types to internal encrypted types
         euint32 minAgeInternal = FHE.fromExternal(_minAge, _attestation);
         euint32 maxAgeInternal = FHE.fromExternal(_maxAge, _attestation);
-        euint8 requiredGenderInternal = FHE.fromExternal(_requiredGender, _attestation);
-        euint128 minBMIScoreInternal = FHE.fromExternal(_minBMIScore, _attestation);
-        euint128 maxBMIScoreInternal = FHE.fromExternal(_maxBMIScore, _attestation);
-        euint8 hasSpecificConditionInternal = FHE.fromExternal(_hasSpecificCondition, _attestation);
-        euint32 conditionCodeInternal = FHE.fromExternal(_conditionCode, _attestation);
+        euint8 requiredGenderInternal = FHE.fromExternal(
+            _requiredGender,
+            _attestation
+        );
+        euint128 minBMIScoreInternal = FHE.fromExternal(
+            _minBMIScore,
+            _attestation
+        );
+        euint128 maxBMIScoreInternal = FHE.fromExternal(
+            _maxBMIScore,
+            _attestation
+        );
+        euint8 hasSpecificConditionInternal = FHE.fromExternal(
+            _hasSpecificCondition,
+            _attestation
+        );
+        euint32 conditionCodeInternal = FHE.fromExternal(
+            _conditionCode,
+            _attestation
+        );
 
         trials[trialCount] = EncryptedTrial({
             trialId: trialCount,

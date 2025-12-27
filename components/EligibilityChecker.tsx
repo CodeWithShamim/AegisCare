@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react';
 import { computeEligibility, getEligibilityResult, connectWallet } from '@/lib/web3Client';
 import { decryptEligibilityResult } from '@/lib/fheClient';
 import { getTrialPublicInfo, getTrialCount } from '@/lib/web3Client';
+import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 interface Trial {
   trialId: number;
@@ -32,6 +33,9 @@ interface EligibilityCheckerProps {
 }
 
 export default function EligibilityChecker({ patientAddress }: EligibilityCheckerProps) {
+  // Wallet connection
+  const { isConnected, address } = useWalletConnection();
+
   // State
   const [trials, setTrials] = useState<Trial[]>([]);
   const [selectedTrialId, setSelectedTrialId] = useState<number | null>(null);
@@ -41,8 +45,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [eligibilityResult, setEligibilityResult] = useState<boolean | null>(null);
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string>('');
 
   /**
    * Load trials on mount
@@ -93,27 +95,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
   };
 
   /**
-   * Connect wallet
-   */
-  const handleConnectWallet = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const { address } = await connectWallet();
-      setWalletAddress(address);
-      setWalletConnected(true);
-
-      console.log('[EligibilityChecker] Wallet connected:', address);
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-      console.error('[EligibilityChecker] Wallet connection error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  /**
    * Check eligibility
    *
    * This function:
@@ -129,6 +110,11 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
   const handleCheckEligibility = async () => {
     if (!selectedTrialId || !patientAddress) {
       setError('Please select a trial and ensure you are registered');
+      return;
+    }
+
+    if (!isConnected || !address) {
+      setError('Please connect your wallet from the header first');
       return;
     }
 
@@ -189,21 +175,16 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       </div>
 
       {/* Wallet Connection */}
-      {!walletConnected ? (
+      {!isConnected ? (
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800 mb-3">Connect your wallet to continue</p>
-          <button
-            onClick={handleConnectWallet}
-            disabled={isLoading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isLoading ? 'Connecting...' : 'Connect Wallet'}
-          </button>
+          <p className="text-sm text-blue-800">
+            Please connect your wallet from the header to continue
+          </p>
         </div>
       ) : (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-800">
-            ✓ Wallet connected: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+            ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
           </p>
         </div>
       )}
@@ -223,7 +204,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       )}
 
       {/* Trial Selection */}
-      {walletConnected && trials.length > 0 && (
+      {isConnected && trials.length > 0 && (
         <div className="mb-6">
           <label htmlFor="trialSelect" className="block text-sm font-medium text-gray-700 mb-2">
             Select a Clinical Trial *
@@ -257,7 +238,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       )}
 
       {/* Check Eligibility Button */}
-      {walletConnected && selectedTrialId && (
+      {isConnected && selectedTrialId && (
         <button
           onClick={handleCheckEligibility}
           disabled={isComputing || isDecrypting}

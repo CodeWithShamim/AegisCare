@@ -22,12 +22,16 @@ import {
   type TrialCriteriaData,
 } from '@/lib/fheClient';
 import { registerTrial, connectWallet } from '@/lib/web3Client';
+import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 interface TrialRegistrationFormProps {
   onRegistrationSuccess?: (trialId: number) => void;
 }
 
 export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRegistrationFormProps) {
+  // Wallet connection
+  const { isConnected, address, isConnecting } = useWalletConnection();
+
   // Form state
   const [formData, setFormData] = useState<TrialCriteriaData>({
     trialName: '',
@@ -45,8 +49,6 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState<string>('');
 
   // Validation errors
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -61,27 +63,6 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
     }));
     setValidationErrors([]);
     setError(null);
-  };
-
-  /**
-   * Connect wallet
-   */
-  const handleConnectWallet = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const { address } = await connectWallet();
-      setWalletAddress(address);
-      setWalletConnected(true);
-
-      console.log('[TrialForm] Wallet connected:', address);
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet');
-      console.error('[TrialForm] Wallet connection error:', err);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   /**
@@ -112,8 +93,8 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       }
 
       // Ensure wallet is connected
-      if (!walletConnected) {
-        setError('Please connect your wallet first');
+      if (!isConnected || !address) {
+        setError('Please connect your wallet from the header first');
         setIsLoading(false);
         return;
       }
@@ -121,7 +102,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       console.log('[TrialForm] Encrypting eligibility criteria...');
 
       // Get wallet signer and address
-      const { signer, address } = await connectWallet();
+      const { signer, address: walletAddress } = await connectWallet();
 
       // Get contract address from environment
       const contractAddress = process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS;
@@ -131,7 +112,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
 
       // Encrypt eligibility criteria client-side
       // This is the critical security step - all encryption happens here
-      const encryptedCriteria = await encryptTrialCriteria(formData, contractAddress, address);
+      const encryptedCriteria = await encryptTrialCriteria(formData, contractAddress, walletAddress);
 
       console.log('[TrialForm] Eligibility criteria encrypted successfully');
       console.log('[TrialForm] Submitting to smart contract...');
@@ -193,21 +174,16 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
       </div>
 
       {/* Wallet Connection */}
-      {!walletConnected ? (
+      {!isConnected ? (
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800 mb-3">Connect your wallet to continue</p>
-          <button
-            onClick={handleConnectWallet}
-            disabled={isLoading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isLoading ? 'Connecting...' : 'Connect Wallet'}
-          </button>
+          <p className="text-sm text-blue-800">
+            Please connect your wallet from the header to continue
+          </p>
         </div>
       ) : (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-800">
-            ✓ Wallet connected: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+            ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
           </p>
         </div>
       )}
@@ -255,7 +231,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="e.g., Diabetes Treatment Study 2025"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           />
           <p className="text-xs text-gray-500 mt-1">This name will be public (not encrypted)</p>
         </div>
@@ -273,7 +249,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Brief description of the clinical trial"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           />
           <p className="text-xs text-gray-500 mt-1">This description will be public (not encrypted)</p>
         </div>
@@ -293,7 +269,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
               onChange={(e) => handleInputChange('minAge', parseInt(e.target.value) || 0)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
           </div>
           <div>
@@ -309,7 +285,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
               onChange={(e) => handleInputChange('maxAge', parseInt(e.target.value) || 0)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
           </div>
         </div>
@@ -326,7 +302,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
             onChange={(e) => handleInputChange('requiredGender', parseInt(e.target.value))}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
-            disabled={!walletConnected || isLoading}
+            disabled={!isConnected || isLoading}
           >
             <option value="0">All Genders</option>
             <option value="1">Male Only</option>
@@ -355,7 +331,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
           </div>
           <div>
@@ -375,7 +351,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
           </div>
         </div>
@@ -394,7 +370,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
                 checked={formData.hasSpecificCondition === true}
                 onChange={() => handleInputChange('hasSpecificCondition', true)}
                 className="mr-2"
-                disabled={!walletConnected || isLoading}
+                disabled={!isConnected || isLoading}
               />
               <span className="text-sm">Yes</span>
             </label>
@@ -405,7 +381,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
                 checked={formData.hasSpecificCondition === false}
                 onChange={() => handleInputChange('hasSpecificCondition', false)}
                 className="mr-2"
-                disabled={!walletConnected || isLoading}
+                disabled={!isConnected || isLoading}
               />
               <span className="text-sm">No</span>
             </label>
@@ -425,7 +401,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
               onChange={(e) => handleInputChange('conditionCode', e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="e.g., E11 (Type 2 diabetes)"
-              disabled={!walletConnected || isLoading}
+              disabled={!isConnected || isLoading}
             />
             <p className="text-xs text-gray-500 mt-1">
               Enter the ICD-10 code for the required condition (will be encrypted)
@@ -436,7 +412,7 @@ export default function TrialRegistrationForm({ onRegistrationSuccess }: TrialRe
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={!walletConnected || isLoading}
+          disabled={!isConnected || isLoading}
           className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? 'Processing...' : 'Register Trial with Encrypted Criteria'}
