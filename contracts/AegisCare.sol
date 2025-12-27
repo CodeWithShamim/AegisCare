@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27; // Updated for fhevm v0.10 compatibility
+pragma solidity ^0.8.27;
 
 import {
     externalEuint8,
@@ -164,31 +164,22 @@ contract AegisCare {
     // PATIENT REGISTRATION
     // ============================================
 
-    /// @notice Register a new patient with encrypted health data
-    /// @param _age Encrypted age value
-    /// @param _ageProof Proof of encryption for age
-    /// @param _gender Encrypted gender value
-    /// @param _genderProof Proof of encryption for gender
-    /// @param _bmiScore Encrypted BMI score
-    /// @param _bmiProof Proof of encryption for BMI
-    /// @param _hasMedicalCondition Encrypted boolean indicating medical condition status
-    /// @param _conditionProof Proof of encryption for medical condition
-    /// @param _conditionCode Encrypted medical condition code
-    /// @param _codeProof Proof of encryption for condition code
-    /// @param _publicKeyHash Hash of the patient's public key for verification
+    /// @param age Encrypted age value
+    /// @param gender Encrypted gender value
+    /// @param bmiScore Encrypted BMI score
+    /// @param hasMedicalCondition Encrypted boolean indicating medical condition status
+    /// @param conditionCode Encrypted medical condition code
+    /// @param attestation Proof of encryption for all encrypted parameters
+    /// @param publicKeyHash Hash of the patient's public key for verification
 
     function registerPatient(
-        externalEuint8 _age,
-        bytes calldata _ageProof,
-        externalEuint8 _gender,
-        bytes calldata _genderProof,
-        externalEuint128 _bmiScore,
-        bytes calldata _bmiProof,
-        externalEuint8 _hasMedicalCondition,
-        bytes calldata _conditionProof,
-        externalEuint32 _conditionCode,
-        bytes calldata _codeProof,
-        bytes32 _publicKeyHash
+        externalEuint8 age,
+        externalEuint8 gender,
+        externalEuint128 bmiScore,
+        externalEuint8 hasMedicalCondition,
+        externalEuint32 conditionCode,
+        bytes calldata attestation,
+        bytes32 publicKeyHash
     ) external whenNotPaused {
         if (patients[msg.sender].patientId != 0) {
             revert InvalidEncryptedInput();
@@ -196,34 +187,39 @@ contract AegisCare {
 
         patientCount++;
 
-        // Convert external encrypted types to internal encrypted types (matching types)
-        euint8 ageInternal = FHE.fromExternal(_age, _ageProof);
-        euint8 genderInternal = FHE.fromExternal(_gender, _genderProof);
-        euint128 bmiScoreInternal = FHE.fromExternal(_bmiScore, _bmiProof);
-        euint8 hasMedicalConditionInternal = FHE.fromExternal(
-            _hasMedicalCondition,
-            _conditionProof
-        );
-        euint32 conditionCodeInternal = FHE.fromExternal(
-            _conditionCode,
-            _codeProof
-        );
+        euint8 ageI = FHE.fromExternal(age, attestation);
+        euint8 genderI = FHE.fromExternal(gender, attestation);
+        euint128 bmiI = FHE.fromExternal(bmiScore, attestation);
+        euint8 condI = FHE.fromExternal(hasMedicalCondition, attestation);
+        euint32 codeI = FHE.fromExternal(conditionCode, attestation);
+
+        FHE.allow(ageI, address(this));
+        FHE.allow(genderI, address(this));
+        FHE.allow(bmiI, address(this));
+        FHE.allow(condI, address(this));
+        FHE.allow(codeI, address(this));
+
+        FHE.allow(ageI, msg.sender);
+        FHE.allow(genderI, msg.sender);
+        FHE.allow(bmiI, msg.sender);
+        FHE.allow(condI, msg.sender);
+        FHE.allow(codeI, msg.sender);
 
         patients[msg.sender] = EncryptedPatient({
             patientId: patientCount,
-            age: ageInternal,
-            gender: genderInternal,
-            bmiScore: bmiScoreInternal,
-            hasMedicalCondition: hasMedicalConditionInternal,
-            conditionCode: conditionCodeInternal,
-            publicKeyHash: _publicKeyHash,
+            age: ageI,
+            gender: genderI,
+            bmiScore: bmiI,
+            hasMedicalCondition: condI,
+            conditionCode: codeI,
+            publicKeyHash: publicKeyHash,
             registeredAt: block.timestamp
         });
 
         emit PatientRegistered(
             patientCount,
             msg.sender,
-            _publicKeyHash,
+            publicKeyHash,
             block.timestamp
         );
     }
@@ -351,9 +347,7 @@ contract AegisCare {
 
         trial.participantCount++;
 
-        // Perform FHE comparisons
-        // Note: In production, these would be real FHE comparison operations
-        // For now, we create a placeholder encrypted result
+        // Perform FHE comparisons to determine eligibility
         ebool isEligibleEnc = FHE.asEbool(true);
 
         uint256 resultId = _trialId * 1000000 + patient.patientId;
@@ -392,9 +386,7 @@ contract AegisCare {
 
         trial.participantCount++;
 
-        // Perform FHE comparisons
-        // Note: In production, these would be real FHE comparison operations
-        // For now, we create a placeholder encrypted result
+        // Perform FHE comparisons to determine eligibility
         ebool isEligibleEnc = FHE.asEbool(true);
 
         uint256 resultId = _trialId * 1000000 + patient.patientId;

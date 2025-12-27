@@ -330,108 +330,23 @@ export async function getTrialCount(
  */
 export async function registerPatient(
   signer: JsonRpcSigner,
-  encryptedMedicalData: {
-    age: any;
-    ageProof: any;
-    gender: any;
-    genderProof: any;
-    bmiScore: any;
-    bmiProof: any;
-    hasMedicalCondition: any;
-    conditionProof: any;
-    conditionCode: any;
-    codeProof: any;
-  },
+  encrypted: any,
   publicKeyHash: string
 ): Promise<any> {
   try {
+    console.log({ signer });
     const contract = getAegisCareContract("", signer);
 
-    console.log("[Contract] Registering patient");
-    console.log("[Contract] Contract address:", WEB3_CONFIG.AEGISCARE_ADDRESS);
-
-    // Log all parameters being sent
-    console.log("[Contract] Parameters to be sent:");
-    console.log("  Age handle:", encryptedMedicalData.age.handle);
-    console.log("  Age handle type:", typeof encryptedMedicalData.age.handle);
-    console.log(
-      "  Age handle length:",
-      encryptedMedicalData.age.handle?.length
-    );
-    console.log("  Age proof length:", encryptedMedicalData.ageProof?.length);
-
-    console.log("  Gender handle:", encryptedMedicalData.gender.handle);
-    console.log(
-      "  Gender handle length:",
-      encryptedMedicalData.gender.handle?.length
-    );
-
-    console.log("  BMI handle:", encryptedMedicalData.bmiScore.handle);
-    console.log(
-      "  BMI handle length:",
-      encryptedMedicalData.bmiScore.handle?.length
-    );
-
-    console.log(
-      "  Condition handle:",
-      encryptedMedicalData.hasMedicalCondition.handle
-    );
-    console.log(
-      "  Condition handle length:",
-      encryptedMedicalData.hasMedicalCondition.handle?.length
-    );
-
-    console.log("  Code handle:", encryptedMedicalData.conditionCode.handle);
-    console.log(
-      "  Code handle length:",
-      encryptedMedicalData.conditionCode.handle?.length
-    );
-
     console.log("  Public key hash:", publicKeyHash);
-    console.log("  Public key hash length:", publicKeyHash?.length);
 
-    // Verify all handles are properly formatted
-    const allHandles = [
-      encryptedMedicalData.age.handle,
-      encryptedMedicalData.gender.handle,
-      encryptedMedicalData.bmiScore.handle,
-      encryptedMedicalData.hasMedicalCondition.handle,
-      encryptedMedicalData.conditionCode.handle,
-    ];
-
-    const invalidHandles = allHandles.filter(
-      (h) => !h || !h.startsWith("0x") || h.length !== 66
-    );
-
-    if (invalidHandles.length > 0) {
-      console.error("[Contract] ❌ Invalid handles detected:", invalidHandles);
-      throw new Error("Some handles are not properly formatted as bytes32");
-    }
-
-    console.log(
-      "[Contract] ✅ All handles properly formatted (0x prefix, 66 chars)"
-    );
-
-    // Contract expects 5 pairs of (handle, proof) + publicKeyHash
     const tx = await contract.registerPatient(
-      // Age (handle + proof)
-      encryptedMedicalData.age.handle,
-      encryptedMedicalData.ageProof,
-      // Gender (handle + proof)
-      encryptedMedicalData.gender.handle,
-      encryptedMedicalData.genderProof,
-      // BMI (handle + proof)
-      encryptedMedicalData.bmiScore.handle,
-      encryptedMedicalData.bmiProof,
-      // Has medical condition (handle + proof)
-      encryptedMedicalData.hasMedicalCondition.handle,
-      encryptedMedicalData.conditionProof,
-      // Condition code (handle + proof)
-      encryptedMedicalData.conditionCode.handle,
-      encryptedMedicalData.codeProof,
-      // Public key hash
-      publicKeyHash,
-      { gasLimit: 10_000_000 }
+      encrypted.handles[0],
+      encrypted.handles[1],
+      encrypted.handles[2],
+      encrypted.handles[3],
+      encrypted.handles[4],
+      encrypted.inputProof,
+      publicKeyHash
     );
 
     console.log("[Contract] Transaction submitted:", tx.hash);
