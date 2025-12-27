@@ -62,7 +62,7 @@ contract AegisCare is ZamaEthereumConfig {
         uint256 resultId;
         uint256 trialId;
         uint256 patientId;
-        ebool isEligible;
+        euint8 isEligible;  // Changed from ebool to euint8 for user decryption support
         bool decryptable;
         bool computed;
         uint256 computedAt;
@@ -331,7 +331,14 @@ contract AegisCare is ZamaEthereumConfig {
         trial.participantCount++;
 
         // Perform FHE comparisons to determine eligibility
-        ebool isEligibleEnc = FHE.asEbool(true);
+        // Use euint8(1) instead of ebool for proper user decryption support
+        euint8 isEligibleEnc = FHE.asEuint8(1);
+
+        // Grant patient permission to decrypt their eligibility result
+        FHE.allow(isEligibleEnc, _patientAddress);
+
+        // Grant contract permission to manage the result
+        FHE.allow(isEligibleEnc, address(this));
 
         uint256 resultId = _trialId * 1000000 + patient.patientId;
         eligibilityResults[_trialId][patient.patientId] = EligibilityResult({
@@ -370,7 +377,14 @@ contract AegisCare is ZamaEthereumConfig {
         trial.participantCount++;
 
         // Perform FHE comparisons to determine eligibility
-        ebool isEligibleEnc = FHE.asEbool(true);
+        // Use euint8(1) instead of ebool for proper user decryption support
+        euint8 isEligibleEnc = FHE.asEuint8(1);
+
+        // Grant patient permission to decrypt their eligibility result
+        FHE.allow(isEligibleEnc, msg.sender);
+
+        // Grant contract permission to manage the result
+        FHE.allow(isEligibleEnc, address(this));
 
         uint256 resultId = _trialId * 1000000 + patient.patientId;
         eligibilityResults[_trialId][patient.patientId] = EligibilityResult({
@@ -396,11 +410,11 @@ contract AegisCare is ZamaEthereumConfig {
     /// @notice Get eligibility result (patient only)
     /// @param _trialId The ID of the trial
     /// @param _patientAddress The address of the patient
-    /// @return The encrypted eligibility result
+    /// @return The encrypted eligibility result (as euint8, 1 = eligible, 0 = not eligible)
     function getEligibilityResult(
         uint256 _trialId,
         address _patientAddress
-    ) external view returns (ebool) {
+    ) external view returns (euint8) {
         // Only the patient can access their own result
         if (msg.sender != _patientAddress) {
             revert NotAuthorized();

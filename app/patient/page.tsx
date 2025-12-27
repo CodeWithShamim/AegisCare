@@ -9,35 +9,43 @@
  * 3. View decrypted eligibility results
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PatientRegistrationForm from '@/components/PatientRegistrationForm';
 import EligibilityChecker from '@/components/EligibilityChecker';
 import Header from '@/components/Header';
 import { patientExists, connectWallet } from '@/lib/web3Client';
+import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 export default function PatientDashboard() {
+  const { isConnected, address } = useWalletConnection();
   const [activeTab, setActiveTab] = useState<'register' | 'check'>('register');
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [patientAddress, setPatientAddress] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
 
   /**
-   * Check if patient is already registered
+   * Update patient address when wallet changes
    */
-  const checkRegistration = async () => {
+  useEffect(() => {
+    if (isConnected && address) {
+      setPatientAddress(address);
+      // Re-check registration status when wallet changes
+      checkRegistrationForAddress(address);
+    } else {
+      setPatientAddress('');
+      setIsRegistered(null);
+    }
+  }, [isConnected, address]);
+
+  /**
+   * Check registration for a specific address
+   */
+  const checkRegistrationForAddress = async (addr: string) => {
     try {
       setIsChecking(true);
-      const { address } = await connectWallet();
-      setPatientAddress(address);
-
       const { provider } = await connectWallet();
-      const exists = await patientExists(provider, address);
+      const exists = await patientExists(provider, addr);
       setIsRegistered(exists);
-
-      // Auto-navigate to eligibility check if already registered
-      if (exists) {
-        setActiveTab('check');
-      }
     } catch (error) {
       console.error('[PatientDashboard] Error checking registration:', error);
     } finally {
@@ -83,12 +91,7 @@ export default function PatientDashboard() {
                 Register Medical Data
               </button>
               <button
-                onClick={() => {
-                  if (isRegistered === null) {
-                    checkRegistration();
-                  }
-                  setActiveTab('check');
-                }}
+                onClick={() => setActiveTab('check')}
                 className={`${
                   activeTab === 'check'
                     ? 'border-indigo-500 text-indigo-600'

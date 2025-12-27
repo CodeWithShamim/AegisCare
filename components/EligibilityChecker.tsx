@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 /**
@@ -118,6 +119,19 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       return;
     }
 
+    // CRITICAL: Ensure the connected wallet matches the patient address
+    // Only the user who encrypted the data can decrypt it
+    if (address.toLowerCase() !== patientAddress.toLowerCase()) {
+      setError(
+        `Wallet mismatch! You must connect with the same wallet you registered with (${patientAddress.slice(
+          0,
+          6,
+        )}...${patientAddress.slice(-4)}). ` +
+          `Currently connected: ${address.slice(0, 6)}...${address.slice(-4)}`,
+      );
+      return;
+    }
+
     setIsComputing(true);
     setIsDecrypting(false);
     setEligibilityResult(null);
@@ -138,6 +152,13 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       // Step 2: Get the encrypted result
       const encryptedResult = await getEligibilityResult(signer, selectedTrialId, patientAddress);
 
+      if (!encryptedResult) {
+        setError('First register your medical data then check eligibility');
+        return;
+      }
+
+      console.log({ encryptedResult });
+
       console.log('[EligibilityChecker] Encrypted result retrieved. Decrypting...');
 
       // Step 3: Decrypt the result using EIP-712 signature
@@ -146,7 +167,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       const isEligible = await decryptEligibilityResult(
         encryptedResult,
         process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS || '',
-        signer
+        signer,
       );
 
       console.log('[EligibilityChecker] Decryption complete. Eligible:', isEligible);
@@ -196,6 +217,31 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
         </div>
       )}
 
+      {/* Wallet Mismatch Warning */}
+      {isConnected &&
+        address &&
+        patientAddress &&
+        address.toLowerCase() !== patientAddress.toLowerCase() && (
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <h3 className="text-sm font-semibold text-yellow-900 mb-2">
+              ⚠️ Wallet Address Mismatch
+            </h3>
+            <p className="text-xs text-yellow-800 mb-2">
+              You registered with a different wallet address. Only the wallet that registered can
+              check eligibility.
+            </p>
+            <p className="text-xs text-yellow-700">
+              <strong>Registered wallet:</strong> {patientAddress.slice(0, 6)}...
+              {patientAddress.slice(-4)}
+              <br />
+              <strong>Current wallet:</strong> {address.slice(0, 6)}...{address.slice(-4)}
+            </p>
+            <p className="text-xs text-yellow-600 mt-2">
+              Please switch your wallet to the registered address to continue.
+            </p>
+          </div>
+        )}
+
       {/* Loading State */}
       {isLoading && (
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -241,10 +287,18 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       {isConnected && selectedTrialId && (
         <button
           onClick={handleCheckEligibility}
-          disabled={isComputing || isDecrypting}
+          disabled={
+            isComputing ||
+            isDecrypting ||
+            (patientAddress && address && address.toLowerCase() !== patientAddress.toLowerCase())
+          }
           className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-6"
         >
-          {isComputing ? 'Computing Eligibility...' : isDecrypting ? 'Decrypting Result...' : 'Check Eligibility'}
+          {isComputing
+            ? 'Computing Eligibility...'
+            : isDecrypting
+            ? 'Decrypting Result...'
+            : 'Check Eligibility'}
         </button>
       )}
 
@@ -252,9 +306,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       {eligibilityResult !== null && (
         <div
           className={`mb-6 p-6 rounded-lg border-2 ${
-            eligibilityResult
-              ? 'bg-green-50 border-green-200'
-              : 'bg-yellow-50 border-yellow-200'
+            eligibilityResult ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'
           }`}
         >
           <div className="text-center">
@@ -263,7 +315,8 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
                 <div className="text-4xl mb-2">🎉</div>
                 <h3 className="text-xl font-bold text-green-800 mb-2">You May Be Eligible!</h3>
                 <p className="text-sm text-green-700">
-                  Based on your encrypted medical data, you meet the eligibility criteria for this trial.
+                  Based on your encrypted medical data, you meet the eligibility criteria for this
+                  trial.
                 </p>
                 <p className="text-xs text-green-600 mt-2">
                   Contact the trial sponsor for next steps.
@@ -274,7 +327,8 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
                 <div className="text-4xl mb-2">😔</div>
                 <h3 className="text-xl font-bold text-yellow-800 mb-2">Not Eligible</h3>
                 <p className="text-sm text-yellow-700">
-                  Based on your encrypted medical data, you do not meet the eligibility criteria for this trial.
+                  Based on your encrypted medical data, you do not meet the eligibility criteria for
+                  this trial.
                 </p>
                 <p className="text-xs text-yellow-600 mt-2">
                   Please check other trials that may match your profile.
