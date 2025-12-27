@@ -15,7 +15,7 @@ export default function Home() {
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="py-16 md:py-36 lg:py-48">
+          <div className="py-16">
             <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
               Clinical Trial Matching with
               <span className="block text-indigo-600 mt-2">Complete Privacy</span>
@@ -284,7 +284,7 @@ export default function Home() {
                 <div className="relative aspect-video w-full bg-gray-900">
                   <iframe
                     className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/sSwq-D9JzhE?rel=0&modestbranding=1"
+                    src="https://www.youtube.com/embed/yj6QrbiY7nU?rel=0&modestbranding=1"
                     title="AegisCare Demo - Privacy-Preserving Clinical Trial Matching"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -315,7 +315,7 @@ export default function Home() {
                     </div>
 
                     <a
-                      href="https://www.youtube.com/watch?v=sSwq-D9JzhE"
+                      href="https://www.youtube.com/watch?v=yj6QrbiY7nU"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"

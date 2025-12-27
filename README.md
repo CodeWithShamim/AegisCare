@@ -1,40 +1,22 @@
 # 🛡️ AegisCare
 
-<div align="center">
-
-**Privacy-Preserving Clinical Trial Matching Platform**
-
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.3-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.27-363636?style=for-the-badge&logo=solidity)](https://soliditylang.org/)
-[![Zama FHE](https://img.shields.io/badge/Zama-FHEVM-6A0DAD?style=for-the-badge)](https://docs.zama.ai/)
-[![Tests Passing](https://img.shields.io/badge/Tests-30%2F30 Passing-success)](https://github.com)
-
-**Revolutionizing healthcare with Fully Homomorphic Encryption**
-
-[Features](#-key-features) • [Test Data](#-test-data) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [API](#-api-reference)
-
-</div>
-
----
-
-## 📖 Overview
+## Overview
 
 **AegisCare** is a groundbreaking clinical trial matching platform that leverages **Zama's Fully Homomorphic Encryption (FHE)** to enable privacy-preserving patient-trial matching. Unlike traditional systems where patient medical data must be revealed to determine eligibility, AegisCare performs matching computations on **encrypted data**, ensuring **zero plaintext leakage**.
 
-### 🎯 The Problem
+### The Problem
 
 Traditional clinical trial matching requires patients to:
+
 - Share sensitive medical data in plaintext
 - Trust multiple third parties with their information
 - Risk data breaches and privacy violations
 - Face discrimination based on medical history
 
-### 💡 Our Solution
+### Our Solution
 
 AegisCare uses **FHE to compute eligibility on encrypted data**:
+
 - ✅ Medical data **never leaves the patient's browser in plaintext**
 - ✅ Eligibility computed **entirely in the encrypted domain**
 - ✅ **Only the patient** can decrypt their own results
@@ -43,9 +25,9 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🔐 Privacy-Preserving Architecture
+### Privacy-Preserving Architecture
 
 - **Client-side encryption** - All medical data encrypted before submission
 - **FHE operations** - Computations performed on encrypted data
@@ -53,7 +35,7 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **EIP-712 signatures** - Private decryption with typed data signing
 - **ACL-based access control** - Granular decryption permissions
 
-### ⚡ Smart Contract Features
+### Smart Contract Features
 
 - **FHE eligibility computation** - Encrypted comparisons on-chain
 - **Owner management** - Pause/unpause functionality
@@ -62,7 +44,7 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **Comprehensive events** - Full audit trail
 - **Deployed on Sepolia** - Testnet deployment at `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
 
-### 🎨 Frontend Features
+### Frontend Features
 
 - **Beautiful responsive UI** - TailwindCSS v4 styling
 - **Patient dashboard** - Registration and eligibility checking
@@ -71,7 +53,7 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **Comprehensive error handling** - User-friendly messages
 - **GitBook-style documentation** - Professional docs site
 
-### 🧪 Production-Ready Testing
+### Production-Ready Testing
 
 - **30/30 tests passing**
 - **Comprehensive test coverage**
@@ -81,13 +63,14 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 
 ---
 
-## 🧪 Test Data
+## Test Data
 
 ### Sample Patient Data
 
 Below are **pre-configured test patients** you can use to test the platform:
 
 #### Patient 1: John Doe (Diabetes Patient)
+
 ```json
 {
   "name": "John Doe",
@@ -101,6 +84,7 @@ Below are **pre-configured test patients** you can use to test the platform:
 ```
 
 #### Patient 2: Jane Smith (Healthy Adult)
+
 ```json
 {
   "name": "Jane Smith",
@@ -114,6 +98,7 @@ Below are **pre-configured test patients** you can use to test the platform:
 ```
 
 #### Patient 3: Bob Johnson (Hypertension)
+
 ```json
 {
   "name": "Bob Johnson",
@@ -129,6 +114,7 @@ Below are **pre-configured test patients** you can use to test the platform:
 ### Sample Trial Data
 
 #### Trial 1: Diabetes Treatment Study
+
 ```json
 {
   "trialName": "Diabetes Treatment Study 2025",
@@ -147,6 +133,7 @@ Below are **pre-configured test patients** you can use to test the platform:
 ```
 
 #### Trial 2: Cardiovascular Health Research
+
 ```json
 {
   "trialName": "Cardiovascular Health Research",
@@ -165,6 +152,7 @@ Below are **pre-configured test patients** you can use to test the platform:
 ```
 
 #### Trial 3: General Wellness Study
+
 ```json
 {
   "trialName": "General Wellness Study",
@@ -186,29 +174,29 @@ Below are **pre-configured test patients** you can use to test the platform:
 
 Common medical condition codes used in the platform:
 
-| Code | Description |
-|------|-------------|
-| **E11** | Type 2 diabetes mellitus |
-| **E10** | Type 1 diabetes mellitus |
-| **I10** | Essential (primary) hypertension |
-| **I50** | Heart failure |
-| **J45** | Asthma |
-| **M54** | Dorsalgia (back pain) |
-| **Z00** | General medical examination (healthy) |
+| Code    | Description                             |
+| ------- | --------------------------------------- |
+| **E11** | Type 2 diabetes mellitus                |
+| **E10** | Type 1 diabetes mellitus                |
+| **I10** | Essential (primary) hypertension        |
+| **I50** | Heart failure                           |
+| **J45** | Asthma                                  |
+| **M54** | Dorsalgia (back pain)                   |
+| **Z00** | General medical examination (healthy)   |
 | **Z01** | Special examinations and investigations |
 
 ### Gender Codes
 
-| Code | Description |
-|------|-------------|
-| **0** | All genders |
-| **1** | Male |
-| **2** | Female |
+| Code  | Description             |
+| ----- | ----------------------- |
+| **0** | All genders             |
+| **1** | Male                    |
+| **2** | Female                  |
 | **3** | Other/Prefer not to say |
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -244,6 +232,7 @@ npm run dev
 ### Deployed Contract
 
 **AegisCare is already deployed on Sepolia Testnet:**
+
 ```
 Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
 Network: Sepolia Testnet
@@ -256,7 +245,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 
 ---
 
-## 📚 Usage Guide
+## Usage Guide
 
 ### 1. Connect Your Wallet
 
@@ -284,6 +273,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 
 1. Go to http://localhost:3000/trial-admin
 2. Fill in trial details:
+
    ```
    Trial Name: Diabetes Treatment Study 2025
    Description: Testing new Type 2 diabetes treatment
@@ -297,6 +287,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
    - Has Specific Condition: Yes
    - Condition Code: E11
    ```
+
 3. Click "Create Trial"
 4. Approve the transaction in MetaMask
 5. **Trial criteria are encrypted on-chain!**
@@ -315,7 +306,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### System Overview
 
@@ -352,27 +343,29 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 ### Technology Stack
 
 #### Frontend
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Next.js** | 16.1.1 | React framework with App Router |
-| **React** | 19.2.3 | UI library |
-| **TypeScript** | 5.x | Type safety |
-| **TailwindCSS** | 4.x | Styling |
-| **ethers.js** | 6.9.0 | Web3 integration |
-| **Wagmi** | 2.x | React hooks for Web3 |
-| **Zama FHE SDK** | 0.3.0-8 | Client-side FHE encryption |
+
+| Technology       | Version | Purpose                         |
+| ---------------- | ------- | ------------------------------- |
+| **Next.js**      | 16.1.1  | React framework with App Router |
+| **React**        | 19.2.3  | UI library                      |
+| **TypeScript**   | 5.x     | Type safety                     |
+| **TailwindCSS**  | 4.x     | Styling                         |
+| **ethers.js**    | 6.9.0   | Web3 integration                |
+| **Wagmi**        | 2.x     | React hooks for Web3            |
+| **Zama FHE SDK** | 0.3.0-8 | Client-side FHE encryption      |
 
 #### Blockchain
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Solidity** | 0.8.27 | Smart contract language |
-| **Zama fhEVM** | Latest | FHE-enabled EVM |
-| **Hardhat** | 2.19.0 | Development framework |
-| **Sepolia Testnet** | - | Deployment network |
+
+| Technology          | Version | Purpose                 |
+| ------------------- | ------- | ----------------------- |
+| **Solidity**        | 0.8.27  | Smart contract language |
+| **Zama fhEVM**      | Latest  | FHE-enabled EVM         |
+| **Hardhat**         | 2.19.0  | Development framework   |
+| **Sepolia Testnet** | -       | Deployment network      |
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 aegiscare/
@@ -421,7 +414,7 @@ aegiscare/
 
 ---
 
-## 📊 Test Results
+## Test Results
 
 ### Test Suite Summary
 
@@ -531,14 +524,14 @@ function getEligibilityResult(
 #### FHE Encryption
 
 ```typescript
-import { encryptPatientData } from '@/lib/fheClient';
+import { encryptPatientData } from "@/lib/fheClient";
 
 const encryptedData = await encryptPatientData({
   age: 45,
-  gender: 1,  // 1=male, 2=female, 3=other
+  gender: 1, // 1=male, 2=female, 3=other
   bmiScore: 28.5,
   hasMedicalCondition: true,
-  conditionCode: "E11"  // ICD-10 code
+  conditionCode: "E11", // ICD-10 code
 });
 
 // Returns:
@@ -554,7 +547,7 @@ const encryptedData = await encryptPatientData({
 #### Contract Interaction
 
 ```typescript
-import { registerPatient } from '@/lib/web3Client';
+import { registerPatient } from "@/lib/web3Client";
 
 await registerPatient(signer, encryptedData, publicKeyHash);
 ```
@@ -562,7 +555,7 @@ await registerPatient(signer, encryptedData, publicKeyHash);
 #### Result Decryption
 
 ```typescript
-import { decryptEligibilityResult } from '@/lib/fheClient';
+import { decryptEligibilityResult } from "@/lib/fheClient";
 
 const isEligible = await decryptEligibilityResult(
   encryptedResult,
@@ -575,7 +568,7 @@ console.log(isEligible); // true or false
 
 ---
 
-## 🔐 Security
+## Security
 
 ### Security Features
 
@@ -597,11 +590,12 @@ console.log(isEligible); // true or false
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Current Deployment
 
 **✅ Deployed on Sepolia Testnet**
+
 ```
 Contract Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
 Network: Sepolia
@@ -646,38 +640,48 @@ npm run dev
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
 #### 1. "Cannot connect to wallet"
+
 **Solution:**
+
 - Ensure MetaMask is installed
 - Check you're on Sepolia testnet
 - Refresh the page and try again
 
 #### 2. "Transaction failed"
+
 **Solution:**
+
 - Ensure you have Sepolia ETH (get from [faucet](https://sepoliafaucet.com/))
 - Check gas price is sufficient
 - Verify contract address in .env is correct
 
 #### 3. "FHE initialization failed"
+
 **Solution:**
+
 - Wait for Zama FHE SDK to load
 - Check browser console for errors
 - Ensure CDN is accessible
 - Try refreshing the page
 
 #### 4. "Eligibility computation failed"
+
 **Solution:**
+
 - Ensure patient is registered
 - Verify trial exists
 - Check you're the contract owner or have permissions
 - Review transaction details in MetaMask
 
 #### 5. "Decryption failed"
+
 **Solution:**
+
 - Only patients can decrypt their own results
 - Ensure you sign the EIP-712 message correctly
 - Check you're using the correct wallet address
@@ -686,6 +690,7 @@ npm run dev
 ### Debug Mode
 
 Enable detailed logging by setting in `.env`:
+
 ```bash
 NEXT_PUBLIC_DEBUG=true
 ```
@@ -694,7 +699,7 @@ Then check browser console for detailed logs.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our contributing guidelines for details.
 
@@ -716,13 +721,13 @@ We welcome contributions! Please see our contributing guidelines for details.
 
 ---
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **[Zama](https://www.zama.ai/)** - For pioneering FHE technology
 - **[FHEVM Team](https://github.com/zama-ai/fhevm)** - For the fhEVM implementation
@@ -731,7 +736,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Support & Community
+## Support & Community
 
 ### Get Help
 
@@ -746,7 +751,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 ### Current Release (v1.0.0) ✅
 
@@ -759,7 +764,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ 30/30 tests passing
 - ✅ Deployed on Sepolia testnet
 
-### Upcoming Features 🚧
+### Upcoming Features
 
 - [ ] Multi-condition matching
 - [ ] Geographic location matching
@@ -772,7 +777,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 ### Documentation
 
