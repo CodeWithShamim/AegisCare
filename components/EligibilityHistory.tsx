@@ -41,8 +41,8 @@ export default function EligibilityHistory({ patientAddress }: EligibilityHistor
       const { provider } = await connectWallet();
       const contract = getAegisCareContractReadOnly(provider);
 
-      // Get eligibility check IDs for the patient
-      const checkIds = await contract.patientEligibilityChecks(patientAddress);
+      // Get eligibility check IDs for the patient using the new function
+      const checkIds = await contract.getPatientEligibilityChecks(patientAddress);
 
       if (!checkIds || checkIds.length === 0) {
         setEligibilityChecks([]);

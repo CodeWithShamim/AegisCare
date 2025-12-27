@@ -492,6 +492,15 @@ contract AegisCare is ZamaEthereumConfig {
         return sponsorTrials[_sponsor];
     }
 
+    /// @notice Get all eligibility check IDs for a patient
+    /// @param _patient The patient's address
+    /// @return Array of eligibility check result IDs
+    function getPatientEligibilityChecks(
+        address _patient
+    ) external view returns (uint256[] memory) {
+        return patientEligibilityChecks[_patient];
+    }
+
     // ============================================
     // ADMIN FUNCTIONS
     // ============================================
