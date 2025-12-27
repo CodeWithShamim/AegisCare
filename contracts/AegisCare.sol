@@ -14,6 +14,7 @@ import {
     ebool,
     FHE
 } from "@fhevm/solidity/lib/FHE.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
 /**
  * @title AegisCare - Privacy-Preserving Clinical Trial Matching
@@ -21,7 +22,7 @@ import {
  * @dev Uses Zama's fhEVM to enable private clinical trial eligibility checks
  * @author AegisCare Team
  */
-contract AegisCare {
+contract AegisCare is ZamaEthereumConfig {
     // ============================================
     // STATE VARIABLES
     // ============================================

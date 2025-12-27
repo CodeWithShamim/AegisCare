@@ -318,7 +318,7 @@ export async function encryptPatientData(
     input.add8(BigInt(data.gender)); // Gender: 0-2
     input.add128(BigInt(Math.round(data.bmiScore * 10))); // BMI: scaled for precision
     input.add8(BigInt(data.hasMedicalCondition ? 1 : 0)); // Boolean as 0 or 1
-    input.add32(BigInt(conditionCodeNum)); // Condition code: ICD-10
+    input.add32(BigInt(conditionCodeNum ? 1 : 0)); // Condition code: ICD-10
 
     console.log("🔐 Encrypting values...");
     // Encrypt all values and generate proof
