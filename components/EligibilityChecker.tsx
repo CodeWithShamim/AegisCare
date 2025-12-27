@@ -1,20 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-/**
- * Eligibility Checker Component
- *
- * Allows patients to check their eligibility for clinical trials.
- * The eligibility computation happens entirely on encrypted data.
- *
- * SECURITY FLOW:
- * 1. Patient selects a trial
- * 2. Smart contract computes eligibility on encrypted data
- * 3. Result is returned encrypted (euint256)
- * 4. Patient decrypts result using EIP-712 signature
- * 5. Only the patient sees the eligibility result
- */
-
 import { useState, useEffect } from 'react';
 import { computeEligibility, getEligibilityResult, connectWallet } from '@/lib/web3Client';
 import { decryptEligibilityResult } from '@/lib/fheClient';
@@ -96,19 +82,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
     setError(null);
   };
 
-  /**
-   * Check eligibility
-   *
-   * This function:
-   * 1. Calls smart contract to compute eligibility on encrypted data
-   * 2. Retrieves the encrypted result
-   * 3. Decrypts the result using EIP-712 signature
-   *
-   * SECURITY:
-   * - Eligibility computation happens on encrypted data
-   * - Result is encrypted and can only be decrypted by the patient
-   * - Decryption requires EIP-712 signature (proof of ownership)
-   */
   const handleCheckEligibility = async () => {
     if (!selectedTrialId || !patientAddress) {
       setError('Please select a trial and ensure you are registered');
@@ -120,7 +93,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       return;
     }
 
-    // CRITICAL: Ensure the connected wallet matches the patient address
     // Only the user who encrypted the data can decrypt it
     if (address.toLowerCase() !== patientAddress.toLowerCase()) {
       setError(
@@ -145,7 +117,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       const { signer } = await connectWallet();
 
       // Step 1: Compute eligibility on smart contract
-      // This performs encrypted comparison on the blockchain
       await computeEligibility(signer, selectedTrialId, patientAddress);
 
       console.log('[EligibilityChecker] Eligibility computed. Fetching encrypted result...');
@@ -163,7 +134,6 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
       console.log('[EligibilityChecker] Encrypted result retrieved. Decrypting...');
 
       // Step 3: Decrypt the result using EIP-712 signature
-      // This proves ownership of the private key without revealing it
       setIsDecrypting(true);
       const isEligible = await decryptEligibilityResult(
         encryptedResult,

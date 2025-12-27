@@ -14,9 +14,6 @@ export default function PatientDashboard() {
   const [patientAddress, setPatientAddress] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
 
-  /**
-   * Update patient address when wallet changes
-   */
   useEffect(() => {
     if (isConnected && address) {
       setPatientAddress(address);

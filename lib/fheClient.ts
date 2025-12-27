@@ -1,29 +1,11 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * FHEVM Client SDK - Production Implementation
- * @module lib/fheClient
- *
- * Complete FHEVM functionality using Zama's Relayer SDK
- * Based on Agora's implementation with FHEVM 0.9+ and RelayerSDK 0.3.0-8
- *
- * Features:
- * - FHE instance initialization with CDN
- * - Real encryption functions for patient/trial data
- * - EIP-712 user decryption
- * - Batch decryption support
- */
 
 let fheInstance: any = null;
 
 // ============================================
 // TYPES
 // ============================================
-
-/**
- * Format an FHE handle as proper bytes32
- * Pads to 64 hex characters (32 bytes) with 0x prefix
- */
 
 export interface EncryptedValue {
   handle: string;
@@ -77,11 +59,6 @@ export interface TrialCriteriaData {
 // FHE INSTANCE MANAGEMENT
 // ============================================
 
-/**
- * Initialize FHEVM instance for browser environment
- * Uses RelayerSDK CDN to avoid bundling issues
- * Based on Agora's implementation
- */
 export async function initFHE(): Promise<boolean> {
   if (fheInstance) {
     console.log("✅ FHE instance already initialized");
@@ -97,7 +74,6 @@ export async function initFHE(): Promise<boolean> {
   }
 
   try {
-    // Check for RelayerSDK from CDN (support both naming conventions)
     let sdk = (window as any).RelayerSDK || (window as any).relayerSDK;
 
     if (!sdk) {
@@ -109,7 +85,6 @@ export async function initFHE(): Promise<boolean> {
 
     const { initSDK, createInstance, SepoliaConfig } = sdk;
 
-    // Check if user is on Sepolia testnet
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
     const sepoliaChainId = "0xaa36a7"; // 11155111 in hex
 
@@ -130,7 +105,6 @@ export async function initFHE(): Promise<boolean> {
     await initSDK();
     console.log("✅ FHEVM SDK initialized with CDN");
 
-    // Configure for Sepolia testnet (exactly as Agora does it)
     const config = { ...SepoliaConfig, network: window.ethereum };
 
     console.log("🔐 Creating FHE instance...");
@@ -143,7 +117,6 @@ export async function initFHE(): Promise<boolean> {
   } catch (error: any) {
     console.error("❌ FHEVM initialization failed:", error);
 
-    // Provide more helpful error messages
     if (error.message?.includes("getKmsSigners") || error.code === "BAD_DATA") {
       throw new Error(
         "Failed to connect to Zama KMS service. This is likely a network issue.\n\n" +
@@ -171,15 +144,10 @@ export function getFHEInstance(): any {
   return fheInstance;
 }
 
-/**
- * Generate public key hash for patient registration
- * @returns Hash of the user's public key
- */
 export function generatePublicKeyHash(): string {
   const fhe = getFHEInstance();
   const keypair = fhe.generateKeypair();
 
-  // Convert public key to proper hex string format
   let pubKeyHex: string;
 
   if (typeof keypair.publicKey === "string") {
@@ -211,10 +179,6 @@ export function generatePublicKeyHash(): string {
   return result;
 }
 
-/**
- * Alias for generatePublicKeyHash for backward compatibility
- * @deprecated Use generatePublicKeyHash() instead
- */
 export function getPublicKeyHash(): string {
   // Generate the key hash properly
   const fhe = getFHEInstance();
@@ -245,15 +209,6 @@ export function getPublicKeyHash(): string {
   return pubKeyHex.slice(0, 66);
 }
 
-// ============================================
-// ENCRYPTION FUNCTIONS
-// ============================================
-
-/**
- * Encrypt patient data for registration
- * @param data - Patient health data
- * @returns Encrypted data with proofs
- */
 export async function encryptPatientData(
   data: PatientData,
   contractAddress: string,
@@ -273,8 +228,6 @@ export async function encryptPatientData(
     // Create encrypted input buffer for patient data
     const input = fhe.createEncryptedInput(contractAddress, userAddress);
 
-    // Add each value using appropriate data type methods
-    // Scale BMI by 10 for precision (e.g., 24.5 becomes 245)
     input.add8(BigInt(data.age)); // Age: 0-255 (euint32 to match contract)
     input.add8(BigInt(data.gender)); // Gender: 0-2
     input.add128(BigInt(Math.round(data.bmiScore * 10))); // BMI: scaled for precision
@@ -300,11 +253,6 @@ export async function encryptPatientData(
       );
     });
 
-    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
-
-    // Return encrypted data with handles and proof
-    // The handles array contains: [age, gender, bmi, hasCondition, conditionCode]
-    // Format handles as proper bytes32 (64 hex chars + 0x prefix)
     return ciphertexts;
   } catch (error) {
     console.error("❌ Encryption failed:", error);
@@ -312,13 +260,6 @@ export async function encryptPatientData(
   }
 }
 
-/**
- * Encrypt trial criteria data
- * @param criteria - Trial eligibility criteria
- * @param contractAddress - AegisCare contract address
- * @param userAddress - User's wallet address
- * @returns Encrypted criteria with single proof
- */
 export async function encryptTrialCriteria(
   criteria: TrialCriteriaData,
   contractAddress: string,
@@ -340,7 +281,6 @@ export async function encryptTrialCriteria(
 
     console.log({ criteria });
 
-    // Add each value using appropriate data type methods
     // Scale BMI by 10 for precision
     input.add32(BigInt(criteria.minAge)); // Min age: euint32 to match contract
     input.add32(BigInt(criteria.maxAge)); // Max age: euint32 to match contract
@@ -371,13 +311,6 @@ export async function encryptTrialCriteria(
 // DECRYPTION FUNCTIONS
 // ============================================
 
-/**
- * Decrypt eligibility result using EIP-712 user decryption
- * @param encryptedHandle - Encrypted result handle from contract
- * @param contractAddress - AegisCare contract address
- * @param signer - Ethers signer from wallet
- * @returns Decrypted eligibility result (0 = not eligible, 1 = eligible)
- */
 export async function decryptEligibilityResult(
   encryptedHandle: string,
   contractAddress: string,
@@ -455,28 +388,15 @@ export async function decryptEligibilityResult(
   }
 }
 
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-/**
- * Check if FHE is initialized
- */
 export function isFHEInitialized(): boolean {
   return fheInstance !== null;
 }
 
-/**
- * Reset FHE instance (for testing or re-initialization)
- */
 export function resetFHEInstance(): void {
   fheInstance = null;
   console.log("🔄 FHE instance reset");
 }
 
-/**
- * Encode BMI for encryption (multiply by 10 for precision)
- */
 export function encodeBMI(bmi: number): number {
   return Math.round(bmi * 10);
 }

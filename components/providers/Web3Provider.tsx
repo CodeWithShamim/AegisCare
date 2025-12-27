@@ -1,22 +1,13 @@
-'use client'
+'use client';
 
-/**
- * Web3 Provider Component
- * @module components/providers/Web3Provider
- *
- * Provides Wagmi context to the application
- * Wraps the app with Wagmi and React Query providers
- * Automatically switches wallet to Sepolia testnet
- */
+import React, { useEffect } from 'react';
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAccount, useSwitchChain } from 'wagmi';
+import { sepolia } from 'wagmi/chains';
+import { config } from '@/lib/web3config';
 
-import React, { useEffect } from 'react'
-import { WagmiProvider } from 'wagmi'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useAccount, useSwitchChain } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
-import { config } from '@/lib/web3config'
-
-// Create React Query client (client-side only)
+// Create React Query client
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -24,48 +15,37 @@ function makeQueryClient() {
         staleTime: 60 * 1000,
       },
     },
-  })
+  });
 }
 
-let browserQueryClient: QueryClient | undefined = undefined
+let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
   if (typeof window === 'undefined') {
-    // Server: always create a new QueryClient
-    return makeQueryClient()
+    return makeQueryClient();
   } else {
-    // Browser: create a new QueryClient if needed
-    if (!browserQueryClient) browserQueryClient = makeQueryClient()
-    return browserQueryClient
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
   }
 }
 
-/**
- * Network Switcher Component
- * Automatically switches connected wallet to Sepolia testnet
- */
 function NetworkSwitcher() {
-  const { isConnected, chain } = useAccount()
-  const { switchChain } = useSwitchChain()
+  const { isConnected, chain } = useAccount();
+  const { switchChain } = useSwitchChain();
 
   useEffect(() => {
-    // Auto-switch to Sepolia when wallet connects and is on wrong network
     if (isConnected && chain?.id !== sepolia.id) {
-      console.log('🔄 Auto-switching to Sepolia testnet...')
-      switchChain({ chainId: sepolia.id })
-      console.log('✅ Network switch initiated')
+      console.log('🔄 Auto-switching to Sepolia testnet...');
+      switchChain({ chainId: sepolia.id });
+      console.log('✅ Network switch initiated');
     }
-  }, [isConnected, chain, switchChain])
+  }, [isConnected, chain, switchChain]);
 
-  return null // This component doesn't render anything
+  return null; // This component doesn't render anything
 }
 
 export function Web3ContextProvider({ children }: { children: React.ReactNode }) {
-  // NOTE: Avoid useState when initializing the query client if you don't
-  // have a suspense boundary between this and the code that may
-  // suspend because React will throw away the client on the initial
-  // render if it suspends and there is no boundary
-  const queryClient = getQueryClient()
+  const queryClient = getQueryClient();
 
   return (
     <WagmiProvider config={config}>
@@ -74,5 +54,5 @@ export function Web3ContextProvider({ children }: { children: React.ReactNode })
         {children}
       </QueryClientProvider>
     </WagmiProvider>
-  )
+  );
 }

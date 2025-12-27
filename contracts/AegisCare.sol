@@ -17,18 +17,10 @@ import {
 import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
 contract AegisCare is ZamaEthereumConfig {
-    // ============================================
-    // STATE VARIABLES
-    // ============================================
-
     uint256 public trialCount;
     uint256 public patientCount;
 
     uint256 private constant MAX_TRIALS_PER_SPONSOR = 50;
-
-    // ============================================
-    // STRUCTS
-    // ============================================
 
     struct EncryptedTrial {
         uint256 trialId;
@@ -62,15 +54,11 @@ contract AegisCare is ZamaEthereumConfig {
         uint256 resultId;
         uint256 trialId;
         uint256 patientId;
-        euint8 isEligible;  // Changed from ebool to euint8 for user decryption support
+        euint8 isEligible;
         bool decryptable;
         bool computed;
         uint256 computedAt;
     }
-
-    // ============================================
-    // MAPPINGS
-    // ============================================
 
     mapping(uint256 => EncryptedTrial) public trials;
     mapping(address => EncryptedPatient) public patients;
@@ -159,14 +147,6 @@ contract AegisCare is ZamaEthereumConfig {
     // PATIENT REGISTRATION
     // ============================================
 
-    /// @param age Encrypted age value
-    /// @param gender Encrypted gender value
-    /// @param bmiScore Encrypted BMI score
-    /// @param hasMedicalCondition Encrypted boolean indicating medical condition status
-    /// @param conditionCode Encrypted medical condition code
-    /// @param attestation Proof of encryption for all encrypted parameters
-    /// @param publicKeyHash Hash of the patient's public key for verification
-
     function registerPatient(
         externalEuint8 age,
         externalEuint8 gender,
@@ -223,18 +203,6 @@ contract AegisCare is ZamaEthereumConfig {
     // TRIAL REGISTRATION
     // ============================================
 
-    /// @notice Register a new clinical trial with encrypted eligibility criteria
-    /// @param _trialName Name of the clinical trial
-    /// @param _description Detailed description of the trial
-    /// @param _minAge Encrypted minimum age requirement
-    /// @param _maxAge Encrypted maximum age requirement
-    /// @param _requiredGender Encrypted gender requirement
-    /// @param _minBMIScore Encrypted minimum BMI score requirement
-    /// @param _maxBMIScore Encrypted maximum BMI score requirement
-    /// @param _hasSpecificCondition Encrypted boolean for specific condition requirement
-    /// @param _conditionCode Encrypted condition code for the trial
-    /// @param _attestation Proof of encryption for all encrypted parameters
-    /// @return The ID of the newly registered trial
     function registerTrial(
         string calldata _trialName,
         string calldata _description,
@@ -307,13 +275,6 @@ contract AegisCare is ZamaEthereumConfig {
         return trialCount;
     }
 
-    // ============================================
-    // ELIGIBILITY COMPUTING
-    // ============================================
-
-    /// @notice Compute eligibility for a patient-trial pair
-    /// @param _trialId The ID of the trial
-    /// @param _patientAddress The address of the patient
     function computeEligibility(
         uint256 _trialId,
         address _patientAddress
@@ -331,7 +292,6 @@ contract AegisCare is ZamaEthereumConfig {
         trial.participantCount++;
 
         // Perform FHE comparisons to determine eligibility
-        // Use euint8(1) instead of ebool for proper user decryption support
         euint8 isEligibleEnc = FHE.asEuint8(1);
 
         // Grant patient permission to decrypt their eligibility result
@@ -361,8 +321,6 @@ contract AegisCare is ZamaEthereumConfig {
         );
     }
 
-    /// @notice Check eligibility (called by patient)
-    /// @param _trialId The ID of the trial
     function checkEligibility(uint256 _trialId) external whenNotPaused {
         EncryptedPatient storage patient = patients[msg.sender];
         if (patient.patientId == 0) {
@@ -466,7 +424,6 @@ contract AegisCare is ZamaEthereumConfig {
         );
     }
 
-    /// @notice Get trial public info (alias for compatibility)
     function getTrialPublicInfo(
         uint256 _trialId
     )
@@ -544,8 +501,6 @@ contract AegisCare is ZamaEthereumConfig {
         trials[_trialId].isActive = false;
     }
 
-    /// @notice Transfer contract ownership
-    /// @param _newOwner The address of the new owner
     function transferOwnership(address _newOwner) external onlyOwner {
         owner = _newOwner;
     }

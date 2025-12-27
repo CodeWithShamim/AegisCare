@@ -29,7 +29,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Zama FHE RelayerSDK - CDN */}
         <Script
           src="https://cdn.zama.org/relayer-sdk-js/0.3.0-8/relayer-sdk-js.umd.cjs"
           strategy="beforeInteractive"

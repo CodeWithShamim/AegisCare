@@ -1,15 +1,7 @@
-'use client';
+"use client";
 
-/**
- * Reusable Wallet Connection Hook
- * @module lib/hooks/useWalletConnection
- *
- * Provides wallet state and utilities for components
- * Uses Wagmi under the hood for consistent wallet management
- */
-
-import { useAccount, useDisconnect } from 'wagmi';
-import { useEffect, useState } from 'react';
+import { useAccount, useDisconnect } from "wagmi";
+import { useEffect, useState } from "react";
 
 export interface WalletState {
   isConnected: boolean;
@@ -36,7 +28,8 @@ export function useWalletConnection() {
   return {
     isConnected,
     address,
-    isConnecting: status === 'connecting' || status === 'reconnecting' || isConnecting,
+    isConnecting:
+      status === "connecting" || status === "reconnecting" || isConnecting,
     error,
     setError,
     disconnect,

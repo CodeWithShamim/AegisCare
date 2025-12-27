@@ -1,17 +1,14 @@
 'use client';
 
-/**
- * Trial Admin Dashboard Page
- *
- * Allows trial sponsors to:
- * 1. Register new clinical trials with encrypted eligibility criteria
- * 2. Manage existing trials
- */
-
 import { useState } from 'react';
 import TrialRegistrationForm from '@/components/TrialRegistrationForm';
 import Header from '@/components/Header';
-import { getTrialCount, getTrialPublicInfo, getSponsorTrials, connectWallet } from '@/lib/web3Client';
+import {
+  getTrialCount,
+  getTrialPublicInfo,
+  getSponsorTrials,
+  connectWallet,
+} from '@/lib/web3Client';
 
 interface Trial {
   trialId: number;
@@ -126,9 +123,9 @@ export default function TrialAdminDashboard() {
                   🔐 Encrypted Eligibility Criteria
                 </h3>
                 <p className="text-xs text-indigo-800">
-                  Your trial eligibility criteria (age range, gender requirements, BMI limits, medical
-                  conditions) will be encrypted before submission. Patients can check their eligibility
-                  without revealing their medical data to you or anyone else.
+                  Your trial eligibility criteria (age range, gender requirements, BMI limits,
+                  medical conditions) will be encrypted before submission. Patients can check their
+                  eligibility without revealing their medical data to you or anyone else.
                 </p>
               </div>
               <TrialRegistrationForm onRegistrationSuccess={handleTrialCreated} />
@@ -142,8 +139,8 @@ export default function TrialAdminDashboard() {
                   ✓ Privacy-Preserving Trials
                 </h3>
                 <p className="text-xs text-green-800">
-                  Your trials are listed below. Patients can check eligibility without revealing their
-                  medical data. You never see patient information in plaintext.
+                  Your trials are listed below. Patients can check eligibility without revealing
+                  their medical data. You never see patient information in plaintext.
                 </p>
               </div>
 
@@ -192,14 +189,16 @@ export default function TrialAdminDashboard() {
                           <p className="text-sm text-gray-600 mb-3">{trial.description}</p>
                           <div className="flex items-center gap-4 text-xs text-gray-500">
                             <span>Trial ID: {trial.trialId}</span>
-                            <span>Sponsor: {trial.sponsor.slice(0, 6)}...{trial.sponsor.slice(-4)}</span>
+                            <span>
+                              Sponsor: {trial.sponsor.slice(0, 6)}...{trial.sponsor.slice(-4)}
+                            </span>
                           </div>
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-gray-200">
                         <p className="text-xs text-gray-500">
-                          🔒 Eligibility criteria are encrypted. Patients can check eligibility without
-                          revealing their medical data.
+                          🔒 Eligibility criteria are encrypted. Patients can check eligibility
+                          without revealing their medical data.
                         </p>
                       </div>
                     </div>
@@ -212,14 +211,18 @@ export default function TrialAdminDashboard() {
 
         {/* Security Notice */}
         <div className="mt-12 bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Why This Matters for Trial Sponsors</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Why This Matters for Trial Sponsors
+          </h3>
           <div className="space-y-4">
             <div className="flex items-start">
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3">
                 <span className="text-sm font-bold">1</span>
               </div>
               <div>
-                <h4 className="text-sm font-medium text-gray-900">Increased Patient Participation</h4>
+                <h4 className="text-sm font-medium text-gray-900">
+                  Increased Patient Participation
+                </h4>
                 <p className="text-xs text-gray-600">
                   Patients are more likely to participate when their medical data remains private
                 </p>
@@ -268,20 +271,22 @@ export default function TrialAdminDashboard() {
           </h3>
           <div className="text-xs text-indigo-800 space-y-2">
             <p>
-              <strong>1. Encrypted Criteria:</strong> Your eligibility criteria (age, gender, BMI, conditions)
-              are encrypted using Zama FHE before submission to the blockchain.
+              <strong>1. Encrypted Criteria:</strong> Your eligibility criteria (age, gender, BMI,
+              conditions) are encrypted using Zama FHE before submission to the blockchain.
             </p>
             <p>
-              <strong>2. Encrypted Matching:</strong> When patients check eligibility, the smart contract
-              compares their encrypted medical data with your encrypted criteria entirely in the encrypted domain.
+              <strong>2. Encrypted Matching:</strong> When patients check eligibility, the smart
+              contract compares their encrypted medical data with your encrypted criteria entirely
+              in the encrypted domain.
             </p>
             <p>
-              <strong>3. Private Results:</strong> The eligibility result is encrypted and only the patient
-              can decrypt it using their private key. You never see the patient's medical data or the result.
+              <strong>3. Private Results:</strong> The eligibility result is encrypted and only the
+              patient can decrypt it using their private key. You never see the patient's medical
+              data or the result.
             </p>
             <p>
-              <strong>4. Zero-Knowledge Proofs:</strong> Patients can prove they're eligible without revealing
-              why or how they match your criteria.
+              <strong>4. Zero-Knowledge Proofs:</strong> Patients can prove they're eligible without
+              revealing why or how they match your criteria.
             </p>
           </div>
         </div>

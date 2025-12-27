@@ -1,12 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
-
-/**
- * Reusable Wallet Status Component
- * @module components/WalletStatus
- *
- * Shows wallet connection status with consistent styling
- * Used throughout the app to display wallet state
- */
 
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 

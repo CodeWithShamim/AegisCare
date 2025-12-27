@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * Web3 Client Utilities
- * @module lib/web3Client
- *
- * Handles Ethereum wallet connection and smart contract interaction
- * Uses ethers.js v6 for blockchain operations
- */
 
 import { ethers, Contract, BrowserProvider, JsonRpcSigner } from "ethers";
 import AegisCareABI from "@/contracts/AegisCare.json";
@@ -21,13 +14,8 @@ import {
 // Extract ABI from the imported JSON
 const ABI = AegisCareABI.abi;
 
-// Re-export common types for convenience
 export type { BrowserProvider, JsonRpcSigner };
 export type Signer = JsonRpcSigner;
-
-// ============================================
-// TYPES
-// ============================================
 
 export interface Trial {
   trialId: number;
@@ -50,25 +38,13 @@ export interface Patient {
 // ============================================
 
 export const WEB3_CONFIG = {
-  // Contract address (set from environment after deployment)
   AEGISCARE_ADDRESS: process.env.NEXT_PUBLIC_AEGISCARE_ADDRESS || "",
 
-  // Network configuration
   CHAIN_ID: parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || "31337"), // Default to local development
 
-  // Required methods for wallet connection
   REQUIRED_METHODS: ["eth_requestAccounts", "personal_sign"],
 };
 
-// ============================================
-// WALLET CONNECTION
-// ============================================
-
-/**
- * Connect to user's Ethereum wallet
- *
- * @returns Provider and signer
- */
 export async function connectWallet(): Promise<{
   provider: BrowserProvider;
   signer: JsonRpcSigner;
@@ -121,9 +97,6 @@ export async function getProviderAndSigner(): Promise<{
   return { provider, signer, address };
 }
 
-/**
- * Get contract instance with signer (for transactions)
- */
 export function getAegisCareContract(
   address: string,
   signer: JsonRpcSigner
@@ -137,9 +110,6 @@ export function getAegisCareContract(
   return new Contract(WEB3_CONFIG.AEGISCARE_ADDRESS, ABI, signer);
 }
 
-/**
- * Get contract instance with provider (for read-only operations)
- */
 export function getAegisCareContractReadOnly(
   provider: BrowserProvider
 ): Contract {
@@ -152,19 +122,6 @@ export function getAegisCareContractReadOnly(
   return new Contract(WEB3_CONFIG.AEGISCARE_ADDRESS, ABI, provider);
 }
 
-// ============================================
-// CONTRACT INTERACTIONS - TRIALS
-// ============================================
-
-/**
- * Register a new clinical trial
- *
- * @param signer Wallet signer
- * @param trialName Trial name (public)
- * @param description Trial description (public)
- * @param encryptedCriteria Encrypted eligibility criteria
- * @returns Transaction receipt
- */
 export async function registerTrial(
   signer: JsonRpcSigner,
   trialName: string,
@@ -227,9 +184,6 @@ export async function getTrialPublicInfo(
   }
 }
 
-/**
- * Get all trials for a sponsor
- */
 export async function getSponsorTrials(
   provider: BrowserProvider,
   sponsorAddress: string
@@ -268,14 +222,6 @@ export async function getTrialCount(
 // CONTRACT INTERACTIONS - PATIENTS
 // ============================================
 
-/**
- * Register a new patient with encrypted medical data
- *
- * @param signer Wallet signer
- * @param encryptedMedicalData Encrypted patient medical data
- * @param publicKeyHash Hash of patient's public key
- * @returns Transaction receipt
- */
 export async function registerPatient(
   signer: JsonRpcSigner,
   encrypted: any,
@@ -347,21 +293,6 @@ export async function getPatientCount(
   }
 }
 
-// ============================================
-// CONTRACT INTERACTIONS - ELIGIBILITY
-// ============================================
-
-/**
- * Compute eligibility for a patient-trial pair
- *
- * This calls the smart contract which performs encrypted comparison.
- * The result remains encrypted and only the patient can decrypt it.
- *
- * @param signer Wallet signer
- * @param trialId Trial ID
- * @param patientAddress Patient wallet address
- * @returns Transaction receipt with result ID
- */
 export async function computeEligibility(
   signer: JsonRpcSigner,
   trialId: number,
@@ -392,16 +323,6 @@ export async function computeEligibility(
   }
 }
 
-/**
- * Get encrypted eligibility result
- *
- * Returns the encrypted result handle that the patient can decrypt.
- *
- * @param signer Wallet signer (must be the patient)
- * @param trialId Trial ID
- * @param patientAddress Patient address (must match signer)
- * @returns Encrypted result handle
- */
 export async function getEligibilityResult(
   signer: JsonRpcSigner,
   trialId: number,

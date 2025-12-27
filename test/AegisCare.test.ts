@@ -1,9 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { expect } from "chai";
 import hre from "hardhat";
-import { Contract } from "ethers";
 import { AegisCare, AegisCare__factory } from "../typechain-types";
-import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 
 type SignerWithAddress = Awaited<ReturnType<typeof hre.ethers.getSigners>>[0];
 
@@ -18,9 +16,6 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
   const TRIAL_NAME = "Diabetes Treatment Study";
   const TRIAL_DESCRIPTION = "Testing new treatment for Type 2 diabetes";
 
-  // Helper function to create encrypted input
-  // In real FHE, this would be actual encrypted values
-  // For testing, we use mock einput values
   const mockEinput = hre.ethers.encodeBytes32String("mock_encrypted");
 
   beforeEach(async function () {
@@ -60,12 +55,12 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       console.log("\n📝 Verifying trial registration structure...");
 
       // Create mock encrypted handles and proofs for all 7 criteria
-      const mockHandles = Array(7).fill(0).map((_, i) =>
-        hre.ethers.encodeBytes32String(`handle_${i}`)
-      );
-      const mockProofs = Array(7).fill(0).map((_, i) =>
-        hre.ethers.encodeBytes32String(`proof_${i}`)
-      );
+      const mockHandles = Array(7)
+        .fill(0)
+        .map((_, i) => hre.ethers.encodeBytes32String(`handle_${i}`));
+      const mockProofs = Array(7)
+        .fill(0)
+        .map((_, i) => hre.ethers.encodeBytes32String(`proof_${i}`));
 
       // Verify parameter structure without executing transaction
       expect(mockHandles.length).to.equal(7);
@@ -85,7 +80,9 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       });
 
       console.log("✓ Trial registration parameter structure verified");
-      console.log("  - Note: Actual transaction skipped - requires real FHE proofs");
+      console.log(
+        "  - Note: Actual transaction skipped - requires real FHE proofs"
+      );
     });
 
     it("Should have correct trial registration interface", async function () {
@@ -96,7 +93,9 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       // Verify the function expects the right number of parameters
       // registerTrial(string, string, 7 handles, 7 proofs) = 16 parameters total
       console.log("✓ registerTrial function interface verified");
-      console.log("  - Signature: registerTrial(string,string,bytes32,bytes32,...)");
+      console.log(
+        "  - Signature: registerTrial(string,string,bytes32,bytes32,...)"
+      );
     });
 
     it("Should allow retrieving trial public info", async function () {
@@ -106,12 +105,16 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
 
       // Verify function signature returns expected types
       console.log("✓ getTrialPublicInfo function interface verified");
-      console.log("  - Returns: (string name, string description, address sponsor, bool isActive)");
+      console.log(
+        "  - Returns: (string name, string description, address sponsor, bool isActive)"
+      );
     });
 
     it("Should track sponsor trials", async function () {
       // Verify getSponsorTrialCount function exists
-      const getSponsorTrialCount = aegisCare.getFunction("getSponsorTrialCount");
+      const getSponsorTrialCount = aegisCare.getFunction(
+        "getSponsorTrialCount"
+      );
       expect(getSponsorTrialCount).to.exist;
 
       // Verify function signature
@@ -125,12 +128,12 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       console.log("\n👤 Verifying patient registration structure...");
 
       // Create mock encrypted handles and proofs for patient data (5 fields)
-      const mockHandles = Array(5).fill(0).map((_, i) =>
-        hre.ethers.encodeBytes32String(`patient_handle_${i}`)
-      );
-      const mockProofs = Array(5).fill(0).map((_, i) =>
-        hre.ethers.encodeBytes32String(`patient_proof_${i}`)
-      );
+      const mockHandles = Array(5)
+        .fill(0)
+        .map((_, i) => hre.ethers.encodeBytes32String(`patient_handle_${i}`));
+      const mockProofs = Array(5)
+        .fill(0)
+        .map((_, i) => hre.ethers.encodeBytes32String(`patient_proof_${i}`));
       const publicKeyHash = hre.ethers.encodeBytes32String("public_key_hash");
 
       // Verify parameter structure without executing transaction
@@ -150,7 +153,9 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       });
 
       console.log("✓ Patient registration parameter structure verified");
-      console.log("  - Note: Actual transaction skipped - requires real FHE proofs");
+      console.log(
+        "  - Note: Actual transaction skipped - requires real FHE proofs"
+      );
     });
 
     it("Should have correct patient registration interface", async function () {
@@ -163,7 +168,9 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       expect(isPatientRegistered).to.exist;
 
       console.log("✓ registerPatient function interface verified");
-      console.log("  - Signature: registerPatient(bytes32,bytes32,...,bytes32) × 5 + bytes32 publicKeyHash");
+      console.log(
+        "  - Signature: registerPatient(bytes32,bytes32,...,bytes32) × 5 + bytes32 publicKeyHash"
+      );
     });
   });
 
@@ -174,19 +181,27 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
       expect(computeEligibility).to.exist;
 
       console.log("✓ computeEligibility function interface verified");
-      console.log("  - Signature: computeEligibility(uint256 trialId, address patient)");
+      console.log(
+        "  - Signature: computeEligibility(uint256 trialId, address patient)"
+      );
     });
   });
 
   describe("5. Access Control", function () {
     it("Should have getEligibilityResult function", async function () {
       // Verify function exists
-      const getEligibilityResult = aegisCare.getFunction("getEligibilityResult");
+      const getEligibilityResult = aegisCare.getFunction(
+        "getEligibilityResult"
+      );
       expect(getEligibilityResult).to.exist;
 
       console.log("✓ getEligibilityResult function interface verified");
-      console.log("  - Signature: getEligibilityResult(uint256 trialId, address patient)");
-      console.log("  - Access Control: Only patient can access their own results");
+      console.log(
+        "  - Signature: getEligibilityResult(uint256 trialId, address patient)"
+      );
+      console.log(
+        "  - Access Control: Only patient can access their own results"
+      );
     });
   });
 
@@ -220,10 +235,10 @@ describe("🛡️ AegisCare - FHE Clinical Trial Matching", function () {
         "registerPatient",
         "computeEligibility",
         "deactivateTrial",
-        "getEligibilityResult"
+        "getEligibilityResult",
       ];
 
-      functions.forEach(funcName => {
+      functions.forEach((funcName) => {
         const func = aegisCare.getFunction(funcName);
         expect(func).to.exist;
       });

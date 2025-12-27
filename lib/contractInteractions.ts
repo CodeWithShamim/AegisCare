@@ -1,15 +1,6 @@
-/**
- * AegisCare Contract Interaction Layer
- *
- * Provides type-safe, validated contract interactions
- * with proper error handling and logging
- */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ethers, Contract, JsonRpcSigner } from "ethers";
-import type {
-  EncryptedPatientData,
-  EncryptedTrialCriteria,
-} from "./fheClient";
+import type { EncryptedPatientData, EncryptedTrialCriteria } from "./fheClient";
 import { logger } from "./logger";
 
 // ============================================
@@ -34,9 +25,10 @@ export interface TrialRegistrationParams {
 /**
  * Validate encrypted patient data before contract interaction
  */
-function validatePatientEncryptedData(
-  data: EncryptedPatientData
-): { valid: boolean; errors: string[] } {
+function validatePatientEncryptedData(data: EncryptedPatientData): {
+  valid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
 
   // Check all required fields exist
@@ -46,7 +38,8 @@ function validatePatientEncryptedData(
   if (!data.genderProof) errors.push("Gender proof is missing");
   if (!data.bmiScore?.handle) errors.push("BMI handle is missing");
   if (!data.bmiProof) errors.push("BMI proof is missing");
-  if (!data.hasMedicalCondition?.handle) errors.push("Condition handle is missing");
+  if (!data.hasMedicalCondition?.handle)
+    errors.push("Condition handle is missing");
   if (!data.conditionProof) errors.push("Condition proof is missing");
   if (!data.conditionCode?.handle) errors.push("Code handle is missing");
   if (!data.codeProof) errors.push("Code proof is missing");
@@ -66,7 +59,9 @@ function validatePatientEncryptedData(
       errors.push(`Handle ${index} must start with 0x`);
     }
     if (handle.length !== 66) {
-      errors.push(`Handle ${index} must be 66 characters (0x + 64 hex), got ${handle.length}`);
+      errors.push(
+        `Handle ${index} must be 66 characters (0x + 64 hex), got ${handle.length}`
+      );
     }
   });
 
@@ -79,7 +74,10 @@ function validatePatientEncryptedData(
 /**
  * Validate public key hash format
  */
-function validatePublicKeyHash(publicKeyHash: string): { valid: boolean; error?: string } {
+function validatePublicKeyHash(publicKeyHash: string): {
+  valid: boolean;
+  error?: string;
+} {
   if (!publicKeyHash) {
     return { valid: false, error: "Public key hash is required" };
   }
@@ -87,29 +85,14 @@ function validatePublicKeyHash(publicKeyHash: string): { valid: boolean; error?:
     return { valid: false, error: "Public key hash must start with 0x" };
   }
   if (publicKeyHash.length !== 66) {
-    return { valid: false, error: `Public key hash must be 66 characters, got ${publicKeyHash.length}` };
+    return {
+      valid: false,
+      error: `Public key hash must be 66 characters, got ${publicKeyHash.length}`,
+    };
   }
   return { valid: true };
 }
 
-// ============================================
-// CONTRACT INTERACTIONS
-// ============================================
-
-/**
- * Register a patient with the AegisCare contract
- *
- * This function provides:
- * - Type-safe parameter handling
- * - Pre-flight validation
- * - Clear error messages
- * - Detailed logging
- * - Gas estimation
- *
- * @param contract ethers Contract instance
- * @param params Registration parameters
- * @returns Transaction receipt
- */
 export async function registerPatient(
   contract: Contract,
   params: PatientRegistrationParams
@@ -129,7 +112,10 @@ export async function registerPatient(
   // 2. Validate public key hash
   const pkhValidation = validatePublicKeyHash(publicKeyHash);
   if (!pkhValidation.valid) {
-    logger.error("❌ [Contract] Public key hash validation failed:", pkhValidation.error);
+    logger.error(
+      "❌ [Contract] Public key hash validation failed:",
+      pkhValidation.error
+    );
     throw new Error(pkhValidation.error!);
   }
   logger.log("✅ [Contract] Public key hash validated");
@@ -157,16 +143,30 @@ export async function registerPatient(
 
   logger.log("📋 [Contract] Parameters prepared:");
   logger.log("  - Age handle:", encryptedData.age.handle.slice(0, 10) + "...");
-  logger.log("  - Gender handle:", encryptedData.gender.handle.slice(0, 10) + "...");
-  logger.log("  - BMI handle:", encryptedData.bmiScore.handle.slice(0, 10) + "...");
-  logger.log("  - Condition handle:", encryptedData.hasMedicalCondition.handle.slice(0, 10) + "...");
-  logger.log("  - Code handle:", encryptedData.conditionCode.handle.slice(0, 10) + "...");
+  logger.log(
+    "  - Gender handle:",
+    encryptedData.gender.handle.slice(0, 10) + "..."
+  );
+  logger.log(
+    "  - BMI handle:",
+    encryptedData.bmiScore.handle.slice(0, 10) + "..."
+  );
+  logger.log(
+    "  - Condition handle:",
+    encryptedData.hasMedicalCondition.handle.slice(0, 10) + "..."
+  );
+  logger.log(
+    "  - Code handle:",
+    encryptedData.conditionCode.handle.slice(0, 10) + "..."
+  );
   logger.log("  - Public key hash:", publicKeyHash.slice(0, 10) + "...");
 
   try {
     // 4. Estimate gas (pre-flight check)
     logger.log("⛽ [Contract] Estimating gas...");
-    const gasEstimate = await contract.registerPatient.estimateGas(...contractParams);
+    const gasEstimate = await contract.registerPatient.estimateGas(
+      ...contractParams
+    );
     logger.log(`✅ [Contract] Gas estimate: ${gasEstimate.toString()}`);
 
     // 5. Send transaction with gas buffer
@@ -187,7 +187,6 @@ export async function registerPatient(
     logger.log(`  - Gas used: ${receipt?.gasUsed.toString()}`);
 
     return receipt!;
-
   } catch (error: any) {
     logger.error("❌ [Contract] Registration failed:");
 
@@ -219,10 +218,6 @@ export async function registerPatient(
 
 /**
  * Register a trial with the AegisCare contract
- *
- * @param contract ethers Contract instance
- * @param params Trial registration parameters
- * @returns Transaction receipt
  */
 export async function registerTrial(
   contract: Contract,
@@ -264,7 +259,9 @@ export async function registerTrial(
   try {
     // Estimate gas
     logger.log("⛽ [Contract] Estimating gas...");
-    const gasEstimate = await contract.registerTrial.estimateGas(...contractParams);
+    const gasEstimate = await contract.registerTrial.estimateGas(
+      ...contractParams
+    );
     logger.log(`✅ [Contract] Gas estimate: ${gasEstimate.toString()}`);
 
     // Send transaction
@@ -285,7 +282,6 @@ export async function registerTrial(
     logger.log(`  - Gas used: ${receipt?.gasUsed.toString()}`);
 
     return receipt!;
-
   } catch (error: any) {
     logger.error("❌ [Contract] Trial registration failed:", error.message);
     throw new Error(`Trial registration failed: ${error.message}`);

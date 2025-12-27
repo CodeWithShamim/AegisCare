@@ -1,8 +1,3 @@
-/**
- * AegisCare Integration Test
- * Step-by-step feature testing
- */
-
 import { expect } from "chai";
 import hre from "hardhat";
 import { AegisCare, AegisCare__factory } from "../typechain-types";
@@ -49,7 +44,11 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       console.log("   - Gender:", gender, "(Male)");
       console.log("   - BMI:", bmiScore / 10);
       console.log("   - Has Condition:", hasMedicalCondition);
-      console.log("   - Condition Code:", conditionCode, "(E11 - Type 2 Diabetes)");
+      console.log(
+        "   - Condition Code:",
+        conditionCode,
+        "(E11 - Type 2 Diabetes)"
+      );
 
       // Note: In a real scenario, you would use fheClient to encrypt
       // For testing, we're using mock encrypted values
@@ -66,14 +65,21 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       const mockPublicKeyHash = ethers_zero_bytes32(10);
 
       // Register patient
-      const tx = await contract.connect(patient1).registerPatient(
-        mockAgeHandle, mockAgeProof,
-        mockGenderHandle, mockGenderProof,
-        mockBMIHandle, mockBMIProof,
-        mockConditionHandle, mockConditionProof,
-        mockCodeHandle, mockCodeProof,
-        mockPublicKeyHash
-      );
+      const tx = await contract
+        .connect(patient1)
+        .registerPatient(
+          mockAgeHandle,
+          mockAgeProof,
+          mockGenderHandle,
+          mockGenderProof,
+          mockBMIHandle,
+          mockBMIProof,
+          mockConditionHandle,
+          mockConditionProof,
+          mockCodeHandle,
+          mockCodeProof,
+          mockPublicKeyHash
+        );
 
       const receipt = await tx.wait();
       console.log("   ✓ Patient registered successfully");
@@ -94,14 +100,21 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       const mockPublicKeyHash = ethers_zero_bytes32(10);
 
       await expect(
-        contract.connect(patient1).registerPatient(
-          ethers_zero_bytes32(0), ethers_zero_bytes32(1),
-          ethers_zero_bytes32(2), ethers_zero_bytes32(3),
-          ethers_zero_bytes32(4), ethers_zero_bytes32(5),
-          ethers_zero_bytes32(6), ethers_zero_bytes32(7),
-          ethers_zero_bytes32(8), ethers_zero_bytes32(9),
-          mockPublicKeyHash
-        )
+        contract
+          .connect(patient1)
+          .registerPatient(
+            ethers_zero_bytes32(0),
+            ethers_zero_bytes32(1),
+            ethers_zero_bytes32(2),
+            ethers_zero_bytes32(3),
+            ethers_zero_bytes32(4),
+            ethers_zero_bytes32(5),
+            ethers_zero_bytes32(6),
+            ethers_zero_bytes32(7),
+            ethers_zero_bytes32(8),
+            ethers_zero_bytes32(9),
+            mockPublicKeyHash
+          )
       ).to.be.reverted;
 
       console.log("   ✓ Duplicate registration correctly blocked");
@@ -112,14 +125,21 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
 
       const mockPublicKeyHash = ethers_zero_bytes32(20);
 
-      const tx = await contract.connect(patient2).registerPatient(
-        ethers_zero_bytes32(0), ethers_zero_bytes32(1),
-        ethers_zero_bytes32(2), ethers_zero_bytes32(3),
-        ethers_zero_bytes32(4), ethers_zero_bytes32(5),
-        ethers_zero_bytes32(6), ethers_zero_bytes32(7),
-        ethers_zero_bytes32(8), ethers_zero_bytes32(9),
-        mockPublicKeyHash
-      );
+      const tx = await contract
+        .connect(patient2)
+        .registerPatient(
+          ethers_zero_bytes32(0),
+          ethers_zero_bytes32(1),
+          ethers_zero_bytes32(2),
+          ethers_zero_bytes32(3),
+          ethers_zero_bytes32(4),
+          ethers_zero_bytes32(5),
+          ethers_zero_bytes32(6),
+          ethers_zero_bytes32(7),
+          ethers_zero_bytes32(8),
+          ethers_zero_bytes32(9),
+          mockPublicKeyHash
+        );
 
       const receipt = await tx.wait();
       console.log("   ✓ Second patient registered");
@@ -129,7 +149,12 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       patient2Id = Number(patientInfo.patientId);
 
       expect(patient2Id).to.equal(patient1Id + 1);
-      console.log("   ✓ Patient IDs increment correctly:", patient1Id, "→", patient2Id);
+      console.log(
+        "   ✓ Patient IDs increment correctly:",
+        patient1Id,
+        "→",
+        patient2Id
+      );
     });
   });
 
@@ -149,13 +174,20 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       const tx = await contract.connect(trialSponsor).registerTrial(
         trialName,
         description,
-        ethers_zero_bytes32(0), ethers_zero_bytes32(1), // minAge
-        ethers_zero_bytes32(2), ethers_zero_bytes32(3), // maxAge
-        ethers_zero_bytes32(4), ethers_zero_bytes32(5), // requiredGender
-        ethers_zero_bytes32(6), ethers_zero_bytes32(7), // minBMI
-        ethers_zero_bytes32(8), ethers_zero_bytes32(9), // maxBMI
-        ethers_zero_bytes32(10), ethers_zero_bytes32(11), // hasCondition
-        ethers_zero_bytes32(12), ethers_zero_bytes32(13), // conditionCode
+        ethers_zero_bytes32(0),
+        ethers_zero_bytes32(1), // minAge
+        ethers_zero_bytes32(2),
+        ethers_zero_bytes32(3), // maxAge
+        ethers_zero_bytes32(4),
+        ethers_zero_bytes32(5), // requiredGender
+        ethers_zero_bytes32(6),
+        ethers_zero_bytes32(7), // minBMI
+        ethers_zero_bytes32(8),
+        ethers_zero_bytes32(9), // maxBMI
+        ethers_zero_bytes32(10),
+        ethers_zero_bytes32(11), // hasCondition
+        ethers_zero_bytes32(12),
+        ethers_zero_bytes32(13) // conditionCode
       );
 
       const receipt = await tx.wait();
@@ -183,7 +215,10 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
 
       console.log("   ✓ Trial details verified");
       console.log("   - Active:", trialInfo.isActive);
-      console.log("   - Participant count:", trialInfo.participantCount.toString());
+      console.log(
+        "   - Participant count:",
+        trialInfo.participantCount.toString()
+      );
     });
 
     it("Should retrieve trial public information correctly", async function () {
@@ -228,7 +263,10 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       // Verify participant count increased
       const trialInfo = await contract.getTrialInfo(trialId);
       expect(Number(trialInfo.participantCount)).to.equal(1);
-      console.log("   ✓ Trial participant count:", trialInfo.participantCount.toString());
+      console.log(
+        "   ✓ Trial participant count:",
+        trialInfo.participantCount.toString()
+      );
     });
 
     it("Should allow patient to check their own eligibility", async function () {
@@ -243,7 +281,11 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       // Verify eligibility check was recorded
       const checks = await contract.patientEligibilityChecks(patient1.address);
       expect(checks.length).to.be.greaterThan(0);
-      console.log("   ✓ Patient has", checks.length.toString(), "eligibility check(s)");
+      console.log(
+        "   ✓ Patient has",
+        checks.length.toString(),
+        "eligibility check(s)"
+      );
     });
 
     it("Should prevent eligibility computation for non-existent patient", async function () {
@@ -276,7 +318,9 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       console.log("\n   📝 Testing Result Retrieval...");
 
       // Get eligibility result
-      const result = await contract.connect(patient1).getEligibilityResult(trialId, patient1.address);
+      const result = await contract
+        .connect(patient1)
+        .getEligibilityResult(trialId, patient1.address);
 
       console.log("   ✓ Eligibility result retrieved");
       console.log("   - Result type: encrypted boolean (ebool)");
@@ -287,7 +331,9 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
 
       // Try to access another patient's result
       await expect(
-        contract.connect(patient2).getEligibilityResult(trialId, patient1.address)
+        contract
+          .connect(patient2)
+          .getEligibilityResult(trialId, patient1.address)
       ).to.be.revertedWithCustomError(contract, "NotAuthorized");
 
       console.log("   ✓ Unauthorized access correctly blocked");
@@ -298,9 +344,15 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
     it("Should retrieve patient registration status", async function () {
       console.log("\n   📝 Testing Patient Status Checks...");
 
-      const isRegistered1 = await contract.isPatientRegistered(patient1.address);
-      const isRegistered2 = await contract.isPatientRegistered(patient2.address);
-      const isRegisteredOwner = await contract.isPatientRegistered(owner.address);
+      const isRegistered1 = await contract.isPatientRegistered(
+        patient1.address
+      );
+      const isRegistered2 = await contract.isPatientRegistered(
+        patient2.address
+      );
+      const isRegisteredOwner = await contract.isPatientRegistered(
+        owner.address
+      );
 
       expect(isRegistered1).to.be.true;
       expect(isRegistered2).to.be.true;
@@ -322,7 +374,10 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       console.log("   - Description:", info.description);
       console.log("   - Sponsor:", info.sponsor);
       console.log("   - Active:", info.isActive);
-      console.log("   - Created At:", new Date(Number(info.createdAt) * 1000).toISOString());
+      console.log(
+        "   - Created At:",
+        new Date(Number(info.createdAt) * 1000).toISOString()
+      );
       console.log("   - Participants:", info.participantCount.toString());
 
       expect(info.trialId).to.equal(trialId);
@@ -338,7 +393,10 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       console.log("   Patient Information:");
       console.log("   - ID:", info.patientId.toString());
       console.log("   - Public Key Hash:", info.publicKeyHash);
-      console.log("   - Registered At:", new Date(Number(info.registeredAt) * 1000).toISOString());
+      console.log(
+        "   - Registered At:",
+        new Date(Number(info.registeredAt) * 1000).toISOString()
+      );
 
       expect(Number(info.patientId)).to.equal(patient1Id);
       expect(info.publicKeyHash).to.not.equal(ethers.ZeroHash);
@@ -428,31 +486,49 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       const newPatient = owner;
       const mockPKH = ethers_zero_bytes32(100);
 
-      await contract.connect(newPatient).registerPatient(
-        ethers_zero_bytes32(0), ethers_zero_bytes32(1),
-        ethers_zero_bytes32(2), ethers_zero_bytes32(3),
-        ethers_zero_bytes32(4), ethers_zero_bytes32(5),
-        ethers_zero_bytes32(6), ethers_zero_bytes32(7),
-        ethers_zero_bytes32(8), ethers_zero_bytes32(9),
-        mockPKH
-      );
+      await contract
+        .connect(newPatient)
+        .registerPatient(
+          ethers_zero_bytes32(0),
+          ethers_zero_bytes32(1),
+          ethers_zero_bytes32(2),
+          ethers_zero_bytes32(3),
+          ethers_zero_bytes32(4),
+          ethers_zero_bytes32(5),
+          ethers_zero_bytes32(6),
+          ethers_zero_bytes32(7),
+          ethers_zero_bytes32(8),
+          ethers_zero_bytes32(9),
+          mockPKH
+        );
       console.log("   ✓ Patient registered");
 
       console.log("\n   Step 2: Create new trial");
-      const tx = await contract.connect(trialSponsor).registerTrial(
-        "Cardiovascular Study",
-        "Heart health research",
-        ethers_zero_bytes32(0), ethers_zero_bytes32(1),
-        ethers_zero_bytes32(2), ethers_zero_bytes32(3),
-        ethers_zero_bytes32(4), ethers_zero_bytes32(5),
-        ethers_zero_bytes32(6), ethers_zero_bytes32(7),
-        ethers_zero_bytes32(8), ethers_zero_bytes32(9),
-        ethers_zero_bytes32(10), ethers_zero_bytes32(11),
-        ethers_zero_bytes32(12), ethers_zero_bytes32(13),
-      );
+      const tx = await contract
+        .connect(trialSponsor)
+        .registerTrial(
+          "Cardiovascular Study",
+          "Heart health research",
+          ethers_zero_bytes32(0),
+          ethers_zero_bytes32(1),
+          ethers_zero_bytes32(2),
+          ethers_zero_bytes32(3),
+          ethers_zero_bytes32(4),
+          ethers_zero_bytes32(5),
+          ethers_zero_bytes32(6),
+          ethers_zero_bytes32(7),
+          ethers_zero_bytes32(8),
+          ethers_zero_bytes32(9),
+          ethers_zero_bytes32(10),
+          ethers_zero_bytes32(11),
+          ethers_zero_bytes32(12),
+          ethers_zero_bytes32(13)
+        );
 
       const receipt = await tx.wait();
-      const event = receipt?.logs.find((log: any) => log.eventName === "TrialRegistered");
+      const event = receipt?.logs.find(
+        (log: any) => log.eventName === "TrialRegistered"
+      );
       const newTrialId = Number(event?.args?.trialId);
       console.log("   ✓ Trial created with ID:", newTrialId);
 
@@ -461,13 +537,17 @@ describe("🚀 AegisCare - Step-by-Step Integration Tests", function () {
       console.log("   ✓ Eligibility computed");
 
       console.log("\n   Step 4: Retrieve result");
-      await contract.connect(newPatient).getEligibilityResult(newTrialId, newPatient.address);
+      await contract
+        .connect(newPatient)
+        .getEligibilityResult(newTrialId, newPatient.address);
       console.log("   ✓ Result retrieved by patient");
 
       console.log("\n   Step 5: Verify all data");
       const trialInfo = await contract.getTrialInfo(newTrialId);
       const patientInfo = await contract.getPatientInfo(newPatient.address);
-      const sponsorCount = await contract.getSponsorTrialCount(trialSponsor.address);
+      const sponsorCount = await contract.getSponsorTrialCount(
+        trialSponsor.address
+      );
 
       expect(trialInfo.isActive).to.be.true;
       expect(Number(patientInfo.patientId)).to.be.greaterThan(0);

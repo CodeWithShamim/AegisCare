@@ -1,11 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * Debug Logger Utility
- * @module lib/logger
- *
- * Provides conditional logging based on DEBUG environment variable
- * Logs are only emitted in development mode
- */
+
 
 const isDebug = process.env.NEXT_PUBLIC_DEBUG === 'true';
 
