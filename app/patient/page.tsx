@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import PatientRegistrationForm from '@/components/PatientRegistrationForm';
 import EligibilityChecker from '@/components/EligibilityChecker';
+import EligibilityHistory from '@/components/EligibilityHistory';
 import Header from '@/components/Header';
 import { patientExists, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 export default function PatientDashboard() {
   const { isConnected, address } = useWalletConnection();
-  const [activeTab, setActiveTab] = useState<'register' | 'check'>('register');
+  const [activeTab, setActiveTab] = useState<'register' | 'check' | 'history'>('register');
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [patientAddress, setPatientAddress] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
@@ -88,6 +89,16 @@ export default function PatientDashboard() {
               >
                 Check Trial Eligibility
               </button>
+              <button
+                onClick={() => setActiveTab('history')}
+                className={`${
+                  activeTab === 'history'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
+              >
+                Eligibility History
+              </button>
             </nav>
           </div>
         </div>
@@ -137,6 +148,21 @@ export default function PatientDashboard() {
               </div>
 
               {patientAddress && <EligibilityChecker patientAddress={patientAddress} />}
+            </div>
+          )}
+
+          {activeTab === 'history' && (
+            <div>
+              {isRegistered === false && (
+                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Not Registered</h3>
+                  <p className="text-xs text-yellow-800">
+                    You need to register with your medical data before viewing your eligibility history.
+                  </p>
+                </div>
+              )}
+
+              {patientAddress && <EligibilityHistory patientAddress={patientAddress} />}
             </div>
           )}
 

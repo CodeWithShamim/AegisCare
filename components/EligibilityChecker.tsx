@@ -266,7 +266,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
           disabled={
             isComputing ||
             isDecrypting ||
-            (patientAddress && address && address.toLowerCase() !== patientAddress.toLowerCase())
+            Boolean(patientAddress && address && address.toLowerCase() !== patientAddress.toLowerCase())
           }
           className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mb-6"
         >

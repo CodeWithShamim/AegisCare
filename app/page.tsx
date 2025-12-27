@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import Header from '@/components/Header';
+import { usePlatformStats } from '@/lib/hooks/usePlatformStats';
 
 export default function Home() {
+  const stats = usePlatformStats();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -9,6 +14,80 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+        {/* Platform Statistics */}
+        <div className="mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Total Trials */}
+            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Active Trials</p>
+                  {stats.isLoading ? (
+                    <div className="animate-pulse mt-2">
+                      <div className="h-8 bg-gray-200 rounded w-20"></div>
+                    </div>
+                  ) : (
+                    <p className="text-4xl font-bold text-indigo-600 mt-2">{stats.totalTrials}</p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">Registered clinical trials</p>
+                </div>
+                <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Total Patients */}
+            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-green-100 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Protected Patients</p>
+                  {stats.isLoading ? (
+                    <div className="animate-pulse mt-2">
+                      <div className="h-8 bg-gray-200 rounded w-20"></div>
+                    </div>
+                  ) : (
+                    <p className="text-4xl font-bold text-green-600 mt-2">{stats.totalPatients}</p>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">Privacy-preserving registrations</p>
+                </div>
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Privacy Score */}
+            <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100 hover:shadow-xl transition-shadow">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Data Privacy</p>
+                  <p className="text-4xl font-bold text-purple-600 mt-2">100%</p>
+                  <p className="text-xs text-gray-500 mt-1">End-to-end encrypted</p>
+                </div>
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Activity Indicator */}
+          <div className="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-600">
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+            <span>Platform active on Zama FHE Devnet</span>
+          </div>
+        </div>
+
         <div className="text-center">
           <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
             Clinical Trial Matching with

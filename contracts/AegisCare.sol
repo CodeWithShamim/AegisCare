@@ -433,7 +433,9 @@ contract AegisCare is ZamaEthereumConfig {
             string memory trialName,
             string memory description,
             address sponsor,
-            bool isActive
+            bool isActive,
+            uint256 createdAt,
+            uint256 participantCount
         )
     {
         EncryptedTrial storage trial = trials[_trialId];
@@ -441,7 +443,9 @@ contract AegisCare is ZamaEthereumConfig {
             trial.trialName,
             trial.description,
             trial.sponsor,
-            trial.isActive
+            trial.isActive,
+            trial.createdAt,
+            trial.participantCount
         );
     }
 
@@ -477,6 +481,15 @@ contract AegisCare is ZamaEthereumConfig {
         address _sponsor
     ) external view returns (uint256) {
         return sponsorTrials[_sponsor].length;
+    }
+
+    /// @notice Get all trial IDs for a sponsor
+    /// @param _sponsor The sponsor's address
+    /// @return Array of trial IDs
+    function getSponsorTrials(
+        address _sponsor
+    ) external view returns (uint256[] memory) {
+        return sponsorTrials[_sponsor];
     }
 
     // ============================================
