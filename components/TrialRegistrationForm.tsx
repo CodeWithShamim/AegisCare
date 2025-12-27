@@ -12,6 +12,7 @@ import {
 import { registerTrial, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import LoadingAnimation from '@/components/LoadingAnimation';
+import ErrorDisplay from '@/components/ErrorDisplay';
 
 interface TrialRegistrationFormProps {
   onRegistrationSuccess?: (trialId: number) => void;
@@ -42,7 +43,7 @@ export default function TrialRegistrationForm({
     'encryption' | 'transaction' | 'blockchain' | null
   >(null);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>(null);
   const [success, setSuccess] = useState(false);
 
   // Validation errors
@@ -203,8 +204,12 @@ export default function TrialRegistrationForm({
 
           {/* Error Messages */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-6">
+              <ErrorDisplay
+                error={error}
+                onDismiss={() => setError(null)}
+                showTechnicalDetails={true}
+              />
             </div>
           )}
 

@@ -7,6 +7,7 @@ import { decryptEligibilityResult } from '@/lib/fheClient';
 import { getTrialPublicInfo, getTrialCount } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import LoadingAnimation from '@/components/LoadingAnimation';
+import ErrorDisplay from '@/components/ErrorDisplay';
 
 interface Trial {
   trialId: number;
@@ -31,7 +32,7 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
   const [isLoading, setIsLoading] = useState(false);
   const [isComputing, setIsComputing] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>(null);
   const [eligibilityResult, setEligibilityResult] = useState<boolean | null>(null);
 
   /**
@@ -183,8 +184,12 @@ export default function EligibilityChecker({ patientAddress }: EligibilityChecke
 
       {/* Error Messages */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="mb-6">
+          <ErrorDisplay
+            error={error}
+            onDismiss={() => setError(null)}
+            showTechnicalDetails={true}
+          />
         </div>
       )}
 
