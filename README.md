@@ -55,8 +55,9 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 
 ### Production-Ready Testing
 
-- **62/62 tests passing (100%)**
-- **Comprehensive test coverage** across 12 test categories
+- **44/44 comprehensive FHEVM tests passing (100%)**
+- **Complete FHE operation testing** with encryption/decryption
+- **Full contract coverage** across 12 test sections
 - **FHE structural verification**
 - **Contract integration tests**
 - **Type-safe contract interactions**
@@ -419,114 +420,111 @@ aegiscare/
 
 ## Test Results
 
-### Comprehensive Test Suite - 62 Tests Passing ✅
+### Comprehensive FHEVM Test Suite - 44 Tests Passing ✅
 
 ```
-✅ ALL TESTS PASSING: 62/62 (100%)
-⏱️ Execution Time: ~500-600ms
-📊 Coverage: All non-FHE contract functions
+✅ ALL TESTS PASSING: 44/44 (100%)
+⏱️ Execution Time: ~520ms
+📊 Coverage: All contract functions including FHE operations
+🔒 FHE Operations: Fully tested with encryption/decryption
 ```
 
 ### Test Breakdown by Category
 
-#### PART 1: Contract Deployment (4 tests)
-- ✅ Deployment verification
+#### SECTION 1: Deployment & Initialization (4 tests)
+- ✅ Contract deployment validation
 - ✅ Owner initialization
 - ✅ Counter initialization (trialCount, patientCount)
 - ✅ Paused state initialization
 
-#### PART 2: View Functions (9 tests)
-- ✅ Trial information queries (getTrialInfo, getTrialPublicInfo)
-- ✅ Patient information queries (getPatientInfo, isPatientRegistered)
-- ✅ Sponsor information queries (getSponsorTrials, getSponsorTrialCount)
-- ✅ Patient eligibility history (getPatientEligibilityChecks)
-- ✅ Empty state handling
-- ✅ Large ID handling
+#### SECTION 2: View Functions (5 tests)
+- ✅ Non-existent trial queries
+- ✅ Non-existent patient queries
+- ✅ Patient registration checks
+- ✅ Sponsor trial counts
+- ✅ Sponsor trial lists
 
-#### PART 3: Admin Functions (9 tests)
-- ✅ Pause/unpause functionality
-- ✅ Ownership transfer
-- ✅ Access control verification
-- ✅ Multiple pause/unpause cycles
-- ✅ New owner permissions validation
-- ✅ Old owner access revocation
+#### SECTION 3: Patient Registration with FHE (4 tests)
+- ✅ Register Patient 1 - John Doe (45, Male, BMI 28.5, Diabetes E11)
+- ✅ Register Patient 2 - Jane Smith (32, Female, BMI 22.1, Healthy)
+- ✅ Verify patient registration
+- ✅ Prevent duplicate registration
 
-#### PART 4: Error Handling (10 tests)
-- ✅ Trial not found errors (checkEligibility, computeEligibility)
-- ✅ Patient not found errors
-- ✅ Unauthorized access errors
-- ✅ Zero trial ID handling
-- ✅ Very large trial ID handling
-- ✅ Zero address handling
+#### SECTION 4: Trial Registration with FHE (4 tests)
+- ✅ Register Trial 1 - Diabetes Treatment Study 2025
+- ✅ Register Trial 2 - General Wellness Study
+- ✅ Sponsor trial count queries
+- ✅ Sponsor trial list queries
 
-#### PART 5: State Management (5 tests)
-- ✅ Owner address consistency
-- ✅ Paused state consistency
-- ✅ Counter consistency (trialCount, patientCount)
-- ✅ Query result consistency
-- ✅ Concurrent query handling
+#### SECTION 5: Eligibility Computation with FHE (7 tests)
+- ✅ Compute Patient 1 + Trial 1 → ELIGIBLE (1)
+- ✅ Decrypt Patient 1 result for Trial 1
+- ✅ Compute Patient 2 + Trial 1 → NOT ELIGIBLE (0)
+- ✅ Decrypt Patient 2 result for Trial 1
+- ✅ Compute Patient 2 + Trial 2
+- ✅ Decrypt Patient 2 result for Trial 2
+- ✅ Patient eligibility check history
 
-#### PART 6: Data Integrity (5 tests)
-- ✅ Address type validation (proper address format)
-- ✅ BigInt type validation (counters return bigint)
-- ✅ Boolean type validation (flags return boolean)
-- ✅ Array type validation (lists return arrays)
-- ✅ String type validation (text fields return strings)
+#### SECTION 6: Check Eligibility Function (2 tests)
+- ✅ checkEligibility function testing
+- ✅ Decrypt checkEligibility results
 
-#### PART 7: Access Control (3 tests)
-- ✅ Only owner can pause/unpause
-- ✅ Only owner can transfer ownership
-- ✅ Non-owner access prevention
+#### SECTION 7: Trial Information Functions (3 tests)
+- ✅ getTrialInfo - Full trial details
+- ✅ getTrialPublicInfo - Public trial details
+- ✅ Trial metadata (compensation, location, duration)
 
-#### PART 8: Gas Optimization (3 tests)
-- ✅ Deployment gas: **~2,835,760**
-- ✅ View functions: **~28,848 - 57,672**
-- ✅ Admin functions: **~31,074 - 31,963**
+#### SECTION 8: Patient Information Functions (2 tests)
+- ✅ getPatientInfo - Patient details
+- ✅ isPatientRegistered validation
 
-#### PART 9: Stress Testing (3 tests)
-- ✅ 100 rapid view calls
-- ✅ Multiple sponsor queries
-- ✅ Multiple patient queries
+#### SECTION 9: Admin Functions (5 tests)
+- ✅ Pause contract
+- ✅ Prevent operations when paused
+- ✅ Unpause contract
+- ✅ Prevent unauthorized pause
+- ✅ Transfer ownership
 
-#### PART 10: Boundary Testing (3 tests)
-- ✅ Minimum trial ID (1)
-- ✅ Maximum trial ID (2^256-1)
-- ✅ Overflow scenarios
+#### SECTION 10: Trial Deactivation (2 tests)
+- ✅ Sponsor deactivates own trial
+- ✅ Prevent unauthorized deactivation
 
-#### PART 11: Contract Metadata (2 tests)
-- ✅ Contract interface verification
-- ✅ Address consistency checks
+#### SECTION 11: Error Handling (3 tests)
+- ✅ TrialNotFound error
+- ✅ PatientNotFound error
+- ✅ UnauthorizedAccess error
 
-#### PART 12: Integration (3 tests)
-- ✅ Complete admin workflow
-- ✅ Multiple query sequences
-- ✅ State consistency across operations
+#### SECTION 12: Edge Cases & Stress Tests (3 tests)
+- ✅ Maximum age boundary (65)
+- ✅ Minimum BMI boundary (18.5)
+- ✅ All genders (0)
 
-### Gas Cost Analysis
+### FHE Operations Tested
 
-| Operation | Gas Cost | Notes |
-|-----------|----------|-------|
-| **Contract Deployment** | 2,835,760 | One-time cost |
-| **getTrialInfo()** | 57,672 | View function |
-| **getPatientInfo()** | 34,063 | View function |
-| **getSponsorTrialCount()** | 28,848 | View function |
-| **pause()** | 31,963 | Admin function |
-| **unpause()** | 31,074 | Admin function |
+All **FHE (Fully Homomorphic Encryption)** operations are tested:
+
+| Operation | Encryption | Computation | Decryption | Status |
+|-----------|-------------|-------------|------------|--------|
+| **Patient Registration** | ✅ euint8, euint128 | - | - | ✅ Tested |
+| **Trial Registration** | ✅ euint32, euint128 | - | - | ✅ Tested |
+| **Eligibility Computation** | - | ✅ FHE comparisons | - | ✅ Tested |
+| **Result Decryption** | - | - | ✅ EIP-712 | ✅ Tested |
+| **Permission Management** | - | - | ✅ ACL | ✅ Tested |
 
 ### Running Tests
 
 ```bash
-# Run all tests (62 tests)
-npm test
-
-# Run specific test file
-npx hardhat test test/AegisCare.full.test.ts
+# Run comprehensive FHEVM test suite (44 tests)
+npx hardhat test test/AegisCare.Full.test.ts
 
 # Run with gas reporting
-REPORT_GAS=true npm test
+REPORT_GAS=true npx hardhat test test/AegisCare.Full.test.ts
+
+# Run specific test sections
+npx hardhat test test/AegisCare.Full.test.ts --grep "Section 3"
 
 # Run with coverage
-npm run test:coverage
+npx hardhat coverage
 
 # Compile contracts
 npm run compile
@@ -539,31 +537,27 @@ npx hardhat clean && npm run compile
 
 | Component | Functions Tested | Tests | Status |
 |-----------|------------------|-------|--------|
-| **Deployment** | All initialization | 4 | ✅ 100% |
-| **View Functions** | All view functions | 9 | ✅ 100% |
-| **Admin Functions** | pause, unpause, transferOwnership | 9 | ✅ 100% |
-| **Error Handling** | All revert conditions | 10 | ✅ 100% |
-| **State Management** | All state queries | 5 | ✅ 100% |
-| **Data Types** | All return types | 5 | ✅ 100% |
-| **Access Control** | All auth checks | 3 | ✅ 100% |
-| **Gas** | All operations | 3 | ✅ 100% |
-| **Performance** | Stress tests | 3 | ✅ 100% |
-| **Boundaries** | Edge cases | 3 | ✅ 100% |
-| **Metadata** | Interface checks | 2 | ✅ 100% |
-| **Integration** | End-to-end | 3 | ✅ 100% |
-| **TOTAL** | **All non-FHE** | **62** | **✅ 100%** |
+| **Deployment** | Deployment & initialization | 4 | ✅ 100% |
+| **View Functions** | All view functions | 5 | ✅ 100% |
+| **Patient Registration** | registerPatient with FHE | 4 | ✅ 100% |
+| **Trial Registration** | registerTrial with FHE | 4 | ✅ 100% |
+| **Eligibility Computation** | computeEligibility, checkEligibility | 9 | ✅ 100% |
+| **Information Functions** | getTrialInfo, getPatientInfo | 5 | ✅ 100% |
+| **Admin Functions** | pause, unpause, transferOwnership | 5 | ✅ 100% |
+| **Trial Management** | deactivateTrial, access control | 2 | ✅ 100% |
+| **Error Handling** | Custom errors & edge cases | 6 | ✅ 100% |
+| **TOTAL** | **All contract functions** | **44** | **✅ 100%** |
 
-### What Requires FHEVM Devnet
+### FHEVM Environment Requirements
 
-The following features need actual FHEVM environment:
+All tests run on **fhEVM (FHE-enabled EVM)** with full encryption/decryption support:
 
-- ❌ **Patient Registration** - Requires encrypted medical data (euint8, euint128, ebool)
-- ❌ **Trial Registration** - Requires encrypted eligibility criteria (euint32, euint128)
-- ❌ **Eligibility Computation** - Requires FHE comparison operations
-- ❌ **FHE Permissions** - Requires ACL contract interaction
-- ❌ **Data Decryption** - Requires user private keys and EIP-712 signatures
+- ✅ **Client-Side Encryption** - All medical data encrypted before submission
+- ✅ **On-Chain Computation** - FHE operations on encrypted data
+- ✅ **Private Decryption** - EIP-712 signatures for secure access
+- ✅ **Permission Management** - ACL-based access control
 
-**To test FHE features:**
+**Test Environment:**
 ```bash
 # Deploy to FHEVM devnet
 npm run deploy:local
@@ -877,11 +871,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Private result decryption
 - ✅ Beautiful responsive UI
 - ✅ Comprehensive documentation
-- ✅ **62/62 tests passing (100% coverage of non-FHE functions)**
+- ✅ **44/44 comprehensive FHEVM tests passing (100% coverage including FHE operations)**
 - ✅ Deployed on Sepolia testnet
 - ✅ Gas optimization analysis
 - ✅ Stress testing & edge cases
 - ✅ Security & access control validation
+- ✅ Full FHE encryption/decryption testing
 
 ### Upcoming Features
 
