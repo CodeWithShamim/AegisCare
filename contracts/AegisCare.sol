@@ -174,11 +174,11 @@ contract AegisCare is ZamaEthereumConfig {
         euint8 condI = FHE.fromExternal(hasMedicalCondition, attestation);
         euint32 codeI = FHE.fromExternal(conditionCode, attestation);
 
-        FHE.allow(ageI, address(this));
-        FHE.allow(genderI, address(this));
-        FHE.allow(bmiI, address(this));
-        FHE.allow(condI, address(this));
-        FHE.allow(codeI, address(this));
+        FHE.allowThis(ageI);
+        FHE.allowThis(genderI);
+        FHE.allowThis(bmiI);
+        FHE.allowThis(condI);
+        FHE.allowThis(codeI);
 
         FHE.allow(ageI, msg.sender);
         FHE.allow(genderI, msg.sender);
@@ -257,6 +257,22 @@ contract AegisCare is ZamaEthereumConfig {
             _attestation
         );
 
+        FHE.allowThis(minAgeInternal);
+        FHE.allowThis(maxAgeInternal);
+        FHE.allowThis(requiredGenderInternal);
+        FHE.allowThis(minBMIScoreInternal);
+        FHE.allowThis(maxBMIScoreInternal);
+        FHE.allowThis(hasSpecificConditionInternal);
+        FHE.allowThis(conditionCodeInternal);
+
+        FHE.allow(minAgeInternal, msg.sender);
+        FHE.allow(maxAgeInternal, msg.sender);
+        FHE.allow(requiredGenderInternal, msg.sender);
+        FHE.allow(minBMIScoreInternal, msg.sender);
+        FHE.allow(maxBMIScoreInternal, msg.sender);
+        FHE.allow(hasSpecificConditionInternal, msg.sender);
+        FHE.allow(conditionCodeInternal, msg.sender);
+
         trials[trialCount] = EncryptedTrial({
             trialId: trialCount,
             trialName: _trialName,
@@ -326,9 +342,18 @@ contract AegisCare is ZamaEthereumConfig {
         // Condition matching:
         // If trial requires specific condition, patient must have it and codes must match
         // If trial doesn't require specific condition, any patient is eligible
-        ebool needsCondition = FHE.eq(trial.hasSpecificCondition, FHE.asEuint8(1));
-        ebool hasConditionMatch = FHE.eq(patient.conditionCode, trial.conditionCode);
-        ebool patientHasCondition = FHE.eq(patient.hasMedicalCondition, FHE.asEuint8(1));
+        ebool needsCondition = FHE.eq(
+            trial.hasSpecificCondition,
+            FHE.asEuint8(1)
+        );
+        ebool hasConditionMatch = FHE.eq(
+            patient.conditionCode,
+            trial.conditionCode
+        );
+        ebool patientHasCondition = FHE.eq(
+            patient.hasMedicalCondition,
+            FHE.asEuint8(1)
+        );
         ebool conditionMatch = FHE.or(
             FHE.not(needsCondition),
             FHE.and(patientHasCondition, hasConditionMatch)
@@ -400,11 +425,19 @@ contract AegisCare is ZamaEthereumConfig {
         );
 
         // Condition matching:
-        // If trial requires specific condition, patient must have it and codes must match
         // If trial doesn't require specific condition, any patient is eligible
-        ebool needsCondition = FHE.eq(trial.hasSpecificCondition, FHE.asEuint8(1));
-        ebool hasConditionMatch = FHE.eq(patient.conditionCode, trial.conditionCode);
-        ebool patientHasCondition = FHE.eq(patient.hasMedicalCondition, FHE.asEuint8(1));
+        ebool needsCondition = FHE.eq(
+            trial.hasSpecificCondition,
+            FHE.asEuint8(1)
+        );
+        ebool hasConditionMatch = FHE.eq(
+            patient.conditionCode,
+            trial.conditionCode
+        );
+        ebool patientHasCondition = FHE.eq(
+            patient.hasMedicalCondition,
+            FHE.asEuint8(1)
+        );
         ebool conditionMatch = FHE.or(
             FHE.not(needsCondition),
             FHE.and(patientHasCondition, hasConditionMatch)
@@ -465,19 +498,6 @@ contract AegisCare is ZamaEthereumConfig {
         return result.isEligible;
     }
 
-    // ============================================
-    // VIEW FUNCTIONS
-    // ============================================
-
-    /// @notice Get trial public information
-    /// @param _trialId The ID of the trial
-    /// @return trialId The trial ID
-    /// @return trialName The trial name
-    /// @return description The trial description
-    /// @return sponsor The sponsor address
-    /// @return isActive Whether the trial is active
-    /// @return createdAt The creation timestamp
-    /// @return participantCount The number of participants
     function getTrialInfo(
         uint256 _trialId
     )
