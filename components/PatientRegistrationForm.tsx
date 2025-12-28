@@ -158,7 +158,7 @@ export default function PatientRegistrationForm({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md text-gray-900">
       {!isLoading ? (
         <>
           <div className="mb-6">
@@ -226,7 +226,7 @@ export default function PatientRegistrationForm({
           )}
 
           {/* Registration Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 ">
             {/* Age */}
             <div>
               <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-2">

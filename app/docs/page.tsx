@@ -106,7 +106,10 @@ export default function DocsPage() {
 
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Resources</h3>
-          <Link href="/USER_GUIDE.md" className="docs-sidebar-link">
+          <Link
+            href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
+            className="docs-sidebar-link"
+          >
             📘 Complete User Guide
           </Link>
           <Link href="/QUICKSTART.md" className="docs-sidebar-link">
@@ -192,7 +195,7 @@ export default function DocsPage() {
           </section>
 
           {/* User Guide */}
-          <section id="user-guide" className="docs-section mb-16">
+          <section id="user-guide" className="docs-section mb-16 text-gray-900">
             <h2 className="docs-section-title">📘 Complete User Guide</h2>
 
             <div className="docs-card bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
@@ -213,13 +216,13 @@ export default function DocsPage() {
                   Comprehensive User Guide Available
                 </h4>
                 <p className="mb-4">
-                  We've created a complete, in-depth user guide to help you understand and use AegisCare.
-                  Whether you're a patient, trial sponsor, developer, or just curious about FHE technology,
-                  this guide has everything you need.
+                  We've created a complete, in-depth user guide to help you understand and use
+                  AegisCare. Whether you're a patient, trial sponsor, developer, or just curious
+                  about FHE technology, this guide has everything you need.
                 </p>
                 <Link
-                  href="/USER_GUIDE.md"
-                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
+                  className="inline-block bg-blue-600 hover:bg-blue-700 !text-white font-bold py-3 px-6 rounded-lg transition-colors"
                 >
                   📖 Read Complete User Guide →
                 </Link>
@@ -249,9 +252,7 @@ export default function DocsPage() {
                     </div>
                     <div>
                       <h5 className="font-bold">Why Do We Need It?</h5>
-                      <p className="text-sm text-gray-600">
-                        Real-world problems AegisCare solves
-                      </p>
+                      <p className="text-sm text-gray-600">Real-world problems AegisCare solves</p>
                     </div>
                   </div>
                 </div>
@@ -277,9 +278,7 @@ export default function DocsPage() {
                     </div>
                     <div>
                       <h5 className="font-bold">Key Concepts Explained</h5>
-                      <p className="text-sm text-gray-600">
-                        FHE, EIP-712, ACLs made simple
-                      </p>
+                      <p className="text-sm text-gray-600">FHE, EIP-712, ACLs made simple</p>
                     </div>
                   </div>
                 </div>
@@ -291,9 +290,7 @@ export default function DocsPage() {
                     </div>
                     <div>
                       <h5 className="font-bold">Technology Stack</h5>
-                      <p className="text-sm text-gray-600">
-                        All technologies used and why
-                      </p>
+                      <p className="text-sm text-gray-600">All technologies used and why</p>
                     </div>
                   </div>
                 </div>
@@ -305,9 +302,7 @@ export default function DocsPage() {
                     </div>
                     <div>
                       <h5 className="font-bold">Getting Started Tutorial</h5>
-                      <p className="text-sm text-gray-600">
-                        5-minute quick start walkthrough
-                      </p>
+                      <p className="text-sm text-gray-600">5-minute quick start walkthrough</p>
                     </div>
                   </div>
                 </div>
@@ -318,48 +313,82 @@ export default function DocsPage() {
                 <div className="grid md:grid-cols-2 gap-2 text-sm">
                   <div className="flex items-center">
                     <span className="mr-2">👤</span>
-                    <span><strong>Patients</strong> - Protect your privacy while joining trials</span>
+                    <span>
+                      <strong>Patients</strong> - Protect your privacy while joining trials
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <span className="mr-2">🏢</span>
-                    <span><strong>Trial Sponsors</strong> - Zero-knowledge trial matching</span>
+                    <span>
+                      <strong>Trial Sponsors</strong> - Zero-knowledge trial matching
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <span className="mr-2">💻</span>
-                    <span><strong>Developers</strong> - Explore FHE technology</span>
+                    <span>
+                      <strong>Developers</strong> - Explore FHE technology
+                    </span>
                   </div>
                   <div className="flex items-center">
                     <span className="mr-2">🎓</span>
-                    <span><strong>Students</strong> - Study privacy-preserving apps</span>
+                    <span>
+                      <strong>Students</strong> - Study privacy-preserving apps
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-                <h5 className="font-bold text-yellow-800 mb-2">📚 Quick Access to Guide Sections</h5>
+                <h5 className="font-bold text-yellow-800 mb-2">
+                  📚 Quick Access to Guide Sections
+                </h5>
                 <div className="grid md:grid-cols-3 gap-2 text-sm">
-                  <a href="/USER_GUIDE.md#what-is-aegiscare" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#what-is-aegiscare"
+                    className="text-blue-600 hover:underline"
+                  >
                     → What is AegisCare?
                   </a>
-                  <a href="/USER_GUIDE.md#why-do-we-need-it" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#why-do-we-need-it"
+                    className="text-blue-600 hover:underline"
+                  >
                     → Why Do We Need It?
                   </a>
-                  <a href="/USER_GUIDE.md#how-does-it-work" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#how-does-it-work"
+                    className="text-blue-600 hover:underline"
+                  >
                     → How Does It Work?
                   </a>
-                  <a href="/USER_GUIDE.md#key-concepts-explained" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#key-concepts-explained"
+                    className="text-blue-600 hover:underline"
+                  >
                     → Key Concepts
                   </a>
-                  <a href="/USER_GUIDE.md#getting-started-tutorial" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#getting-started-tutorial"
+                    className="text-blue-600 hover:underline"
+                  >
                     → Getting Started
                   </a>
-                  <a href="/USER_GUIDE.md#security--privacy" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#security--privacy"
+                    className="text-blue-600 hover:underline"
+                  >
                     → Security & Privacy
                   </a>
-                  <a href="/USER_GUIDE.md#real-world-use-cases" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#real-world-use-cases"
+                    className="text-blue-600 hover:underline"
+                  >
                     → Real-World Use Cases
                   </a>
-                  <a href="/USER_GUIDE.md#faq" className="text-blue-600 hover:underline">
+                  <a
+                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#faq"
+                    className="text-blue-600 hover:underline"
+                  >
                     → FAQ (50+ Questions)
                   </a>
                 </div>
@@ -371,43 +400,50 @@ export default function DocsPage() {
 
               <div className="space-y-4">
                 <div>
-                  <h5 className="font-semibold text-blue-800 mb-2">🔒 Privacy-First Architecture</h5>
+                  <h5 className="font-semibold text-blue-800 mb-2">
+                    🔒 Privacy-First Architecture
+                  </h5>
                   <p className="text-sm text-gray-700">
-                    Learn how AegisCare ensures your medical data never leaves your device in plaintext form.
-                    All data is encrypted using FHE before being sent to the blockchain, and only you can decrypt
-                    your eligibility results.
+                    Learn how AegisCare ensures your medical data never leaves your device in
+                    plaintext form. All data is encrypted using FHE before being sent to the
+                    blockchain, and only you can decrypt your eligibility results.
                   </p>
                 </div>
 
                 <div>
-                  <h5 className="font-semibold text-purple-800 mb-2">⚡ FHE Technology Explained</h5>
+                  <h5 className="font-semibold text-purple-800 mb-2">
+                    ⚡ FHE Technology Explained
+                  </h5>
                   <p className="text-sm text-gray-700">
-                    Understand Fully Homomorphic Encryption - how it allows computations on encrypted data without
-                    ever decrypting it. This breakthrough technology enables zero-knowledge trial matching.
+                    Understand Fully Homomorphic Encryption - how it allows computations on
+                    encrypted data without ever decrypting it. This breakthrough technology enables
+                    zero-knowledge trial matching.
                   </p>
                 </div>
 
                 <div>
                   <h5 className="font-semibold text-green-800 mb-2">🎯 Real-World Use Cases</h5>
                   <p className="text-sm text-gray-700">
-                    Explore practical scenarios: diabetes trials, mental health studies, rare disease research.
-                    See how AegisCare solves real privacy concerns in clinical trial recruitment.
+                    Explore practical scenarios: diabetes trials, mental health studies, rare
+                    disease research. See how AegisCare solves real privacy concerns in clinical
+                    trial recruitment.
                   </p>
                 </div>
 
                 <div>
                   <h5 className="font-semibold text-orange-800 mb-2">🚀 Step-by-Step Tutorial</h5>
                   <p className="text-sm text-gray-700">
-                    Follow our detailed 5-minute quick start guide. Learn how to connect your wallet, register
-                    as a patient, create trials, and check eligibility - all with privacy preserved.
+                    Follow our detailed 5-minute quick start guide. Learn how to connect your
+                    wallet, register as a patient, create trials, and check eligibility - all with
+                    privacy preserved.
                   </p>
                 </div>
 
                 <div>
                   <h5 className="font-semibold text-red-800 mb-2">📊 Comprehensive FAQ</h5>
                   <p className="text-sm text-gray-700">
-                    Over 50 frequently asked questions answered. From "Can trial sponsors see my data?" to
-                    "How does FHE work?" - find answers to all your questions.
+                    Over 50 frequently asked questions answered. From "Can trial sponsors see my
+                    data?" to "How does FHE work?" - find answers to all your questions.
                   </p>
                 </div>
               </div>
@@ -418,13 +454,14 @@ export default function DocsPage() {
                 Ready to dive deeper into privacy-preserving clinical trials?
               </p>
               <Link
-                href="/USER_GUIDE.md"
-                className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-lg transition-all transform hover:scale-105"
+                href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
+                className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 !text-white font-bold py-4 px-8 rounded-lg transition-all transform hover:scale-105"
               >
                 📖 Read the Complete User Guide →
               </Link>
               <p className="text-sm text-gray-600 mt-3">
-                500+ lines of comprehensive documentation • 10 major sections • Perfect for beginners
+                500+ lines of comprehensive documentation • 10 major sections • Perfect for
+                beginners
               </p>
             </div>
           </section>

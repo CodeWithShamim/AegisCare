@@ -178,7 +178,7 @@ export default function TrialRegistrationForm({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md text-gray-500">
       {!isLoading ? (
         <>
           <div className="mb-6">
@@ -283,13 +283,16 @@ export default function TrialRegistrationForm({
             </div>
 
             {/* Enhanced Trial Metadata */}
-            <div className="border-t border-gray-200 pt-6">
+            <div className="border-t border-gray-200 pt-6 text-gray-800">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Trial Details</h3>
 
               {/* Trial Phase & Study Type */}
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label htmlFor="trialPhase" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="trialPhase"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Trial Phase *
                   </label>
                   <select
@@ -308,7 +311,10 @@ export default function TrialRegistrationForm({
                 </div>
 
                 <div>
-                  <label htmlFor="studyType" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="studyType"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Study Type *
                   </label>
                   <select
@@ -329,7 +335,10 @@ export default function TrialRegistrationForm({
 
               {/* Compensation */}
               <div className="mb-4">
-                <label htmlFor="compensation" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="compensation"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Compensation Amount (ETH)
                 </label>
                 <input
@@ -351,7 +360,10 @@ export default function TrialRegistrationForm({
               {/* Location & Duration */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="location"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Trial Location *
                   </label>
                   <input
@@ -367,7 +379,10 @@ export default function TrialRegistrationForm({
                 </div>
 
                 <div>
-                  <label htmlFor="durationWeeks" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="durationWeeks"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Duration (weeks) *
                   </label>
                   <input
@@ -376,7 +391,9 @@ export default function TrialRegistrationForm({
                     min="1"
                     max="520"
                     value={formData.durationWeeks}
-                    onChange={(e) => handleInputChange('durationWeeks', parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      handleInputChange('durationWeeks', parseInt(e.target.value) || 0)
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     disabled={!isConnected || isLoading}

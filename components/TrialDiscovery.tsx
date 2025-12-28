@@ -52,11 +52,7 @@ export default function TrialDiscovery({ patientAddress }: TrialDiscoveryProps) 
       await computeEligibility(signer, selectedTrialId, patientAddress);
 
       // Get encrypted result
-      const encryptedResult = await getEligibilityResult(
-        signer,
-        selectedTrialId,
-        patientAddress
-      );
+      const encryptedResult = await getEligibilityResult(signer, selectedTrialId, patientAddress);
 
       if (!encryptedResult) {
         throw new Error('No result found');
@@ -64,11 +60,7 @@ export default function TrialDiscovery({ patientAddress }: TrialDiscoveryProps) 
 
       // Decrypt
       setIsDecrypting(true);
-      const isEligible = await decryptEligibilityResult(
-        encryptedResult,
-        contractAddress,
-        signer
-      );
+      const isEligible = await decryptEligibilityResult(encryptedResult, contractAddress, signer);
 
       setResult({
         trialId: selectedTrialId,
@@ -84,7 +76,7 @@ export default function TrialDiscovery({ patientAddress }: TrialDiscoveryProps) 
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-gray-900">
       {/* Trial Search */}
       <TrialSearch
         onTrialSelect={setSelectedTrialId}
@@ -151,9 +143,7 @@ export default function TrialDiscovery({ patientAddress }: TrialDiscoveryProps) 
                 {result.isEligible ? (
                   <>
                     <div className="text-4xl mb-2">🎉</div>
-                    <h3 className="text-xl font-bold text-green-800 mb-2">
-                      You May Be Eligible!
-                    </h3>
+                    <h3 className="text-xl font-bold text-green-800 mb-2">You May Be Eligible!</h3>
                     <p className="text-sm text-green-700">
                       Based on your encrypted medical data, you meet the criteria for Trial #
                       {result.trialId}
