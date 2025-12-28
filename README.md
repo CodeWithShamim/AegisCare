@@ -42,7 +42,7 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **Enhanced metadata** - Timestamps, participant counts, history tracking
 - **Gas optimization** - Custom errors for efficient execution
 - **Comprehensive events** - Full audit trail
-- **Deployed on Sepolia** - Testnet deployment at `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
+- **Deployed on Sepolia** - Testnet deployment at `0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7`
 
 ### Frontend Features
 
@@ -237,7 +237,7 @@ npm run dev
 **AegisCare is already deployed on Sepolia Testnet:**
 
 ```
-Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
+Address: 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7
 Network: Sepolia Testnet
 Chain ID: 11155111
 Deployer: 0x7e1489fabCF51Fc9a4aCD221A574dD0D3eA8A6F8
@@ -326,7 +326,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 │              Ethereum Sepolia Testnet                        │
 ├─────────────────────────────────────────────────────────────┤
 │  Smart Contract: AegisCare.sol                              │
-│  Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947         │
+│  Address: 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7         │
 │                                                                │
 │  • Encrypted Patient Data (euint256 values)                 │
 │  • Encrypted Trial Criteria (euint256 values)               │
@@ -713,7 +713,7 @@ console.log(isEligible); // true or false
 **✅ Deployed on Sepolia Testnet**
 
 ```
-Contract Address: 0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
+Contract Address: 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7
 Network: Sepolia
 Chain ID: 11155111
 Deployer: 0x7e1489fabCF51Fc9a4aCD221A574dD0D3eA8A6F8
@@ -724,7 +724,7 @@ Transaction: (verify on Etherscan)
 ### Verify on Etherscan
 
 1. Visit [Sepolia Etherscan](https://sepolia.etherscan.io/)
-2. Search for contract: `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
+2. Search for contract: `0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7`
 3. View contract code, transactions, and events
 
 ### Local Development Deployment

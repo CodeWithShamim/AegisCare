@@ -104,7 +104,7 @@ NEXT_PUBLIC_BLOCKCHAIN_URL=https://sepolia.infura.io/v3/YOUR_KEY
 NEXT_PUBLIC_CHAIN_ID=11155111
 
 # Deployed Contract Address (Sepolia)
-NEXT_PUBLIC_AEGISCARE_ADDRESS=0xe790E247C5793AD4EDDE7C1cFd6582b45F603947
+NEXT_PUBLIC_AEGISCARE_ADDRESS=0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7
 
 # WalletConnect
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id
@@ -485,7 +485,7 @@ View your transactions on [Sepolia Etherscan](https://sepolia.etherscan.io/):
 - See all your transactions
 - View contract calls and events
 
-**Contract Address:** `0xe790E247C5793AD4EDDE7C1cFd6582b45F603947`
+**Contract Address:** `0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7`
 
 ### Tip 4: Enable Debug Mode
 

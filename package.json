@@ -13,7 +13,7 @@
     "deploy": "hardhat run scripts/deploy.ts --network fhevm_devnet",
     "deploy:local": "hardhat run scripts/deploy.ts --network hardhat",
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
-    "verify:sepolia": "npx hardhat verify --network sepolia 0x61e0CA72cc1Ed434a575DF11293CE48AC5D3C5E5",
+    "verify:sepolia": "npx hardhat verify --network sepolia 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7",
     "node": "hardhat node",
     "typechain": "hardhat typechain"
   },
