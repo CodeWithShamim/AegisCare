@@ -51,6 +51,8 @@ export default function PlatformAnalytics() {
       const totalPatientCountBN = await getPatientCount(provider);
       const totalPatientCount = Number(totalPatientCountBN);
 
+      console.log('[PlatformAnalytics] Loading', totalTrialCount, 'trials and', totalPatientCount, 'patients');
+
       // Load all trials
       const allTrials: Trial[] = [];
       for (let i = 1; i <= totalTrialCount; i++) {
@@ -58,9 +60,11 @@ export default function PlatformAnalytics() {
           const trial = await getTrialPublicInfo(provider, i);
           allTrials.push(trial);
         } catch (err) {
-          // Skip failed trials
+          console.warn(`[PlatformAnalytics] Failed to load trial ${i}:`, err);
         }
       }
+
+      console.log('[PlatformAnalytics] Loaded', allTrials.length, 'trials');
 
       const activeTrials = allTrials.filter(t => t.isActive);
       const totalParticipants = allTrials.reduce((sum, t) => sum + t.participantCount, 0);

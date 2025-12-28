@@ -140,12 +140,13 @@ export default function PatientRegistrationForm({
         ?.patientId;
 
       console.log({ patientId });
+      console.log({ receiptEvents: receipt.events });
 
       setSuccess(true);
 
       // Notify parent component
-      if (onRegistrationSuccess && patientId) {
-        onRegistrationSuccess(patientId.toNumber());
+      if (onRegistrationSuccess) {
+        onRegistrationSuccess(patientId?.toNumber());
       }
     } catch (err: any) {
       setError(err.message || 'Registration failed. Please try again.');

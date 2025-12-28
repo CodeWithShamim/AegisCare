@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { computeEligibility, getEligibilityResult, connectWallet, getTrialPublicInfo } from '@/lib/web3Client';
+import { computeEligibility, getEligibilityResult, connectWallet, getTrialPublicInfo, getTrialCount } from '@/lib/web3Client';
 import { decryptEligibilityResult } from '@/lib/fheClient';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import LoadingAnimation from '@/components/LoadingAnimation';
@@ -58,31 +58,32 @@ export default function BatchEligibilityChecker({ patientAddress }: BatchEligibi
         throw new Error('Contract address not configured');
       }
 
-      // Get trial count first
-      const trialCountBigInt = await provider.getBalance(contractAddress); // Just to trigger connection
-      // We need to actually call the contract
-      // For now, let's use getTrialPublicInfo in a loop
+      // Get trial count first to know when to stop
+      const trialCountBigInt = await getTrialCount(provider);
+      const totalTrials = Number(trialCountBigInt);
+
+      console.log('[BatchChecker] Loading', totalTrials, 'trials');
 
       const loadedTrials: Trial[] = [];
-      let trialId = 1;
 
-      while (true) {
+      // Load trials from 1 to totalTrials
+      for (let trialId = 1; trialId <= totalTrials; trialId++) {
         try {
           const trial = await getTrialPublicInfo(provider, trialId);
           if (trial.isActive) {
             loadedTrials.push(trial);
           }
-          trialId++;
         } catch (err) {
-          // Trial doesn't exist, we've reached the end
-          break;
+          // Skip trials that fail to load
+          console.warn(`[BatchChecker] Failed to load trial ${trialId}:`, err);
         }
       }
 
       setTrials(loadedTrials);
+      console.log('[BatchChecker] Loaded', loadedTrials.length, 'active trials');
     } catch (err: any) {
       setError(err.message || 'Failed to load trials');
-      console.error('[BatchEligibilityChecker] Error loading trials:', err);
+      console.error('[BatchChecker] Error loading trials:', err);
     } finally {
       setIsLoading(false);
     }

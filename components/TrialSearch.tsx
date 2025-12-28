@@ -42,6 +42,7 @@ export default function TrialSearch({
   const [trials, setTrials] = useState<Trial[]>([]);
   const [filteredTrials, setFilteredTrials] = useState<Trial[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState<SearchFilters>({
@@ -67,27 +68,56 @@ export default function TrialSearch({
       setIsLoading(true);
       const { provider } = await connectWallet();
 
-      const loadedTrials: Trial[] = [];
-      let trialId = 1;
+      // Get trial count first to know when to stop
+      const trialCountBigInt = await getTrialCount(provider);
+      const totalTrials = Number(trialCountBigInt);
 
-      while (true) {
+      console.log('[TrialSearch] Loading', totalTrials, 'trials');
+
+      const loadedTrials: Trial[] = [];
+
+      // Load trials from 1 to totalTrials
+      for (let trialId = 1; trialId <= totalTrials; trialId++) {
         try {
           const trial = await getTrialPublicInfo(provider, trialId);
           if (trial.isActive) {
             loadedTrials.push(trial);
           }
-          trialId++;
         } catch (err) {
-          break;
+          console.warn(`[TrialSearch] Failed to load trial ${trialId}:`, err);
         }
       }
 
       setTrials(loadedTrials);
+      console.log('[TrialSearch] Loaded', loadedTrials.length, 'active trials');
     } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to load trials');
       console.error('[TrialSearch] Error loading trials:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleFilterChange = (key: keyof SearchFilters, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      searchTerm: '',
+      phase: '',
+      studyType: '',
+      location: '',
+      minCompensation: '',
+      maxDuration: '',
+      sortBy: 'newest',
+    });
+  };
+
+  const getActiveFilterCount = () => {
+    return Object.entries(filters).filter(
+      ([key, value]) => key !== 'sortBy' && value !== ''
+    ).length;
   };
 
   const applyFilters = () => {
@@ -160,28 +190,6 @@ export default function TrialSearch({
     });
 
     setFilteredTrials(filtered);
-  };
-
-  const handleFilterChange = (key: keyof SearchFilters, value: string) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      searchTerm: '',
-      phase: '',
-      studyType: '',
-      location: '',
-      minCompensation: '',
-      maxDuration: '',
-      sortBy: 'newest',
-    });
-  };
-
-  const getActiveFilterCount = () => {
-    return Object.entries(filters).filter(
-      ([key, value]) => key !== 'sortBy' && value !== ''
-    ).length;
   };
 
   return (

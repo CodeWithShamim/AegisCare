@@ -53,11 +53,19 @@ export default function SponsorAnalytics() {
       // Get sponsor's trials
       const trialIds = await getSponsorTrials(provider, address);
 
+      console.log('[SponsorAnalytics] Loading', trialIds.length, 'trials');
+
       const trials: Trial[] = [];
       for (const trialId of trialIds) {
-        const trial = await getTrialPublicInfo(provider, trialId);
-        trials.push(trial);
+        try {
+          const trial = await getTrialPublicInfo(provider, trialId);
+          trials.push(trial);
+        } catch (err) {
+          console.warn(`[SponsorAnalytics] Failed to load trial ${trialId}:`, err);
+        }
       }
+
+      console.log('[SponsorAnalytics] Loaded', trials.length, 'trals');
 
       // Filter by time range
       const now = Math.floor(Date.now() / 1000);
