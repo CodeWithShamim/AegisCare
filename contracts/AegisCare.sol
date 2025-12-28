@@ -37,6 +37,12 @@ contract AegisCare is ZamaEthereumConfig {
         bool isActive;
         uint256 createdAt;
         uint256 participantCount;
+        // Enhanced metadata (public fields)
+        string trialPhase; // Phase 1, 2, 3, or 4
+        uint256 compensation; // Compensation amount in wei
+        string location; // Trial location
+        uint256 durationWeeks; // Trial duration in weeks
+        string studyType; // Interventional, Observational, etc.
     }
 
     struct EncryptedPatient {
@@ -213,7 +219,12 @@ contract AegisCare is ZamaEthereumConfig {
         externalEuint128 _maxBMIScore,
         externalEuint8 _hasSpecificCondition,
         externalEuint32 _conditionCode,
-        bytes calldata _attestation
+        bytes calldata _attestation,
+        string calldata _trialPhase,
+        uint256 _compensation,
+        string calldata _location,
+        uint256 _durationWeeks,
+        string calldata _studyType
     ) external whenNotPaused returns (uint256) {
         uint256[] storage sponsorTrialList = sponsorTrials[msg.sender];
         if (sponsorTrialList.length >= MAX_TRIALS_PER_SPONSOR) {
@@ -260,7 +271,12 @@ contract AegisCare is ZamaEthereumConfig {
             sponsor: msg.sender,
             isActive: true,
             createdAt: block.timestamp,
-            participantCount: 0
+            participantCount: 0,
+            trialPhase: _trialPhase,
+            compensation: _compensation,
+            location: _location,
+            durationWeeks: _durationWeeks,
+            studyType: _studyType
         });
 
         sponsorTrialList.push(trialCount);
@@ -292,7 +308,40 @@ contract AegisCare is ZamaEthereumConfig {
         trial.participantCount++;
 
         // Perform FHE comparisons to determine eligibility
-        euint8 isEligibleEnc = FHE.asEuint8(1);
+        // Age range check: minAge <= age <= maxAge
+        ebool ageInRange = FHE.and(
+            FHE.ge(patient.age, trial.minAge),
+            FHE.le(patient.age, trial.maxAge)
+        );
+
+        // Gender match: patient.gender == requiredGender
+        ebool genderMatch = FHE.eq(patient.gender, trial.requiredGender);
+
+        // BMI range check: minBMIScore <= bmiScore <= maxBMIScore
+        ebool bmiInRange = FHE.and(
+            FHE.ge(patient.bmiScore, trial.minBMIScore),
+            FHE.le(patient.bmiScore, trial.maxBMIScore)
+        );
+
+        // Condition matching:
+        // If trial requires specific condition, patient must have it and codes must match
+        // If trial doesn't require specific condition, any patient is eligible
+        ebool needsCondition = FHE.eq(trial.hasSpecificCondition, FHE.asEuint8(1));
+        ebool hasConditionMatch = FHE.eq(patient.conditionCode, trial.conditionCode);
+        ebool patientHasCondition = FHE.eq(patient.hasMedicalCondition, FHE.asEuint8(1));
+        ebool conditionMatch = FHE.or(
+            FHE.not(needsCondition),
+            FHE.and(patientHasCondition, hasConditionMatch)
+        );
+
+        // Combine all checks: patient must meet ALL criteria
+        ebool isEligibleBool = FHE.and(
+            FHE.and(ageInRange, genderMatch),
+            FHE.and(bmiInRange, conditionMatch)
+        );
+
+        // Convert ebool to euint8 for proper user decryption support
+        euint8 isEligibleEnc = FHE.asEuint8(isEligibleBool);
 
         // Grant patient permission to decrypt their eligibility result
         FHE.allow(isEligibleEnc, _patientAddress);
@@ -335,8 +384,40 @@ contract AegisCare is ZamaEthereumConfig {
         trial.participantCount++;
 
         // Perform FHE comparisons to determine eligibility
-        // Use euint8(1) instead of ebool for proper user decryption support
-        euint8 isEligibleEnc = FHE.asEuint8(1);
+        // Age range check: minAge <= age <= maxAge
+        ebool ageInRange = FHE.and(
+            FHE.ge(patient.age, trial.minAge),
+            FHE.le(patient.age, trial.maxAge)
+        );
+
+        // Gender match: patient.gender == requiredGender
+        ebool genderMatch = FHE.eq(patient.gender, trial.requiredGender);
+
+        // BMI range check: minBMIScore <= bmiScore <= maxBMIScore
+        ebool bmiInRange = FHE.and(
+            FHE.ge(patient.bmiScore, trial.minBMIScore),
+            FHE.le(patient.bmiScore, trial.maxBMIScore)
+        );
+
+        // Condition matching:
+        // If trial requires specific condition, patient must have it and codes must match
+        // If trial doesn't require specific condition, any patient is eligible
+        ebool needsCondition = FHE.eq(trial.hasSpecificCondition, FHE.asEuint8(1));
+        ebool hasConditionMatch = FHE.eq(patient.conditionCode, trial.conditionCode);
+        ebool patientHasCondition = FHE.eq(patient.hasMedicalCondition, FHE.asEuint8(1));
+        ebool conditionMatch = FHE.or(
+            FHE.not(needsCondition),
+            FHE.and(patientHasCondition, hasConditionMatch)
+        );
+
+        // Combine all checks: patient must meet ALL criteria
+        ebool isEligibleBool = FHE.and(
+            FHE.and(ageInRange, genderMatch),
+            FHE.and(bmiInRange, conditionMatch)
+        );
+
+        // Convert ebool to euint8 for proper user decryption support
+        euint8 isEligibleEnc = FHE.asEuint8(isEligibleBool);
 
         // Grant patient permission to decrypt their eligibility result
         FHE.allow(isEligibleEnc, msg.sender);
@@ -409,7 +490,12 @@ contract AegisCare is ZamaEthereumConfig {
             address sponsor,
             bool isActive,
             uint256 createdAt,
-            uint256 participantCount
+            uint256 participantCount,
+            string memory trialPhase,
+            uint256 compensation,
+            string memory location,
+            uint256 durationWeeks,
+            string memory studyType
         )
     {
         EncryptedTrial storage trial = trials[_trialId];
@@ -420,7 +506,12 @@ contract AegisCare is ZamaEthereumConfig {
             trial.sponsor,
             trial.isActive,
             trial.createdAt,
-            trial.participantCount
+            trial.participantCount,
+            trial.trialPhase,
+            trial.compensation,
+            trial.location,
+            trial.durationWeeks,
+            trial.studyType
         );
     }
 

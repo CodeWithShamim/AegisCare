@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import PatientRegistrationForm from '@/components/PatientRegistrationForm';
 import EligibilityChecker from '@/components/EligibilityChecker';
+import BatchEligibilityChecker from '@/components/BatchEligibilityChecker';
+import TrialDiscovery from '@/components/TrialDiscovery';
 import EligibilityHistory from '@/components/EligibilityHistory';
 import Header from '@/components/Header';
 import { patientExists, connectWallet } from '@/lib/web3Client';
@@ -10,7 +12,7 @@ import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 export default function PatientDashboard() {
   const { isConnected, address } = useWalletConnection();
-  const [activeTab, setActiveTab] = useState<'register' | 'check' | 'history'>('register');
+  const [activeTab, setActiveTab] = useState<'register' | 'check' | 'discover' | 'batch' | 'history'>('register');
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [patientAddress, setPatientAddress] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
@@ -80,6 +82,16 @@ export default function PatientDashboard() {
                 Register Medical Data
               </button>
               <button
+                onClick={() => setActiveTab('discover')}
+                className={`${
+                  activeTab === 'discover'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
+              >
+                Discover Trials (New)
+              </button>
+              <button
                 onClick={() => setActiveTab('check')}
                 className={`${
                   activeTab === 'check'
@@ -87,7 +99,17 @@ export default function PatientDashboard() {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
               >
-                Check Trial Eligibility
+                Check Single Trial
+              </button>
+              <button
+                onClick={() => setActiveTab('batch')}
+                className={`${
+                  activeTab === 'batch'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
+              >
+                Batch Check (New)
               </button>
               <button
                 onClick={() => setActiveTab('history')}
@@ -120,6 +142,37 @@ export default function PatientDashboard() {
             </div>
           )}
 
+          {activeTab === 'discover' && (
+            <div>
+              {isRegistered === false && (
+                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Not Registered</h3>
+                  <p className="text-xs text-yellow-800 mb-3">
+                    You need to register with your medical data before checking eligibility.
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('register')}
+                    className="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded transition-colors"
+                  >
+                    Go to Registration
+                  </button>
+                </div>
+              )}
+
+              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-purple-900 mb-2">
+                  🔍 Advanced Trial Discovery
+                </h3>
+                <p className="text-xs text-purple-800">
+                  Search, filter, and find clinical trials that match your preferences. Check
+                  eligibility with private FHE computation.
+                </p>
+              </div>
+
+              {patientAddress && <TrialDiscovery patientAddress={patientAddress} />}
+            </div>
+          )}
+
           {activeTab === 'check' && (
             <div>
               {isRegistered === false && (
@@ -148,6 +201,37 @@ export default function PatientDashboard() {
               </div>
 
               {patientAddress && <EligibilityChecker patientAddress={patientAddress} />}
+            </div>
+          )}
+
+          {activeTab === 'batch' && (
+            <div>
+              {isRegistered === false && (
+                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Not Registered</h3>
+                  <p className="text-xs text-yellow-800 mb-3">
+                    You need to register with your medical data before checking eligibility.
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('register')}
+                    className="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded transition-colors"
+                  >
+                    Go to Registration
+                  </button>
+                </div>
+              )}
+
+              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-indigo-900 mb-2">
+                  ⚡ Batch Eligibility Checker
+                </h3>
+                <p className="text-xs text-indigo-800">
+                  Check your eligibility for multiple trials at once! Save time while maintaining
+                  complete privacy. Each check is independently computed on encrypted data.
+                </p>
+              </div>
+
+              {patientAddress && <BatchEligibilityChecker patientAddress={patientAddress} />}
             </div>
           )}
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import TrialRegistrationForm from '@/components/TrialRegistrationForm';
+import SponsorAnalytics from '@/components/SponsorAnalytics';
 import Header from '@/components/Header';
 import {
   getTrialCount,
@@ -21,7 +22,7 @@ interface Trial {
 }
 
 export default function TrialAdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'create' | 'manage'>('create');
+  const [activeTab, setActiveTab] = useState<'create' | 'manage' | 'analytics'>('create');
   const [trials, setTrials] = useState<Trial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string>('');
@@ -62,7 +63,7 @@ export default function TrialAdminDashboard() {
     }
   };
 
-  const handleTabChange = (tab: 'create' | 'manage') => {
+  const handleTabChange = (tab: 'create' | 'manage' | 'analytics') => {
     setActiveTab(tab);
     if (tab === 'manage' && trials.length === 0) {
       loadTrials();
@@ -112,6 +113,16 @@ export default function TrialAdminDashboard() {
                   </span>
                 )}
               </button>
+              <button
+                onClick={() => handleTabChange('analytics')}
+                className={`${
+                  activeTab === 'analytics'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
+              >
+                Analytics Dashboard (New)
+              </button>
             </nav>
           </div>
         </div>
@@ -131,6 +142,20 @@ export default function TrialAdminDashboard() {
                 </p>
               </div>
               <TrialRegistrationForm onRegistrationSuccess={handleTrialCreated} />
+            </div>
+          )}
+
+          {activeTab === 'analytics' && (
+            <div>
+              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-purple-900 mb-2">
+                  📊 Performance Analytics
+                </h3>
+                <p className="text-xs text-purple-800">
+                  View detailed analytics about your clinical trials, participant engagement, and performance metrics.
+                </p>
+              </div>
+              <SponsorAnalytics />
             </div>
           )}
 

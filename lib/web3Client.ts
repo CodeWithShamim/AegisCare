@@ -25,6 +25,11 @@ export interface Trial {
   isActive: boolean;
   createdAt: number;
   participantCount: number;
+  trialPhase?: string;
+  compensation?: string;
+  location?: string;
+  durationWeeks?: number;
+  studyType?: string;
 }
 
 export interface Patient {
@@ -126,7 +131,12 @@ export async function registerTrial(
   signer: JsonRpcSigner,
   trialName: string,
   description: string,
-  encryptedData: any
+  encryptedData: any,
+  trialPhase?: string,
+  compensation?: string,
+  location?: string,
+  durationWeeks?: number,
+  studyType?: string
 ): Promise<any> {
   try {
     const contract = getAegisCareContract("", signer);
@@ -141,7 +151,12 @@ export async function registerTrial(
       encryptedData.handles[4], // maxBMIScore
       encryptedData.handles[5], // hasSpecificCondition
       encryptedData.handles[6], // conditionCode
-      encryptedData.inputProof
+      encryptedData.inputProof,
+      trialPhase || 'Not Specified',
+      compensation || '0',
+      location || 'Not Specified',
+      durationWeeks || 0,
+      studyType || 'Not Specified'
     );
 
     console.log("[Contract] Transaction submitted:", tx.hash);
@@ -167,7 +182,7 @@ export async function getTrialPublicInfo(
   try {
     const contract = getAegisCareContractReadOnly(provider);
 
-    const info = await contract.getTrialPublicInfo(trialId);
+    const info = await contract.getTrialInfo(trialId);
 
     return {
       trialId,
@@ -177,6 +192,11 @@ export async function getTrialPublicInfo(
       isActive: info.isActive,
       createdAt: Number(info.createdAt),
       participantCount: Number(info.participantCount),
+      trialPhase: info.trialPhase,
+      compensation: info.compensation,
+      location: info.location,
+      durationWeeks: Number(info.durationWeeks),
+      studyType: info.studyType,
     };
   } catch (error: any) {
     console.error("[Contract] Failed to get trial info:", error);

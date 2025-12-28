@@ -35,6 +35,11 @@ export default function TrialRegistrationForm({
     maxBMIScore: 400, // 40.0 * 10
     hasSpecificCondition: false,
     conditionCode: '',
+    trialPhase: 'Phase 2',
+    compensation: '',
+    location: '',
+    durationWeeks: 52,
+    studyType: 'Interventional',
   });
 
   // UI state
@@ -123,6 +128,11 @@ export default function TrialRegistrationForm({
         formData.trialName,
         formData.description,
         encryptedCriteria,
+        formData.trialPhase,
+        formData.compensation,
+        formData.location,
+        formData.durationWeeks,
+        formData.studyType,
       );
 
       console.log('[TrialForm] Trial registered successfully');
@@ -150,6 +160,11 @@ export default function TrialRegistrationForm({
           maxBMIScore: 400,
           hasSpecificCondition: false,
           conditionCode: '',
+          trialPhase: 'Phase 2',
+          compensation: '',
+          location: '',
+          durationWeeks: 52,
+          studyType: 'Interventional',
         });
         setSuccess(false);
       }, 3000);
@@ -265,6 +280,107 @@ export default function TrialRegistrationForm({
               <p className="text-xs text-gray-500 mt-1">
                 This description will be public (not encrypted)
               </p>
+            </div>
+
+            {/* Enhanced Trial Metadata */}
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Trial Details</h3>
+
+              {/* Trial Phase & Study Type */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label htmlFor="trialPhase" className="block text-sm font-medium text-gray-700 mb-2">
+                    Trial Phase *
+                  </label>
+                  <select
+                    id="trialPhase"
+                    value={formData.trialPhase}
+                    onChange={(e) => handleInputChange('trialPhase', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    disabled={!isConnected || isLoading}
+                  >
+                    <option value="Phase 1">Phase 1</option>
+                    <option value="Phase 2">Phase 2</option>
+                    <option value="Phase 3">Phase 3</option>
+                    <option value="Phase 4">Phase 4</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="studyType" className="block text-sm font-medium text-gray-700 mb-2">
+                    Study Type *
+                  </label>
+                  <select
+                    id="studyType"
+                    value={formData.studyType}
+                    onChange={(e) => handleInputChange('studyType', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    disabled={!isConnected || isLoading}
+                  >
+                    <option value="Interventional">Interventional</option>
+                    <option value="Observational">Observational</option>
+                    <option value="Clinical Registry">Clinical Registry</option>
+                    <option value="Patient-Centered Research">Patient-Centered Research</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Compensation */}
+              <div className="mb-4">
+                <label htmlFor="compensation" className="block text-sm font-medium text-gray-700 mb-2">
+                  Compensation Amount (ETH)
+                </label>
+                <input
+                  type="text"
+                  id="compensation"
+                  value={formData.compensation}
+                  onChange={(e) => handleInputChange('compensation', e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., 0.5"
+                  disabled={!isConnected || isLoading}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Compensation amount in ETH (optional)
+                </p>
+              </div>
+
+              {/* Location & Duration */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                    Trial Location *
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) => handleInputChange('location', e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="e.g., New York, NY"
+                    required
+                    disabled={!isConnected || isLoading}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="durationWeeks" className="block text-sm font-medium text-gray-700 mb-2">
+                    Duration (weeks) *
+                  </label>
+                  <input
+                    type="number"
+                    id="durationWeeks"
+                    min="1"
+                    max="520"
+                    value={formData.durationWeeks}
+                    onChange={(e) => handleInputChange('durationWeeks', parseInt(e.target.value) || 0)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    disabled={!isConnected || isLoading}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Age Range */}

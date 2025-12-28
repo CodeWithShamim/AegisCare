@@ -53,6 +53,12 @@ export interface TrialCriteriaData {
   maxBMIScore: number;
   hasSpecificCondition: boolean;
   conditionCode: number | string; // Accept both for flexibility
+  // Enhanced metadata (public fields)
+  trialPhase?: string;
+  compensation?: string;
+  location?: string;
+  durationWeeks?: number;
+  studyType?: string;
 }
 
 // ============================================

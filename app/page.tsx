@@ -180,6 +180,12 @@ export default function Home() {
             >
               I'm a Trial Sponsor
             </Link>
+            <Link
+              href="/analytics"
+              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 md:py-4 md:text-lg md:px-10 transition-colors"
+            >
+              📊 Platform Analytics
+            </Link>
           </div>
 
           {/* How It Works */}
