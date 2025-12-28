@@ -67,6 +67,43 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 
 ---
 
+## 🎓 Complete User Guide
+
+**New to AegisCare? Start here!** → [**USER_GUIDE.md**](USER_GUIDE.md)
+
+This guide provides a comprehensive introduction to understanding and using AegisCare:
+
+### 📖 What's Inside the User Guide
+
+| Section | Description |
+|---------|-------------|
+| **What is AegisCare?** | Simple explanation of the platform |
+| **Why Do We Need It?** | Real-world problems it solves |
+| **How Does It Work?** | Step-by-step process explanation |
+| **Key Concepts** | FHE, EIP-712, ACLs explained simply |
+| **Technology Stack** | All technologies used |
+| **Who Should Use This?** | Target users and use cases |
+| **Getting Started** | 5-minute quick start tutorial |
+| **Security & Privacy** | How your data is protected |
+| **FAQ** | Common questions answered |
+
+### 🚀 Quick Links
+
+- **[📘 Full User Guide](USER_GUIDE.md)** - Complete walkthrough for new users
+- **[⚡ Quick Start](#quick-start)** - Get running in 5 minutes
+- **[📊 Test Data](#test-data)** - Sample patients and trials
+- **[🔧 API Reference](#api-reference)** - Developer documentation
+- **[📚 Documentation](#additional-resources)** - More learning resources
+
+### 🎯 Perfect For
+
+- **👤 Patients** - Learn how to protect your privacy while joining trials
+- **🏢 Trial Sponsors** - Understand zero-knowledge trial matching
+- **💻 Developers** - Explore FHE technology and smart contracts
+- **🎓 Students** - Study privacy-preserving blockchain applications
+
+---
+
 ## Test Data
 
 ### Sample Patient Data
