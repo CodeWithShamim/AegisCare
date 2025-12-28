@@ -141,6 +141,19 @@ export async function registerTrial(
   try {
     const contract = getAegisCareContract("", signer);
 
+    // Convert compensation from ETH string to wei (BigInt)
+    let compensationWei = BigInt(0);
+    if (compensation && compensation.trim() !== '' && parseFloat(compensation) > 0) {
+      try {
+        // Parse ETH value and convert to wei
+        compensationWei = ethers.parseEther(compensation);
+        console.log(`[Contract] Converted compensation: ${compensation} ETH = ${compensationWei} wei`);
+      } catch (err) {
+        console.warn(`[Contract] Failed to parse compensation "${compensation}", using 0`, err);
+        compensationWei = BigInt(0);
+      }
+    }
+
     const tx = await contract.registerTrial(
       trialName,
       description,
@@ -153,7 +166,7 @@ export async function registerTrial(
       encryptedData.handles[6], // conditionCode
       encryptedData.inputProof,
       trialPhase || 'Not Specified',
-      compensation || '0',
+      compensationWei,
       location || 'Not Specified',
       durationWeeks || 0,
       studyType || 'Not Specified'

@@ -333,8 +333,10 @@ export default function TrialRegistrationForm({
                   Compensation Amount (ETH)
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="compensation"
+                  step="0.0001"
+                  min="0"
                   value={formData.compensation}
                   onChange={(e) => handleInputChange('compensation', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -342,7 +344,7 @@ export default function TrialRegistrationForm({
                   disabled={!isConnected || isLoading}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Compensation amount in ETH (optional)
+                  Compensation amount in ETH (optional, e.g., 0.5, 1.0, 2.5)
                 </p>
               </div>
 
