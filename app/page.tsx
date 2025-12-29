@@ -290,13 +290,12 @@ export default function Home() {
                 <div className="relative aspect-video w-full bg-gray-900">
                   <iframe
                     className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/yj6QrbiY7nU?rel=0&modestbranding=1"
+                    src="https://www.youtube.com/embed/EvdMsxFs08c?rel=0&modestbranding=1"
                     title="AegisCare Demo - Privacy-Preserving Clinical Trial Matching"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
                 </div>
-
                 {/* Video Footer */}
                 <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-gray-200">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -321,7 +320,7 @@ export default function Home() {
                     </div>
 
                     <a
-                      href="https://www.youtube.com/watch?v=yj6QrbiY7nU"
+                      href="https://www.youtube.com/watch?v=EvdMsxFs08c"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
