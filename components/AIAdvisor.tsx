@@ -29,6 +29,7 @@ import {
   type TxState,
   type EligibilityVerdict,
 } from "@/lib/genLayerClient";
+import { FillExampleButton } from "@/components/Button";
 
 interface AIAdvisorProps {
   patientAddress: string;
@@ -153,19 +154,6 @@ function TxBadge({ state }: { state: TxState }) {
   return <span className={`text-xs px-2 py-1 rounded-full ${s.cls}`}>{s.label}</span>;
 }
 
-/** One-click button that loads a realistic example payload into a form. */
-function FillExampleButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="text-xs font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
-    >
-      Fill example
-    </button>
-  );
-}
-
 // ===========================================================================
 // Feature 1 — Eligibility Explainer
 // ===========================================================================
@@ -218,7 +206,7 @@ function ExplainFeature({ patientAddress }: { patientAddress: string }) {
           Explains an eligibility result in plain language. Receives only public trial criteria and the
           precomputed eligibility boolean — no raw patient values.
         </p>
-        <FillExampleButton onClick={() => setForm(EXAMPLE_EXPLAIN)} />
+        <FillExampleButton label="Fill example" onClick={() => setForm(EXAMPLE_EXPLAIN)} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Input label="Trial ID" value={form.trialId} onChange={(v) => setForm({ ...form, trialId: v })} />
@@ -328,7 +316,7 @@ function RecommendFeature() {
           Recommends 1–3 trials for a coarse profile bucket. Uses only non-identifying buckets and a
           profile hash — no exact values or addresses.
         </p>
-        <FillExampleButton onClick={fillExample} />
+        <FillExampleButton label="Fill example" onClick={fillExample} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Input label="Profile Hash (not address)" value={form.profileHash} onChange={(v) => setForm({ ...form, profileHash: v })} />
@@ -417,7 +405,7 @@ function ValidateFeature() {
           Validates a trial registration: checks description coherence and verifies the ICD-10 code
           against a live medical reference via GenLayer web access. No patient data involved.
         </p>
-        <FillExampleButton onClick={() => setForm(EXAMPLE_VALIDATE)} />
+        <FillExampleButton label="Fill example" onClick={() => setForm(EXAMPLE_VALIDATE)} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <Input label="Trial ID" value={form.trialId} onChange={(v) => setForm({ ...form, trialId: v })} />
@@ -541,7 +529,7 @@ function EligibilityFeature({ patientAddress }: { patientAddress: string }) {
           summary must be de-identified — emails, phone numbers, and ID numbers are rejected before
           submission.
         </p>
-        <FillExampleButton onClick={() => setForm(EXAMPLE_ELIGIBILITY)} />
+        <FillExampleButton label="Fill example" onClick={() => setForm(EXAMPLE_ELIGIBILITY)} />
       </div>
       <Input
         label="Check ID (optional — auto-generated if blank)"

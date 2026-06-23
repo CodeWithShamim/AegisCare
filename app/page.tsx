@@ -2,35 +2,88 @@
 
 import Link from 'next/link';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
+import { useSparkleBurst } from '@/components/useSparkleBurst';
 import { usePlatformStats } from '@/lib/hooks/usePlatformStats';
 
 export default function Home() {
   const stats = usePlatformStats();
+  const sparkle = useSparkleBurst();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
+      <ScrollReveal />
+
+      {/* Animated aurora background — covers the full page */}
+      <div className="ac-aurora-bg" aria-hidden="true">
+        <div className="ac-blob ac-blob-indigo" />
+        <div className="ac-blob ac-blob-purple" />
+        <div className="ac-blob ac-blob-pink" />
+      </div>
+
       {/* Header */}
-      <Header />
+      <div className="relative z-10">
+        <Header />
+      </div>
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="py-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+            {/* Built-for badge */}
+            <h2
+              data-reveal
+              className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+            >
               Clinical Trial Matching with
-              <span className="block text-indigo-600 mt-2">Complete Privacy</span>
+              <span className="ac-gradient-text block mt-2">Complete Privacy</span>
             </h2>
-            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500">
-              AegisCare uses Fully Homomorphic Encryption (FHE) to match patients with clinical
-              trials without ever revealing medical data in plaintext.
+            <p
+              data-reveal
+              className="ac-delay-1 mt-6 max-w-2xl mx-auto text-xl text-gray-500"
+            >
+              AegisCare combines{' '}
+              <strong className="text-gray-700">Fully Homomorphic Encryption (FHE)</strong> for
+              private eligibility matching with a{' '}
+              <strong className="text-gray-700">GenLayer AI advisor</strong> that explains,
+              recommends, and validates trials through on-chain LLM consensus — never touching raw
+              patient data.
             </p>
+
+            {/* Dual-chain chips */}
+            <div
+              data-reveal
+              className="ac-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3"
+            >
+              <span className="inline-flex items-center space-x-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-sm border border-indigo-100">
+                <span className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm">
+                  🔐
+                </span>
+                <span className="text-sm font-medium text-gray-700">
+                  Zama fhEVM · encrypted eligibility
+                </span>
+              </span>
+              <span className="text-gray-400">+</span>
+              <span className="inline-flex items-center space-x-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-sm border border-purple-100">
+                <span className="w-7 h-7 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm">
+                  🧠
+                </span>
+                <span className="text-sm font-medium text-gray-700">
+                  GenLayer · AI advisor (Optimistic Democracy)
+                </span>
+              </span>
+            </div>
           </div>
 
           {/* Platform Statistics */}
           <div className="mb-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Total Trials */}
-              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100 hover:shadow-xl transition-shadow">
+              <div
+                data-reveal="pop"
+                className="ac-card bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100"
+              >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
@@ -64,7 +117,10 @@ export default function Home() {
               </div>
 
               {/* Total Patients */}
-              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-green-100 hover:shadow-xl transition-shadow">
+              <div
+                data-reveal="pop"
+                className="ac-card ac-delay-1 bg-white rounded-xl shadow-lg p-6 border-2 border-green-100"
+              >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
@@ -100,7 +156,10 @@ export default function Home() {
               </div>
 
               {/* Privacy Score */}
-              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100 hover:shadow-xl transition-shadow">
+              <div
+                data-reveal="pop"
+                className="ac-card ac-delay-2 bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100"
+              >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
@@ -134,14 +193,34 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
               </span>
-              <span>Platform active on Zama FHE Devnet</span>
+              <span>Platform active on Zama FHE Devnet &amp; GenLayer StudioNet</span>
             </div>
           </div>
 
           {/* Key Features */}
           <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-3">🔒</div>
+            <div data-reveal className="ac-card ac-shine bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🧠</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">GenLayer AI Advisor</h3>
+              <p className="text-sm text-gray-600">
+                An <strong>AegisCareAdvisor</strong> Intelligent Contract explains eligibility,
+                recommends trials, validates registrations against live ICD-10 data, and checks
+                registry eligibility — all through LLM-backed consensus.
+              </p>
+            </div>
+
+            <div data-reveal className="ac-card ac-shine ac-delay-1 bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">⚖️</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Optimistic Democracy</h3>
+              <p className="text-sm text-gray-600">
+                Every advisor result is proposed by a leader and verified by independent validators
+                with equivalence rules, so non-deterministic LLM/web output settles on-chain
+                trustlessly.
+              </p>
+            </div>
+
+            <div data-reveal className="ac-card ac-shine ac-delay-2 bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🔒</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">End-to-End Encryption</h3>
               <p className="text-sm text-gray-600">
                 Medical data is encrypted before leaving your browser and stays encrypted throughout
@@ -149,16 +228,25 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-3">🔐</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">FHE-Powered</h3>
+            <div data-reveal className="ac-card ac-shine ac-delay-3 bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🔐</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">FHE-Powered Matching</h3>
               <p className="text-sm text-gray-600">
                 Eligibility is computed on encrypted data using Zama FHEVM - no plaintext exposure
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-3xl mb-3">👤</div>
+            <div data-reveal className="ac-card ac-shine ac-delay-4 bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🚫</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Strict Privacy Boundary</h3>
+              <p className="text-sm text-gray-600">
+                The advisor only ever sees anonymized inputs — age buckets, condition categories,
+                and PII-screened summaries. Raw or encrypted PHI never leaves the FHE layer.
+              </p>
+            </div>
+
+            <div data-reveal className="ac-card ac-shine ac-delay-5 bg-white p-6 rounded-lg shadow-md">
+              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">👤</div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Private Results</h3>
               <p className="text-sm text-gray-600">
                 Only you can decrypt your eligibility results using your private key
@@ -167,32 +255,49 @@ export default function Home() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+          <div data-reveal className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/patient"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition-colors"
+              onClick={sparkle}
+              className="ac-shine inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30"
             >
-              I'm a Patient
+              I&apos;m a Patient
             </Link>
             <Link
               href="/trial-admin"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10 transition-colors"
+              onClick={sparkle}
+              className="ac-shine inline-flex items-center justify-center px-8 py-3 border border-indigo-200 text-base font-medium rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-sm hover:shadow-md"
             >
-              I'm a Trial Sponsor
+              I&apos;m a Trial Sponsor
             </Link>
             <Link
               href="/analytics"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 md:py-4 md:text-lg md:px-10 transition-colors"
+              onClick={sparkle}
+              className="ac-shine inline-flex items-center justify-center gap-2 px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30"
             >
-              📊 Platform Analytics
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+              Platform Analytics
             </Link>
           </div>
 
           {/* How It Works */}
           <div className="mt-20">
-            <h3 className="text-3xl font-bold text-gray-900 mb-8">How It Works</h3>
+            <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-8">How It Works</h3>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div className="bg-white p-6 rounded-lg shadow-md text-left">
+              <div data-reveal className="ac-card bg-white p-6 rounded-lg shadow-md text-left">
                 <h4 className="text-lg font-semibold text-indigo-600 mb-3">For Patients</h4>
                 <ol className="space-y-3 text-sm text-gray-600">
                   <li className="flex items-start">
@@ -222,7 +327,7 @@ export default function Home() {
                 </ol>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow-md text-left">
+              <div data-reveal className="ac-card ac-delay-1 bg-white p-6 rounded-lg shadow-md text-left">
                 <h4 className="text-lg font-semibold text-indigo-600 mb-3">For Trial Sponsors</h4>
                 <ol className="space-y-3 text-sm text-gray-600">
                   <li className="flex items-start">
@@ -256,11 +361,127 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Two-Layer Architecture */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-3">A Dual-Chain Architecture</h3>
+              <p data-reveal className="ac-delay-1 text-lg text-gray-600 max-w-3xl mx-auto">
+                FHE handles the confidential math; GenLayer handles the judgment. Each layer does
+                the one thing the other fundamentally cannot.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* FHE Layer */}
+              <div data-reveal className="ac-card bg-white rounded-2xl shadow-md border-2 border-indigo-100 p-8 text-left">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="ac-wiggle-hover w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl">
+                    🔐
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-gray-900">FHE Matching Layer</h4>
+                    <p className="text-sm text-indigo-600 font-medium">
+                      Zama fhEVM · Solidity · Sepolia
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Computes eligibility entirely on encrypted data. Medical values and trial criteria
+                  never appear in plaintext on-chain.
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-indigo-500 mr-2">▸</span>
+                    <span>Encrypted patient registration &amp; trial criteria</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-indigo-500 mr-2">▸</span>
+                    <span>
+                      FHE comparisons on{' '}
+                      <code className="text-xs bg-gray-100 px-1 rounded">euint</code> values
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-indigo-500 mr-2">▸</span>
+                    <span>EIP-712 private decryption by the patient only</span>
+                  </li>
+                </ul>
+                <p className="mt-4 text-xs text-gray-500">
+                  Contract: <code className="text-xs bg-gray-100 px-1 rounded">0x3DB49…92F7</code>
+                </p>
+              </div>
+
+              {/* GenLayer Layer */}
+              <div data-reveal className="ac-card ac-delay-1 bg-white rounded-2xl shadow-md border-2 border-purple-100 p-8 text-left">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="ac-wiggle-hover w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl">
+                    🧠
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-gray-900">AI Advisor Layer</h4>
+                    <p className="text-sm text-purple-600 font-medium">
+                      GenLayer · Python · StudioNet
+                    </p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Runs LLM-backed logic with leader/validator consensus on anonymized inputs only.
+                  Explains, recommends, validates, and checks eligibility.
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start">
+                    <span className="text-purple-500 mr-2">▸</span>
+                    <span>
+                      <strong>generate_explanation</strong> — plain-language eligibility result
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-500 mr-2">▸</span>
+                    <span>
+                      <strong>recommend_trials</strong> — best 1–3 matches from candidates
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-500 mr-2">▸</span>
+                    <span>
+                      <strong>validate_trial</strong> — checks against live ICD-10 reference
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-purple-500 mr-2">▸</span>
+                    <span>
+                      <strong>check_eligibility</strong> — registry page + PII-screened summary
+                    </span>
+                  </li>
+                </ul>
+                <p className="mt-4 text-xs text-gray-500">
+                  Contract: <code className="text-xs bg-gray-100 px-1 rounded">0x27bcE4…3bB19</code>
+                </p>
+              </div>
+            </div>
+
+            {/* Privacy boundary callout */}
+            <div data-reveal className="ac-card mt-6 bg-purple-50 border border-purple-200 rounded-2xl p-6">
+              <div className="flex items-start">
+                <div className="ac-wiggle-hover text-2xl mr-4 inline-block">🛡️</div>
+                <div>
+                  <h4 className="font-bold text-purple-900 mb-1">Why a privacy boundary?</h4>
+                  <p className="text-sm text-purple-800">
+                    The advisor is strictly additive and isolated. FHE decides the binary
+                    eligibility; the advisor explains and enriches it using only anonymized buckets
+                    and PII-screened summaries. No raw or encrypted PHI is ever sent to the GenLayer
+                    contract — both the client and the contract enforce this.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Video Section */}
           <div className="mt-20">
             <div className="text-center mb-10">
-              <h3 className="text-3xl font-bold text-gray-900 mb-3">See AegisCare in Action</h3>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-3">See AegisCare in Action</h3>
+              <p data-reveal className="ac-delay-1 text-lg text-gray-600 max-w-2xl mx-auto">
                 Watch how our platform revolutionizes clinical trial matching with complete privacy
                 preservation
               </p>
@@ -345,7 +566,7 @@ export default function Home() {
 
             {/* Feature Highlights Below Video */}
             <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100">
+              <div data-reveal className="ac-card bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100">
                 <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
                   <svg
                     className="w-6 h-6 text-white"
@@ -367,7 +588,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+              <div data-reveal className="ac-card ac-delay-1 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
                 <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
                   <svg
                     className="w-6 h-6 text-white"
@@ -389,7 +610,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+              <div data-reveal className="ac-card ac-delay-2 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
                   <svg
                     className="w-6 h-6 text-white"
@@ -414,28 +635,33 @@ export default function Home() {
           </div>
 
           {/* Technology Stack */}
-          <div className="mt-20 bg-white rounded-lg shadow-md p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
+          <div data-reveal className="ac-card mt-20 bg-white rounded-2xl shadow-md p-8">
+            <h3 data-reveal className="text-2xl font-bold text-gray-900 mb-6">
               Built with Privacy-First Technology
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="text-2xl mb-2">⚡</div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+              <div data-reveal className="text-center">
+                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">⚡</div>
                 <p className="text-sm font-medium text-gray-900">Zama FHEVM</p>
                 <p className="text-xs text-gray-500">Fully Homomorphic Encryption</p>
               </div>
-              <div className="text-center">
-                <div className="text-2xl mb-2">🔗</div>
+              <div data-reveal className="ac-delay-1 text-center">
+                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🧠</div>
+                <p className="text-sm font-medium text-gray-900">GenLayer</p>
+                <p className="text-xs text-gray-500">AI Intelligent Contracts &amp; consensus</p>
+              </div>
+              <div data-reveal className="ac-delay-2 text-center">
+                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🔗</div>
                 <p className="text-sm font-medium text-gray-900">Ethereum</p>
                 <p className="text-xs text-gray-500">Blockchain Infrastructure</p>
               </div>
-              <div className="text-center">
-                <div className="text-2xl mb-2">🛡️</div>
+              <div data-reveal className="ac-delay-3 text-center">
+                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🛡️</div>
                 <p className="text-sm font-medium text-gray-900">EIP-712</p>
                 <p className="text-xs text-gray-500">Typed Data Signing</p>
               </div>
-              <div className="text-center">
-                <div className="text-2xl mb-2">🔑</div>
+              <div data-reveal className="ac-delay-4 text-center">
+                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🔑</div>
                 <p className="text-sm font-medium text-gray-900">Private Keys</p>
                 <p className="text-xs text-gray-500">User-Only Decryption</p>
               </div>
@@ -462,7 +688,7 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <h3 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 mb-4">
+                  <h3 className="ac-gradient-text text-4xl md:text-5xl font-bold mb-4">
                     📘 Master AegisCare
                   </h3>
                   <p className="text-lg text-gray-400 max-w-3xl mx-auto">
@@ -577,7 +803,7 @@ export default function Home() {
                           d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                         />
                       </svg>
-                      📖 Read Full Guide
+                      Read Full Guide
                     </Link>
                   </div>
 
@@ -739,9 +965,24 @@ export default function Home() {
                   </p>
                   <Link
                     href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl border border-white/20"
+                    onClick={sparkle}
+                    className="ac-shine inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl border border-white/20"
                   >
-                    📖 Start Reading the User Guide
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      />
+                    </svg>
+                    Start Reading the User Guide
                   </Link>
                   <p className="text-xs text-gray-500 mt-3">
                     10 Major Sections • 500+ Lines • Perfect for Beginners
@@ -752,8 +993,13 @@ export default function Home() {
           </div>
 
           {/* Security Notice */}
-          <div className="mt-12 bg-indigo-50 rounded-lg p-6 border border-indigo-200">
-            <h4 className="text-lg font-semibold text-indigo-900 mb-3">🔒 Security Guarantee</h4>
+          <div
+            data-reveal
+            className="ac-card mt-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-200"
+          >
+            <h4 className="text-lg font-semibold text-indigo-900 mb-3 flex items-center gap-2">
+              <span className="ac-wiggle-hover inline-block">🔒</span> Security Guarantee
+            </h4>
             <p className="text-sm text-indigo-800">
               AegisCare ensures that <strong>no plaintext medical data ever appears</strong>{' '}
               on-chain, in logs, or in the UI. All computation happens on encrypted data using FHE,
@@ -765,13 +1011,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500">
-            AegisCare - Privacy-Preserving Clinical Trial Matching powered by Zama FHEVM
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

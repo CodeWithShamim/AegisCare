@@ -4,6 +4,13 @@
 
 **AegisCare** is a groundbreaking clinical trial matching platform that leverages **Zama's Fully Homomorphic Encryption (FHE)** to enable privacy-preserving patient-trial matching. Unlike traditional systems where patient medical data must be revealed to determine eligibility, AegisCare performs matching computations on **encrypted data**, ensuring **zero plaintext leakage**.
 
+AegisCare uses a **dual-chain architecture**:
+
+- **Zama fhEVM (Solidity)** — `AegisCare.sol` performs the confidential eligibility matching entirely in the encrypted domain on Sepolia.
+- **GenLayer (Python Intelligent Contract)** — `AegisCareAdvisor` adds an **AI advisor layer** (plain-language explanations, trial recommendations, trial validation, and registry-based eligibility checks) using LLM-backed consensus.
+
+> The GenLayer advisor is **strictly additive**: it handles AI features only and **never receives raw or encrypted patient medical data**. All AI inputs are anonymized (age buckets, condition categories, PII-screened summaries).
+
 ### The Problem
 
 Traditional clinical trial matching requires patients to:
@@ -43,6 +50,16 @@ AegisCare uses **FHE to compute eligibility on encrypted data**:
 - **Gas optimization** - Custom errors for efficient execution
 - **Comprehensive events** - Full audit trail
 - **Deployed on Sepolia** - Testnet deployment at `0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7`
+
+### AI Advisor Features (GenLayer Intelligent Contract)
+
+The `AegisCareAdvisor` Python contract runs LLM-backed logic with optimistic-democracy consensus. It works **only on anonymized data** — never raw or encrypted PHI:
+
+- **Eligibility explainer** - Plain-language explanation of an eligibility result, validated to never echo specific patient values
+- **Trial recommender** - Suggests 1–3 best-matching trials from a candidate list using an anonymized profile (age bucket + condition category)
+- **Trial validator** - Validates trial registrations against live **ICD-10 reference data** fetched on-chain via the GenLayer web access
+- **Registry eligibility checker** - Assesses eligibility against an external trial-registry URL from a PII-screened summary
+- **Consensus + PII guards** - Every write runs a leader/validator pair; summaries are regex-screened for emails, phone numbers, and ID numbers before processing
 
 ### Frontend Features
 
@@ -256,8 +273,13 @@ cd aegiscare
 # Install dependencies
 npm install
 
-# Configure environment (already configured for Sepolia)
-cp .env.example .env
+# Configure environment
+# The .env is already populated with the deployed Sepolia (FHE) and
+# GenLayer (AI advisor) contract addresses. Override these keys to use
+# your own deployments:
+#   NEXT_PUBLIC_AEGISCARE_ADDRESS   – Zama fhEVM contract (Sepolia)
+#   NEXT_PUBLIC_ADVISOR_ADDRESS     – GenLayer AegisCareAdvisor
+#   NEXT_PUBLIC_GENLAYER_CHAIN_ID   – GenLayer network (studionet)
 
 # Start development server
 npm run dev
@@ -269,10 +291,13 @@ npm run dev
 - **Patient Dashboard:** http://localhost:3000/patient
 - **Trial Admin:** http://localhost:3000/trial-admin
 - **Documentation:** http://localhost:3000/docs
+- **Analytics:** http://localhost:3000/analytics
 
-### Deployed Contract
+### Deployed Contracts
 
-**AegisCare is already deployed on Sepolia Testnet:**
+**AegisCare is already deployed — no setup needed to start exploring:**
+
+**FHE matching contract (Zama fhEVM · Sepolia):**
 
 ```
 Address: 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7
@@ -281,6 +306,17 @@ Chain ID: 11155111
 Deployer: 0x7e1489fabCF51Fc9a4aCD221A574dD0D3eA8A6F8
 Deployment Date: December 27, 2025
 ```
+
+🔎 **Explorer:** [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7)
+
+**AI Advisor (GenLayer Intelligent Contract · StudioNet):**
+
+```
+Address: 0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19
+Network: GenLayer StudioNet
+```
+
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19)
 
 No need to deploy - just connect MetaMask to Sepolia and start testing!
 
@@ -381,6 +417,22 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 └─────────────────────────────────────────────────────────────┘
 ```
 
+> **AI advisor (parallel, anonymized path):** Alongside the encrypted flow, the
+> `AegisCareAdvisor` Intelligent Contract on **GenLayer** provides explanations,
+> recommendations, and validation. It receives only anonymized inputs (age
+> buckets, condition categories, PII-screened summaries) — never raw or
+> encrypted patient data.
+>
+> ```
+> ┌──────────────┐  anonymized   ┌─────────────────────────────┐
+> │   Browser    │ ────────────► │  GenLayer (studionet)       │
+> │ (no PHI sent)│   summary     │  AegisCareAdvisor (Python)  │
+> └──────────────┘               │  • LLM consensus            │
+>                                │  • ICD-10 web validation    │
+>                                │  • PII screening            │
+>                                └─────────────────────────────┘
+> ```
+
 ### Technology Stack
 
 #### Frontend
@@ -394,6 +446,7 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 | **ethers.js**    | 6.9.0   | Web3 integration                |
 | **Wagmi**        | 2.x     | React hooks for Web3            |
 | **Zama FHE SDK** | 0.3.0-8 | Client-side FHE encryption      |
+| **genlayer-js**  | 1.1.8   | GenLayer Intelligent Contract client |
 
 #### Blockchain
 
@@ -401,8 +454,9 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 | ------------------- | ------- | ----------------------- |
 | **Solidity**        | 0.8.27  | Smart contract language |
 | **Zama fhEVM**      | Latest  | FHE-enabled EVM         |
+| **GenLayer**        | studionet | AI Intelligent Contracts (Python) |
 | **Hardhat**         | 2.19.0  | Development framework   |
-| **Sepolia Testnet** | -       | Deployment network      |
+| **Sepolia Testnet** | -       | FHE contract deployment network |
 
 ---
 
@@ -412,7 +466,11 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 aegiscare/
 ├── contracts/                    # Smart contracts
 │   ├── AegisCare.sol            # Main FHE contract (700+ lines)
-│   └── AegisCare.json           # Contract ABI & bytecode
+│   ├── AegisCare.json           # Contract ABI & bytecode
+│   └── aegiscare_advisor.py     # GenLayer AI Intelligent Contract (Python)
+│
+├── config/                       # Contract configuration
+│   └── genLayerContracts.ts     # GenLayer advisor address & method schema
 │
 ├── scripts/                      # Utility scripts
 │   ├── deploy.ts                # Automated deployment
@@ -428,6 +486,7 @@ aegiscare/
 │   ├── web3Client.ts            # Web3 utilities (200 lines)
 │   ├── contractInteractions.ts  # Contract interaction layer (300 lines)
 │   ├── logger.ts                # Conditional debug logging
+│   ├── genLayerClient.ts        # GenLayer advisor read/write client
 │   └── web3config.ts            # Web3 configuration
 │
 ├── components/                  # React components
@@ -444,6 +503,7 @@ aegiscare/
 │   ├── page.tsx                 # Landing page
 │   ├── patient/                 # Patient dashboard
 │   ├── trial-admin/             # Trial admin dashboard
+│   ├── analytics/               # Analytics dashboard
 │   └── docs/                    # Documentation pages
 │
 ├── .env                         # Environment configuration
@@ -713,6 +773,40 @@ const isEligible = await decryptEligibilityResult(
 console.log(isEligible); // true or false
 ```
 
+### GenLayer AI Advisor (Intelligent Contract)
+
+The advisor exposes four AI features. Write methods run LLM consensus; read methods return the stored result. All inputs are anonymized — **never send raw or encrypted patient data**.
+
+| Feature | Write method | Read method |
+| ------- | ------------ | ----------- |
+| Eligibility explainer | `generate_explanation` | `get_explanation` |
+| Trial recommender | `recommend_trials` | `get_recommendations` |
+| Trial validator | `validate_trial` | `get_validation` |
+| Registry eligibility check | `check_eligibility` | `get_eligibility_check` |
+
+```typescript
+import {
+  generateExplanation,
+  getExplanation,
+} from "@/lib/genLayerClient";
+
+// Write: run LLM consensus to produce a plain-language explanation
+await generateExplanation({
+  trialId,
+  patientAddress,
+  isEligible,
+  trialName,
+  // ...trial criteria boundaries (no patient values)
+});
+
+// Read: fetch the stored explanation
+const explanation = await getExplanation(trialId, patientAddress);
+```
+
+> Method names mirror the deployed `aegiscare_advisor.py` schema. If you change the
+> contract, regenerate with `genlayer schema <address>` and update
+> `config/genLayerContracts.ts`.
+
 ---
 
 ## Security
@@ -774,7 +868,33 @@ NEXT_PUBLIC_AEGISCARE_ADDRESS=0x...
 npm run dev
 ```
 
-### Production Deployment Checklist
+### GenLayer AI Advisor Deployment
+
+The AI advisor is a separate Python Intelligent Contract on GenLayer. It is **already deployed** for this project:
+
+```
+Advisor Address: 0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19
+Network: GenLayer studionet
+Contract: contracts/aegiscare_advisor.py
+```
+
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19)
+
+To deploy your own instance:
+
+```bash
+# Deploy the Intelligent Contract
+genlayer deploy --contract contracts/aegiscare_advisor.py
+
+# Copy the returned address into .env
+NEXT_PUBLIC_ADVISOR_ADDRESS=0x...
+NEXT_PUBLIC_GENLAYER_CHAIN_ID=studionet
+
+# (Optional) inspect the deployed method schema
+genlayer schema <address>
+```
+
+The frontend guards against a missing address (`assertAdvisorConfigured`), so a misconfigured deploy fails loudly instead of sending transactions to `address(0)`. Once deployed, open your contract at `https://explorer-studio.genlayer.com/address/<your-address>`.
 
 - [ ] Audit smart contract
 - [ ] Deploy to mainnet
@@ -878,6 +998,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **[Zama](https://www.zama.ai/)** - For pioneering FHE technology
 - **[FHEVM Team](https://github.com/zama-ai/fhevm)** - For the fhEVM implementation
+- **[GenLayer](https://www.genlayer.com/)** - For AI-native Intelligent Contracts with LLM consensus
 - **[FHE Relayer SDK](https://docs.zama.org/protocol/relayer-sdk-guides)** - For excellent documentation
 - **[Agora FHE Raffle](https://github.com/dordunu1/Raffle)** - For production-ready FHE patterns
 
@@ -906,6 +1027,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Trial creation with encrypted criteria
 - ✅ FHE eligibility computation
 - ✅ Private result decryption
+- ✅ **GenLayer AI advisor** — explanations, recommendations, trial validation & registry eligibility checks (anonymized, no PHI)
 - ✅ Beautiful responsive UI
 - ✅ Comprehensive documentation
 - ✅ **44/44 comprehensive FHEVM tests passing (100% coverage including FHE operations)**

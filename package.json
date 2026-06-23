@@ -15,7 +15,14 @@
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "verify:sepolia": "npx hardhat verify --network sepolia 0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7",
     "node": "hardhat node",
-    "typechain": "hardhat typechain"
+    "typechain": "hardhat typechain",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:test": "tsc --noEmit -p tsconfig.test.json",
+    "lint:site": "eslint app components lib --max-warnings 0",
+    "lint:contract": "genvm-lint check contracts/aegiscare_advisor.py --json",
+    "test:solidity": "hardhat test",
+    "test:contract": "pytest tests/direct -v",
+    "test:contract:integration": "gltest tests/integration -v -s"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",

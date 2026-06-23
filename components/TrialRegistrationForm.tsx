@@ -13,6 +13,7 @@ import { registerTrial, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import LoadingAnimation from '@/components/LoadingAnimation';
 import ErrorDisplay from '@/components/ErrorDisplay';
+import { FillExampleButton } from '@/components/Button';
 
 interface TrialRegistrationFormProps {
   onRegistrationSuccess?: (trialId: number) => void;
@@ -62,6 +63,32 @@ export default function TrialRegistrationForm({
       ...prev,
       [field]: value,
     }));
+    setValidationErrors([]);
+    setError(null);
+  };
+
+  /**
+   * Populate the form with a realistic sample trial so reviewers can
+   * try the flow in one click. Clears any prior validation/error state.
+   */
+  const handleFillExample = () => {
+    setFormData({
+      trialName: 'Diabetes Treatment Study 2025',
+      description:
+        'Testing a new treatment for Type 2 diabetes in adults aged 18-65.',
+      minAge: 18,
+      maxAge: 65,
+      requiredGender: 0,
+      minBMIScore: 185,
+      maxBMIScore: 350,
+      hasSpecificCondition: true,
+      conditionCode: 'E11',
+      trialPhase: 'Phase 2',
+      compensation: '$500',
+      location: 'Boston, MA',
+      durationWeeks: 52,
+      studyType: 'Interventional',
+    });
     setValidationErrors([]);
     setError(null);
   };
@@ -178,29 +205,39 @@ export default function TrialRegistrationForm({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md text-gray-500">
+    <div className="w-full max-w-2xl mx-auto p-6 sm:p-8 bg-white rounded-2xl shadow-sm shadow-indigo-500/5 border border-gray-100 ac-card text-gray-500">
       {!isLoading ? (
         <>
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Register Clinical Trial</h2>
-            <p className="text-sm text-gray-600">
-              Create a new clinical trial with encrypted eligibility criteria.
-              <br />
-              <span className="text-xs text-gray-500">
-                🔒 All eligibility criteria are encrypted before submission. Privacy guaranteed.
-              </span>
-            </p>
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Register <span className="ac-gradient-text">Clinical Trial</span>
+              </h2>
+              <p className="text-sm text-gray-600">
+                Create a new clinical trial with encrypted eligibility criteria.
+                <br />
+                <span className="text-xs text-gray-500">
+                  🔒 All eligibility criteria are encrypted before submission. Privacy guaranteed.
+                </span>
+              </p>
+            </div>
+            <FillExampleButton
+              type="button"
+              onClick={handleFillExample}
+              disabled={isLoading}
+              className="flex-shrink-0"
+            />
           </div>
 
           {/* Wallet Connection */}
           {!isConnected ? (
-            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
               <p className="text-sm text-blue-800">
                 Please connect your wallet from the header to continue
               </p>
             </div>
           ) : (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
               <p className="text-sm text-green-800">
                 ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
               </p>
@@ -209,7 +246,7 @@ export default function TrialRegistrationForm({
 
           {/* Success Message */}
           {success && (
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
               <p className="text-sm font-medium text-green-800">
                 ✓ Trial registered successfully! Your encrypted eligibility criteria has been
                 submitted.
@@ -230,7 +267,7 @@ export default function TrialRegistrationForm({
 
           {/* Validation Errors */}
           {validationErrors.length > 0 && (
-            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
               <p className="text-sm font-medium text-yellow-800 mb-2">
                 Please fix the following errors:
               </p>
@@ -254,7 +291,7 @@ export default function TrialRegistrationForm({
                 id="trialName"
                 value={formData.trialName}
                 onChange={(e) => handleInputChange('trialName', e.target.value)}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="e.g., Diabetes Treatment Study 2025"
                 required
                 disabled={!isConnected || isLoading}
@@ -272,7 +309,7 @@ export default function TrialRegistrationForm({
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={3}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="Brief description of the clinical trial"
                 required
                 disabled={!isConnected || isLoading}
@@ -299,7 +336,7 @@ export default function TrialRegistrationForm({
                     id="trialPhase"
                     value={formData.trialPhase}
                     onChange={(e) => handleInputChange('trialPhase', e.target.value)}
-                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   >
@@ -321,7 +358,7 @@ export default function TrialRegistrationForm({
                     id="studyType"
                     value={formData.studyType}
                     onChange={(e) => handleInputChange('studyType', e.target.value)}
-                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   >
@@ -348,7 +385,7 @@ export default function TrialRegistrationForm({
                   min="0"
                   value={formData.compensation}
                   onChange={(e) => handleInputChange('compensation', e.target.value)}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., 0.5"
                   disabled={!isConnected || isLoading}
                 />
@@ -371,7 +408,7 @@ export default function TrialRegistrationForm({
                     id="location"
                     value={formData.location}
                     onChange={(e) => handleInputChange('location', e.target.value)}
-                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     placeholder="e.g., New York, NY"
                     required
                     disabled={!isConnected || isLoading}
@@ -394,7 +431,7 @@ export default function TrialRegistrationForm({
                     onChange={(e) =>
                       handleInputChange('durationWeeks', parseInt(e.target.value) || 0)
                     }
-                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   />
@@ -415,7 +452,7 @@ export default function TrialRegistrationForm({
                   max="150"
                   value={formData.minAge}
                   onChange={(e) => handleInputChange('minAge', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -431,7 +468,7 @@ export default function TrialRegistrationForm({
                   max="150"
                   value={formData.maxAge}
                   onChange={(e) => handleInputChange('maxAge', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -451,7 +488,7 @@ export default function TrialRegistrationForm({
                 id="requiredGender"
                 value={formData.requiredGender}
                 onChange={(e) => handleInputChange('requiredGender', parseInt(e.target.value))}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 required
                 disabled={!isConnected || isLoading}
               >
@@ -480,7 +517,7 @@ export default function TrialRegistrationForm({
                     const bmi = parseFloat(e.target.value);
                     handleInputChange('minBMIScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                   }}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -500,7 +537,7 @@ export default function TrialRegistrationForm({
                     const bmi = parseFloat(e.target.value);
                     handleInputChange('maxBMIScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                   }}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -553,7 +590,7 @@ export default function TrialRegistrationForm({
                   id="conditionCode"
                   value={formData.conditionCode || ''}
                   onChange={(e) => handleInputChange('conditionCode', e.target.value)}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., E11 (Type 2 diabetes)"
                   disabled={!isConnected || isLoading}
                 />
@@ -567,13 +604,13 @@ export default function TrialRegistrationForm({
             <button
               type="submit"
               disabled={!isConnected || isLoading}
-              className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="ac-shine w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl hover:shadow-indigo-500/40 hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300"
             >
               {isLoading ? 'Processing...' : 'Register Trial with Encrypted Criteria'}
             </button>
 
             {/* Security Notice */}
-            <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-xl">
               <p className="text-xs text-gray-600 font-medium mb-2">🔒 Privacy Protection:</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li>• All eligibility criteria are encrypted in your browser before submission</li>

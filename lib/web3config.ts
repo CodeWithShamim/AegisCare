@@ -13,7 +13,7 @@ export const metadata = {
     typeof window !== "undefined"
       ? window.location.origin
       : "https://localhost:3000",
-  icons: ["/favicon.ico"],
+  icons: ["/logo.svg"],
 };
 
 // Create noop storage for SSR

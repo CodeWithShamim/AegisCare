@@ -146,9 +146,9 @@ export default function PlatformAnalytics() {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <div className="w-full max-w-7xl mx-auto p-6 bg-white rounded-2xl shadow-lg shadow-gray-100/60">
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading platform analytics...</p>
         </div>
       </div>
@@ -157,7 +157,7 @@ export default function PlatformAnalytics() {
 
   if (!stats) {
     return (
-      <div className="w-full max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <div className="w-full max-w-7xl mx-auto p-6 bg-white rounded-2xl shadow-lg shadow-gray-100/60">
         <div className="text-center py-12">
           <div className="text-4xl mb-4">📊</div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No Data Available</h3>
@@ -172,9 +172,9 @@ export default function PlatformAnalytics() {
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Platform Analytics Dashboard</h2>
-        <p className="text-sm text-gray-600">
+      <div className="text-center" data-reveal>
+        <h2 className="text-4xl font-bold ac-gradient-text mb-3">Platform Analytics Dashboard</h2>
+        <p className="text-base text-gray-600">
           Comprehensive overview of the AegisCare platform performance
         </p>
       </div>
@@ -187,6 +187,7 @@ export default function PlatformAnalytics() {
           icon="📋"
           color="blue"
           subtitle="Clinical trials registered"
+          delay="ac-delay-1"
         />
         <MetricCard
           title="Registered Patients"
@@ -194,6 +195,7 @@ export default function PlatformAnalytics() {
           icon="👥"
           color="green"
           subtitle="Patients on platform"
+          delay="ac-delay-2"
         />
         <MetricCard
           title="Total Eligibility Checks"
@@ -201,6 +203,7 @@ export default function PlatformAnalytics() {
           icon="✓"
           color="purple"
           subtitle="Privacy-preserving checks"
+          delay="ac-delay-3"
         />
         <MetricCard
           title="Active Sponsors"
@@ -208,6 +211,7 @@ export default function PlatformAnalytics() {
           icon="🏢"
           color="indigo"
           subtitle="Organizations hosting trials"
+          delay="ac-delay-4"
         />
       </div>
 
@@ -219,6 +223,7 @@ export default function PlatformAnalytics() {
           icon="✅"
           color="green"
           subtitle={`${stats.totalTrials > 0 ? Math.round((stats.activeTrials / stats.totalTrials) * 100) : 0}% of total trials`}
+          delay="ac-delay-1"
         />
         <MetricCard
           title="Avg Participants/Trial"
@@ -226,6 +231,7 @@ export default function PlatformAnalytics() {
           icon="📊"
           color="blue"
           subtitle="Average engagement per trial"
+          delay="ac-delay-2"
         />
         <MetricCard
           title="Patient Participation Rate"
@@ -233,6 +239,7 @@ export default function PlatformAnalytics() {
           icon="📈"
           color="purple"
           subtitle="Patients checking eligibility"
+          delay="ac-delay-3"
         />
       </div>
 
@@ -256,9 +263,9 @@ export default function PlatformAnalytics() {
       </div>
 
       {/* Top Locations */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div data-reveal className="ac-card bg-white border border-gray-100 rounded-2xl p-6 shadow-lg shadow-gray-100/60">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl">🌍</span>
+          <span className="ac-wiggle-hover inline-block text-2xl">🌍</span>
           <h3 className="text-lg font-semibold text-gray-900">Top Trial Locations</h3>
         </div>
         {stats.topLocations.length === 0 ? (
@@ -268,7 +275,7 @@ export default function PlatformAnalytics() {
             {stats.topLocations.map((item, index) => (
               <div
                 key={item.location}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-indigo-50 transition-colors"
               >
                 <div className="flex items-center gap-2">
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center text-xs font-bold">
@@ -284,9 +291,9 @@ export default function PlatformAnalytics() {
       </div>
 
       {/* Top Sponsors */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div data-reveal className="ac-card bg-white border border-gray-100 rounded-2xl p-6 shadow-lg shadow-gray-100/60">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl">🏆</span>
+          <span className="ac-wiggle-hover inline-block text-2xl">🏆</span>
           <h3 className="text-lg font-semibold text-gray-900">Top Sponsors by Engagement</h3>
         </div>
         {stats.topSponsors.length === 0 ? (
@@ -326,9 +333,9 @@ export default function PlatformAnalytics() {
       </div>
 
       {/* Recent Trials */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      <div data-reveal className="ac-card bg-white border border-gray-100 rounded-2xl p-6 shadow-lg shadow-gray-100/60">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl">🕐</span>
+          <span className="ac-wiggle-hover inline-block text-2xl">🕐</span>
           <h3 className="text-lg font-semibold text-gray-900">Recently Registered Trials</h3>
         </div>
         {stats.recentTrials.length === 0 ? (
@@ -338,7 +345,7 @@ export default function PlatformAnalytics() {
             {stats.recentTrials.map((trial) => (
               <div
                 key={trial.trialId}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-indigo-50 transition-colors"
               >
                 <div className="flex-1">
                   <h4 className="text-sm font-medium text-gray-900">{trial.trialName}</h4>
@@ -369,23 +376,27 @@ interface MetricCardProps {
   icon: string;
   color: 'blue' | 'green' | 'purple' | 'indigo';
   subtitle?: string;
+  delay?: string;
 }
 
-function MetricCard({ title, value, icon, color, subtitle }: MetricCardProps) {
+function MetricCard({ title, value, icon, color, subtitle, delay }: MetricCardProps) {
   const colorClasses = {
-    blue: 'bg-blue-50 border-blue-200',
-    green: 'bg-green-50 border-green-200',
-    purple: 'bg-purple-50 border-purple-200',
-    indigo: 'bg-indigo-50 border-indigo-200',
+    blue: 'bg-gradient-to-br from-blue-50 to-white border-blue-100 shadow-blue-100/50',
+    green: 'bg-gradient-to-br from-green-50 to-white border-green-100 shadow-green-100/50',
+    purple: 'bg-gradient-to-br from-purple-50 to-white border-purple-100 shadow-purple-100/50',
+    indigo: 'bg-gradient-to-br from-indigo-50 to-white border-indigo-100 shadow-indigo-100/50',
   };
 
   return (
-    <div className={`border-2 rounded-lg p-6 ${colorClasses[color]}`}>
+    <div
+      data-reveal="pop"
+      className={`ac-card border rounded-2xl p-6 shadow-lg ${colorClasses[color]} ${delay ?? ''}`}
+    >
       <div className="flex items-center gap-3 mb-2">
-        <span className="text-3xl">{icon}</span>
+        <span className="ac-wiggle-hover inline-block text-3xl">{icon}</span>
         <div>
-          <div className="text-3xl font-bold text-gray-900">{value}</div>
-          <p className="text-sm text-gray-600">{title}</p>
+          <div className="text-3xl font-bold ac-gradient-text">{value}</div>
+          <p className="text-sm font-medium text-gray-700">{title}</p>
         </div>
       </div>
       {subtitle && (
@@ -407,9 +418,9 @@ function StatCard({ title, data, icon, emptyMessage }: StatCardProps) {
   const maxValue = entries.length > 0 ? entries[0][1] : 0;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div data-reveal className="ac-card bg-white border border-gray-100 rounded-2xl p-6 shadow-lg shadow-gray-100/60">
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">{icon}</span>
+        <span className="ac-wiggle-hover inline-block text-2xl">{icon}</span>
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
       </div>
       {entries.length === 0 ? (

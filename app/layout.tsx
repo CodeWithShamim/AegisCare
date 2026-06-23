@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
@@ -16,9 +16,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'AegisCare - Privacy-Preserving Clinical Trial Matching',
+  title: {
+    default: 'AegisCare — Privacy-Preserving Clinical Trial Matching',
+    template: '%s · AegisCare',
+  },
   description:
-    'Match patients with clinical trials using Fully Homomorphic Encryption (FHE) for complete privacy',
+    'Match patients with clinical trials using Fully Homomorphic Encryption (FHE) and a GenLayer AI advisor — complete privacy, zero plaintext leakage.',
+  applicationName: 'AegisCare',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' },
+    ],
+    apple: '/icon.svg',
+  },
+  openGraph: {
+    title: 'AegisCare — Privacy-Preserving Clinical Trial Matching',
+    description:
+      'FHE-encrypted eligibility matching with an on-chain GenLayer AI advisor. Your medical data never leaves your browser in plaintext.',
+    siteName: 'AegisCare',
+    type: 'website',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#6366F1',
 };
 
 export default function RootLayout({

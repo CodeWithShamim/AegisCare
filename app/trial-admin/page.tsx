@@ -5,6 +5,8 @@ import TrialRegistrationForm from '@/components/TrialRegistrationForm';
 import SponsorAnalytics from '@/components/SponsorAnalytics';
 import AIAdvisor from '@/components/AIAdvisor';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
 import {
   getTrialCount,
   getTrialPublicInfo,
@@ -73,13 +75,18 @@ export default function TrialAdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100">
+      {/* Scroll-reveal driver (mounted once) */}
+      <ScrollReveal />
+
       {/* Header */}
       <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Trial Sponsor Portal</h2>
+        <div className="mb-8" data-reveal>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            Trial <span className="ac-gradient-text">Sponsor Portal</span>
+          </h2>
           <p className="text-gray-600">
             Create clinical trials with encrypted eligibility criteria
           </p>
@@ -142,7 +149,7 @@ export default function TrialAdminDashboard() {
         <div className="space-y-8">
           {activeTab === 'create' && (
             <div>
-              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-indigo-900 mb-2">
                   🔐 Encrypted Eligibility Criteria
                 </h3>
@@ -158,7 +165,7 @@ export default function TrialAdminDashboard() {
 
           {activeTab === 'analytics' && (
             <div>
-              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-purple-900 mb-2">
                   📊 Performance Analytics
                 </h3>
@@ -172,7 +179,7 @@ export default function TrialAdminDashboard() {
 
           {activeTab === 'advisor' && (
             <div>
-              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-indigo-900 mb-2">
                   🧠 GenLayer AI Advisor
                 </h3>
@@ -188,7 +195,7 @@ export default function TrialAdminDashboard() {
 
           {activeTab === 'manage' && (
             <div>
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-green-900 mb-2">
                   ✓ Privacy-Preserving Trials
                 </h3>
@@ -305,7 +312,7 @@ export default function TrialAdminDashboard() {
         </div>
 
         {/* Security Notice */}
-        <div className="mt-12 bg-white rounded-lg shadow-md p-6">
+        <div className="mt-12 bg-white rounded-2xl shadow-sm shadow-indigo-500/5 p-6 ac-card border border-gray-100" data-reveal>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Why This Matters for Trial Sponsors
           </h3>
@@ -360,7 +367,7 @@ export default function TrialAdminDashboard() {
         </div>
 
         {/* Technical Info */}
-        <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-6 border border-indigo-200">
+        <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-200 ac-card" data-reveal>
           <h3 className="text-sm font-semibold text-indigo-900 mb-3">
             ⚡ How FHE Powers Privacy-Preserving Trials
           </h3>
@@ -376,11 +383,11 @@ export default function TrialAdminDashboard() {
             </p>
             <p>
               <strong>3. Private Results:</strong> The eligibility result is encrypted and only the
-              patient can decrypt it using their private key. You never see the patient's medical
+              patient can decrypt it using their private key. You never see the patient&apos;s medical
               data or the result.
             </p>
             <p>
-              <strong>4. Zero-Knowledge Proofs:</strong> Patients can prove they're eligible without
+              <strong>4. Zero-Knowledge Proofs:</strong> Patients can prove they&apos;re eligible without
               revealing why or how they match your criteria.
             </p>
           </div>
@@ -388,13 +395,7 @@ export default function TrialAdminDashboard() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500">
-            Powered by Zama FHEVM - Enabling privacy-preserving clinical research
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

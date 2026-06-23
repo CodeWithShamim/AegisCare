@@ -8,6 +8,8 @@ import TrialDiscovery from '@/components/TrialDiscovery';
 import EligibilityHistory from '@/components/EligibilityHistory';
 import AIAdvisor from '@/components/AIAdvisor';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
 import { patientExists, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
@@ -56,14 +58,19 @@ export default function PatientDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Scroll-reveal animations */}
+      <ScrollReveal />
+
       {/* Header */}
       <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Patient Portal</h2>
-          <p className="text-gray-600">
+        <div className="mb-10" data-reveal>
+          <h2 className="text-4xl font-bold tracking-tight mb-3">
+            <span className="ac-gradient-text">Patient Portal</span>
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl">
             Register with encrypted medical data and find matching clinical trials
           </p>
         </div>
@@ -140,7 +147,7 @@ export default function PatientDashboard() {
         <div className="space-y-8">
           {activeTab === 'register' && (
             <div>
-              <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="mb-6 p-5 bg-blue-50 border border-blue-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-blue-900 mb-2">
                   🔒 Privacy First Registration
                 </h3>
@@ -170,7 +177,7 @@ export default function PatientDashboard() {
                 </div>
               )}
 
-              <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <div className="mb-6 p-5 bg-purple-50 border border-purple-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-purple-900 mb-2">
                   🔍 Advanced Trial Discovery
                 </h3>
@@ -201,13 +208,13 @@ export default function PatientDashboard() {
                 </div>
               )}
 
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mb-6 p-5 bg-green-50 border border-green-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-green-900 mb-2">
                   🔐 Private Eligibility Check
                 </h3>
                 <p className="text-xs text-green-800">
                   Your eligibility is computed on encrypted data. The result is encrypted and only
-                  you can decrypt it using your private key. No one else knows if you're eligible.
+                  you can decrypt it using your private key. No one else knows if you&apos;re eligible.
                 </p>
               </div>
 
@@ -232,7 +239,7 @@ export default function PatientDashboard() {
                 </div>
               )}
 
-              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+              <div className="mb-6 p-5 bg-indigo-50 border border-indigo-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-indigo-900 mb-2">
                   ⚡ Batch Eligibility Checker
                 </h3>
@@ -263,7 +270,7 @@ export default function PatientDashboard() {
 
           {activeTab === 'advisor' && (
             <div>
-              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+              <div className="mb-6 p-5 bg-indigo-50 border border-indigo-200 rounded-xl ac-card" data-reveal>
                 <h3 className="text-sm font-semibold text-indigo-900 mb-2">
                   🧠 GenLayer AI Advisor
                 </h3>
@@ -287,8 +294,8 @@ export default function PatientDashboard() {
         </div>
 
         {/* Security Notice */}
-        <div className="mt-12 bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="mt-12 bg-white rounded-2xl shadow-lg shadow-indigo-500/5 p-8 ac-card" data-reveal>
+          <h3 className="text-xl font-bold text-gray-900 mb-6">
             How Your Privacy is Protected
           </h3>
           <div className="space-y-4">
@@ -341,13 +348,7 @@ export default function PatientDashboard() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500">
-            Powered by Zama FHEVM - Fully Homomorphic Encryption for privacy-preserving computation
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

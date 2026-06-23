@@ -14,6 +14,7 @@ import { useFHE } from '@/components/providers/FHEProvider';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 import LoadingAnimation from '@/components/LoadingAnimation';
 import ErrorDisplay from '@/components/ErrorDisplay';
+import { FillExampleButton } from '@/components/Button';
 import type { Signer } from 'ethers';
 
 interface PatientRegistrationFormProps {
@@ -58,6 +59,21 @@ export default function PatientRegistrationForm({
       ...prev,
       [field]: value,
     }));
+    setValidationErrors([]);
+    setError(null);
+  };
+
+  /**
+   * Populate the form with a realistic sample patient for quick demos.
+   */
+  const handleFillExample = () => {
+    setFormData({
+      age: 45,
+      gender: 1,
+      bmiScore: 28.5,
+      hasMedicalCondition: true,
+      conditionCode: 'E11',
+    });
     setValidationErrors([]);
     setError(null);
   };
@@ -158,18 +174,27 @@ export default function PatientRegistrationForm({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md text-gray-900">
+    <div className="w-full max-w-2xl mx-auto p-8 bg-white rounded-2xl shadow-lg shadow-indigo-500/5 text-gray-900 ac-card">
       {!isLoading ? (
         <>
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Registration</h2>
-            <p className="text-sm text-gray-600">
-              Register with your medical data to find matching clinical trials.
-              <br />
-              <span className="text-xs text-gray-500">
-                🔒 All medical data is encrypted before submission. Your privacy is protected.
-              </span>
-            </p>
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">
+                <span className="ac-gradient-text">Patient Registration</span>
+              </h2>
+              <p className="text-sm text-gray-600">
+                Register with your medical data to find matching clinical trials.
+                <br />
+                <span className="text-xs text-gray-500">
+                  🔒 All medical data is encrypted before submission. Your privacy is protected.
+                </span>
+              </p>
+            </div>
+            <FillExampleButton
+              type="button"
+              onClick={handleFillExample}
+              className="shrink-0 self-start"
+            />
           </div>
 
           {/* Wallet Connection */}
@@ -239,7 +264,7 @@ export default function PatientRegistrationForm({
                 max="150"
                 value={formData.age || ''}
                 onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-shadow disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="Enter your age"
                 required
                 disabled={!isConnected || isLoading}
@@ -255,7 +280,7 @@ export default function PatientRegistrationForm({
                 id="gender"
                 value={formData.gender}
                 onChange={(e) => handleInputChange('gender', parseInt(e.target.value))}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-shadow disabled:bg-gray-100 disabled:text-gray-500"
                 required
                 disabled={!isConnected || isLoading}
               >
@@ -282,7 +307,7 @@ export default function PatientRegistrationForm({
                   const bmi = parseFloat(e.target.value);
                   handleInputChange('bmiScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                 }}
-                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-shadow disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="e.g., 24.5"
                 required
                 disabled={!isConnected || isLoading}
@@ -337,7 +362,7 @@ export default function PatientRegistrationForm({
                   id="conditionCode"
                   value={formData.conditionCode || ''}
                   onChange={(e) => handleInputChange('conditionCode', e.target.value)}
-                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                  className="w-full px-4 py-2.5 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-shadow disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., E11 (Type 2 diabetes)"
                   disabled={!isConnected || isLoading}
                 />
@@ -351,13 +376,13 @@ export default function PatientRegistrationForm({
             <button
               type="submit"
               disabled={!isConnected || isLoading}
-              className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="ac-shine w-full px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:from-indigo-700 hover:to-purple-700 hover:shadow-xl hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             >
               {isLoading ? 'Processing...' : 'Register with Encrypted Data'}
             </button>
 
             {/* Security Notice */}
-            <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-xl">
               <p className="text-xs text-gray-600 font-medium mb-2">🔒 Privacy Protection:</p>
               <ul className="text-xs text-gray-500 space-y-1">
                 <li>• All medical data is encrypted in your browser before submission</li>

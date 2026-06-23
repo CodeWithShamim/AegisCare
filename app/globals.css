@@ -48,3 +48,210 @@ body {
     background-color: #ffffff;
   }
 }
+
+/* ============================================================
+ * ✨ AegisCare motion toolkit
+ * Reusable, dependency-free animations for a delightful,
+ * "dopamine-friendly" UI. Everything degrades gracefully and
+ * fully respects prefers-reduced-motion.
+ * ============================================================ */
+
+@keyframes ac-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-22px) translateX(10px); }
+}
+
+@keyframes ac-float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(26px) scale(1.06); }
+}
+
+@keyframes ac-aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes ac-gradient-text {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes ac-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ac-pop-in {
+  0% { opacity: 0; transform: scale(0.85); }
+  60% { opacity: 1; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ac-shimmer {
+  0% { background-position: -160% 0; }
+  100% { background-position: 260% 0; }
+}
+
+@keyframes ac-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.35); }
+  50% { box-shadow: 0 0 36px 6px rgba(99, 102, 241, 0.45); }
+}
+
+@keyframes ac-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-9deg); }
+  75% { transform: rotate(9deg); }
+}
+
+@keyframes ac-sparkle-fall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+}
+
+/* ---- Animated aurora background layer ---- */
+.ac-aurora-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ac-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.ac-blob-indigo {
+  width: 26rem; height: 26rem;
+  background: radial-gradient(circle at 30% 30%, #818cf8, #6366f1 60%, transparent 70%);
+  top: -6rem; left: -4rem;
+  animation: ac-float 13s ease-in-out infinite;
+}
+
+.ac-blob-purple {
+  width: 22rem; height: 22rem;
+  background: radial-gradient(circle at 30% 30%, #c084fc, #a855f7 60%, transparent 70%);
+  top: 4rem; right: -5rem;
+  animation: ac-float-slow 16s ease-in-out infinite;
+}
+
+.ac-blob-pink {
+  width: 20rem; height: 20rem;
+  background: radial-gradient(circle at 30% 30%, #f9a8d4, #ec4899 60%, transparent 70%);
+  bottom: -6rem; left: 30%;
+  animation: ac-float 18s ease-in-out infinite;
+}
+
+/* ---- Gradient animated text ---- */
+.ac-gradient-text {
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #6366f1);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ac-gradient-text 6s ease infinite;
+}
+
+/* ---- Continuous motion utilities ---- */
+.ac-float { animation: ac-float 7s ease-in-out infinite; }
+.ac-wiggle-hover:hover { animation: ac-wiggle 0.5s ease-in-out; }
+.ac-pulse-glow { animation: ac-pulse-glow 2.6s ease-in-out infinite; }
+
+/* ---- Card hover lift + sheen ---- */
+.ac-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease;
+  will-change: transform;
+}
+.ac-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 24px 50px -12px rgba(79, 70, 229, 0.35);
+}
+
+/* Shiny sweep on hover for buttons/cards */
+.ac-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ac-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 75%
+  );
+  background-size: 220% 100%;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.ac-shine:hover::after {
+  opacity: 1;
+  animation: ac-shimmer 0.9s ease forwards;
+}
+
+/* ---- Scroll-reveal system (toggled by ScrollReveal.tsx) ---- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+[data-reveal].ac-visible {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal="pop"] {
+  transform: scale(0.9);
+}
+[data-reveal="pop"].ac-visible {
+  animation: ac-pop-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Stagger helpers (apply alongside data-reveal) */
+.ac-delay-1 { transition-delay: 0.08s; }
+.ac-delay-2 { transition-delay: 0.16s; }
+.ac-delay-3 { transition-delay: 0.24s; }
+.ac-delay-4 { transition-delay: 0.32s; }
+.ac-delay-5 { transition-delay: 0.40s; }
+.ac-delay-6 { transition-delay: 0.48s; }
+
+/* ---- Celebration sparkles ---- */
+.ac-sparkle {
+  position: fixed;
+  top: 0;
+  font-size: 1.25rem;
+  pointer-events: none;
+  z-index: 60;
+  animation: ac-sparkle-fall linear forwards;
+}
+
+/* ---- Respect user motion preferences ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ac-blob,
+  .ac-gradient-text,
+  .ac-float,
+  .ac-pulse-glow {
+    animation: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .ac-card:hover { transform: none; }
+  .ac-sparkle { display: none !important; }
+}

@@ -16,6 +16,23 @@
 export const GENLAYER_CHAIN_ID =
   process.env.NEXT_PUBLIC_GENLAYER_CHAIN_ID || "studionet";
 
+/** GenLayer Studio block explorer base — where deployed contracts are inspected. */
+export const GENLAYER_EXPLORER_URL =
+  process.env.NEXT_PUBLIC_GENLAYER_EXPLORER_URL ||
+  "https://explorer-studio.genlayer.com";
+
+/** Deep link to an address on the GenLayer Studio explorer. */
+export function genlayerExplorerAddressUrl(address: string): string {
+  return `${GENLAYER_EXPLORER_URL}/address/${address}`;
+}
+
+/** @deprecated use GENLAYER_EXPLORER_URL */
+export const GENLAYER_STUDIO_URL = GENLAYER_EXPLORER_URL;
+/** @deprecated use genlayerExplorerAddressUrl */
+export function genlayerStudioContractUrl(address: string): string {
+  return genlayerExplorerAddressUrl(address);
+}
+
 /** Deployed AegisCareAdvisor Intelligent Contract address. */
 export const ADVISOR_ADDRESS =
   process.env.NEXT_PUBLIC_ADVISOR_ADDRESS || "";

@@ -4,6 +4,12 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
+import ScrollReveal from '@/components/ScrollReveal';
+import {
+  ADVISOR_ADDRESS,
+  genlayerExplorerAddressUrl,
+  GENLAYER_EXPLORER_URL,
+} from '@/config/genLayerContracts';
 
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState('');
@@ -20,6 +26,12 @@ export default function DocsPage() {
     { id: 'trial-workflow', title: 'Trial Sponsor Workflow', level: 3 },
     { id: 'eligibility-workflow', title: 'Eligibility Workflow', level: 3 },
     { id: 'architecture', title: 'Architecture', level: 2 },
+    { id: 'genlayer-advisor', title: 'GenLayer AI Advisor', level: 2 },
+    { id: 'advisor-features', title: 'Advisor Capabilities', level: 3 },
+    { id: 'advisor-consensus', title: 'Consensus & Equivalence', level: 3 },
+    { id: 'advisor-privacy', title: 'Privacy Boundary', level: 3 },
+    { id: 'advisor-api', title: 'Advisor Contract API', level: 3 },
+    { id: 'advisor-deploy', title: 'Deploying the Advisor', level: 3 },
     { id: 'tech-stack', title: 'Technology Stack', level: 2 },
     { id: 'api-reference', title: 'API Reference', level: 2 },
     { id: 'fhe-api', title: 'FHE Client API', level: 3 },
@@ -53,6 +65,7 @@ export default function DocsPage() {
   return (
     <div className="docs-container">
       <Header />
+      <ScrollReveal />
 
       <aside className="docs-sidebar mt-[-3%]">
         <div className="docs-sidebar-section">
@@ -77,8 +90,11 @@ export default function DocsPage() {
 
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Core Concepts</h3>
-          <Link href="/docs#architecture" className="docs-sidebar-link">
+          <Link href="/docs#architecture" className={`docs-sidebar-link${activeSection === 'architecture' ? ' active' : ''}`}>
             Architecture
+          </Link>
+          <Link href="/docs#genlayer-advisor" className={`docs-sidebar-link${activeSection === 'genlayer-advisor' ? ' active' : ''}`}>
+            🧠 GenLayer AI Advisor
           </Link>
           <Link href="/docs#tech-stack" className="docs-sidebar-link">
             Technology Stack
@@ -124,6 +140,14 @@ export default function DocsPage() {
             Zama FHEVM Docs
           </a>
           <a
+            href="https://docs.genlayer.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
+            GenLayer Docs
+          </a>
+          <a
             href="https://sepolia.etherscan.io/address/0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7"
             target="_blank"
             rel="noopener noreferrer"
@@ -131,13 +155,21 @@ export default function DocsPage() {
           >
             Contract on Etherscan
           </a>
+          <a
+            href={ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
+            🧠 Advisor on GenLayer Explorer
+          </a>
         </div>
       </aside>
 
       <main className="docs-content">
         <div className="prose prose-lg max-w-none">
           {/* Introduction */}
-          <section id="introduction" className="docs-section mb-16">
+          <section id="introduction" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">Introduction to AegisCare</h2>
 
             <div className="docs-card">
@@ -192,10 +224,56 @@ export default function DocsPage() {
                 </li>
               </ul>
             </div>
+
+            {/* Live deployments — open in explorers (front and center) */}
+            <div className="docs-card mt-6">
+              <h3 className="text-xl font-bold mb-4">🔎 Live Deployments — Open in Explorer</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                AegisCare is already deployed. Inspect both contracts directly in their block
+                explorers before you start.
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <a
+                  href="https://sepolia.etherscan.io/address/0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ac-card group block rounded-xl border border-indigo-100 bg-indigo-50 p-4 no-underline"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-indigo-800">🔐 FHE Matching Contract</span>
+                    <span className="text-indigo-500 transition-transform group-hover:translate-x-0.5">↗</span>
+                  </div>
+                  <p className="mt-1 text-xs text-indigo-600">Zama fhEVM · Sepolia · Etherscan</p>
+                  <code className="mt-2 block text-xs text-gray-500">0x3DB49…4192F7</code>
+                </a>
+
+                <a
+                  href={
+                    ADVISOR_ADDRESS
+                      ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS)
+                      : GENLAYER_EXPLORER_URL
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ac-card group block rounded-xl border border-purple-100 bg-purple-50 p-4 no-underline"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-purple-800">🧠 AI Advisor Contract</span>
+                    <span className="text-purple-500 transition-transform group-hover:translate-x-0.5">↗</span>
+                  </div>
+                  <p className="mt-1 text-xs text-purple-600">
+                    GenLayer StudioNet · Studio Explorer
+                  </p>
+                  <code className="mt-2 block text-xs text-gray-500">
+                    {ADVISOR_ADDRESS ? `${ADVISOR_ADDRESS.slice(0, 6)}…${ADVISOR_ADDRESS.slice(-4)}` : 'not configured'}
+                  </code>
+                </a>
+              </div>
+            </div>
           </section>
 
           {/* User Guide */}
-          <section id="user-guide" className="docs-section mb-16 text-gray-900">
+          <section id="user-guide" data-reveal className="docs-section mb-16 text-gray-900">
             <h2 className="docs-section-title">📘 Complete User Guide</h2>
 
             <div className="docs-card bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200">
@@ -216,8 +294,8 @@ export default function DocsPage() {
                   Comprehensive User Guide Available
                 </h4>
                 <p className="mb-4">
-                  We've created a complete, in-depth user guide to help you understand and use
-                  AegisCare. Whether you're a patient, trial sponsor, developer, or just curious
+                  We&apos;ve created a complete, in-depth user guide to help you understand and use
+                  AegisCare. Whether you&apos;re a patient, trial sponsor, developer, or just curious
                   about FHE technology, this guide has everything you need.
                 </p>
                 <Link
@@ -228,7 +306,7 @@ export default function DocsPage() {
                 </Link>
               </div>
 
-              <h4 className="font-bold text-xl mb-4">What's Inside the User Guide</h4>
+              <h4 className="font-bold text-xl mb-4">What&apos;s Inside the User Guide</h4>
 
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-white p-4 rounded-lg border border-gray-200">
@@ -442,8 +520,8 @@ export default function DocsPage() {
                 <div>
                   <h5 className="font-semibold text-red-800 mb-2">📊 Comprehensive FAQ</h5>
                   <p className="text-sm text-gray-700">
-                    Over 50 frequently asked questions answered. From "Can trial sponsors see my
-                    data?" to "How does FHE work?" - find answers to all your questions.
+                    Over 50 frequently asked questions answered. From &quot;Can trial sponsors see my
+                    data?&quot; to &quot;How does FHE work?&quot; - find answers to all your questions.
                   </p>
                 </div>
               </div>
@@ -467,7 +545,7 @@ export default function DocsPage() {
           </section>
 
           {/* Test Data Guide */}
-          <section id="test-data" className="docs-section mb-16">
+          <section id="test-data" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">📊 Test Data Guide</h2>
             <p className="mb-6 text-lg">
               Use these pre-configured test patients and trials to explore the platform without
@@ -530,7 +608,7 @@ export default function DocsPage() {
           </section>
 
           {/* Sample Patients */}
-          <section id="patient-data" className="docs-section mb-16">
+          <section id="patient-data" data-reveal className="docs-section mb-16">
             <h3 className="text-2xl font-bold mb-6">Sample Patient Data</h3>
 
             <div className="space-y-6">
@@ -624,7 +702,7 @@ export default function DocsPage() {
           </section>
 
           {/* Sample Trials */}
-          <section id="trial-data" className="docs-section mb-16">
+          <section id="trial-data" data-reveal className="docs-section mb-16">
             <h3 className="text-2xl font-bold mb-6">Sample Trial Data</h3>
 
             <div className="space-y-6">
@@ -716,7 +794,7 @@ export default function DocsPage() {
           </section>
 
           {/* Medical Codes Reference */}
-          <section id="medical-codes" className="docs-section mb-16">
+          <section id="medical-codes" data-reveal className="docs-section mb-16">
             <h3 className="text-2xl font-bold mb-6">Medical Codes Reference</h3>
 
             <div className="docs-card overflow-x-auto">
@@ -839,7 +917,7 @@ export default function DocsPage() {
           </section>
 
           {/* How It Works */}
-          <section id="how-it-works" className="docs-section mb-16">
+          <section id="how-it-works" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">🚀 How It Works</h2>
 
             <div className="space-y-6">
@@ -957,7 +1035,7 @@ export default function DocsPage() {
           </section>
 
           {/* Architecture */}
-          <section id="architecture" className="docs-section mb-16">
+          <section id="architecture" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">🏗️ Architecture Overview</h2>
 
             <div className="docs-card">
@@ -1005,7 +1083,19 @@ export default function DocsPage() {
          ┌──────────┐
          │ ELIGIBLE │
          │ YES / NO │
-         └─────────┘`}</code>
+         └─────────┘
+
+── Parallel, anonymized AI advisor path ──
+
+┌──────────────┐  anonymized   ┌─────────────────────────────┐
+│   Browser    │ ────────────► │  GenLayer StudioNet          │
+│ (no PHI sent)│   buckets /   │  AegisCareAdvisor (Python)   │
+│              │   summary     │  • generate_explanation      │
+└──────────────┘               │  • recommend_trials          │
+                               │  • validate_trial (ICD-10)   │
+                               │  • check_eligibility         │
+                               │  leader → validators → store │
+                               └─────────────────────────────┘`}</code>
                 </pre>
               </div>
 
@@ -1025,6 +1115,10 @@ export default function DocsPage() {
                     <strong>Blockchain:</strong> Solidity 0.8.27, fhEVM, Sepolia testnet
                   </li>
                   <li>
+                    <strong>AI Advisor:</strong> GenLayer AegisCareAdvisor (Python) on StudioNet —
+                    LLM consensus, ICD-10 web validation, PII screening
+                  </li>
+                  <li>
                     <strong>Smart Contract:</strong> AegisCare.sol with FHE operations
                   </li>
                 </ul>
@@ -1032,8 +1126,322 @@ export default function DocsPage() {
             </div>
           </section>
 
+          {/* GenLayer AI Advisor */}
+          <section id="genlayer-advisor" data-reveal className="docs-section mb-16">
+            <h2 className="docs-section-title">🧠 GenLayer AI Advisor</h2>
+
+            <p className="mb-6 text-lg">
+              <code className="bg-gray-100 px-2 py-1 rounded">AegisCareAdvisor</code> is a Python
+              Intelligent Contract on <strong>GenLayer</strong> that adds an AI reasoning layer on
+              top of the FHE matching engine. It explains results, recommends trials, validates
+              registrations, and checks external-registry eligibility — all settled on-chain through
+              <strong> Optimistic Democracy</strong> consensus.
+            </p>
+
+            <div className="docs-card mb-6">
+              <div className="bg-purple-50 border-l-4 border-purple-500 p-4">
+                <p className="font-semibold text-purple-800">🎯 The core idea</p>
+                <p className="text-sm text-purple-700 mt-2">
+                  FHE is great at deterministic, confidential math, but it cannot{' '}
+                  <em>explain</em> a result, <em>recommend</em> a trial from free text, or{' '}
+                  <em>validate</em> a registration against a live medical reference. Those need
+                  judgment — so they run on GenLayer, on anonymized inputs only, with leader/validator
+                  consensus so the result is trustless.
+                </p>
+              </div>
+            </div>
+
+            {/* Advisor capabilities */}
+            <div id="advisor-features" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">Advisor Capabilities</h3>
+              <div className="space-y-4">
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-purple-800 mb-1">
+                    1. Eligibility explainer · generate_explanation
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    Turns the binary FHE eligibility result into a plain-language explanation for the
+                    patient. The validator enforces the explanation names the correct status, references a
+                    criterion boundary, stays within 50–400 characters, and never echoes specific patient
+                    values.
+                  </p>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-purple-800 mb-1">
+                    2. Trial recommender · recommend_trials
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    Suggests the best 1–3 trials from a candidate list using an anonymized profile (age
+                    bucket + condition category + profile hash). The validator confirms the picked IDs are
+                    within the candidate set and the count is valid.
+                  </p>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-purple-800 mb-1">
+                    3. Trial validator · validate_trial
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    Fetches the live WHO <strong>ICD-10</strong> reference on-chain via GenLayer&apos;s web
+                    access and checks that a trial registration is coherent and its condition code is real.
+                    The validator re-runs the leader and agrees only on the boolean outcome.
+                  </p>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-purple-800 mb-1">
+                    4. Registry eligibility checker · check_eligibility
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    Assesses eligibility against an external trial-registry URL from a PII-screened
+                    anonymized summary. Returns ELIGIBLE / NOT_ELIGIBLE / UNCLEAR with matched and failed
+                    criteria. The validator agrees on the verdict class.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Consensus & equivalence */}
+            <div id="advisor-consensus" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">Consensus &amp; Equivalence</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Every write method follows the same pattern — a leader proposes, validators independently
+                evaluate, and only equivalent results settle. Because LLM and web output are
+                non-deterministic, validators agree on <strong>meaning</strong>, not exact bytes.
+              </p>
+              <div className="bg-gray-50 p-6 rounded-lg font-mono text-sm overflow-x-auto">
+                <pre>
+                  <code>{`leader_fn()
+  → calls gl.nondet.exec_prompt() / gl.nondet.web.render()
+  → parses + validates JSON defensively (prefix: LLM_ERROR / EXPECTED)
+  → returns structured calldata
+
+validator_fn(leaders_res)
+  → re-runs leader_fn() independently
+  → checks leaders_res is gl.vm.Return
+  → compares on the DECIDED field (status / verdict / boolean)
+  → True  ⇒ accept
+  → False ⇒ reject
+
+gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+  → only an accepted result is written to contract storage`}</code>
+                </pre>
+              </div>
+              <div className="mt-4 grid md:grid-cols-2 gap-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="font-semibold text-green-800 text-sm">✅ Equivalence on meaning</p>
+                  <p className="text-xs text-green-700 mt-1">
+                    Two validators may phrase an explanation differently, but they agree it conveys the
+                    right status — so the result is trustworthy.
+                  </p>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="font-semibold text-blue-800 text-sm">🛡️ Defensive LLM handling</p>
+                  <p className="text-xs text-blue-700 mt-1">
+                    JSON is parsed defensively; malformed output, wrong types, and missing fields are
+                    classified with deterministic prefixes so failures are reproducible, not silent.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Privacy boundary */}
+            <div id="advisor-privacy" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">Privacy Boundary</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                The advisor is <strong>strictly additive and isolated</strong>. It never receives raw or
+                encrypted patient medical data — only anonymized, de-identified inputs.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Input
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Form
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-2">Patient age</td>
+                      <td className="px-4 py-2">Coarse bucket (e.g. <code>&quot;30-40&quot;</code>)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2">Condition</td>
+                      <td className="px-4 py-2">Category code, not free-text history</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2">Patient summary</td>
+                      <td className="px-4 py-2">
+                        Pre-screened, length-bounded (20–2000 chars), regex-checked for email / phone /
+                        ID runs
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2">Eligibility</td>
+                      <td className="px-4 py-2">A boolean computed under FHE, not the raw values</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>Enforced twice.</strong> The same PII/length rules run client-side in{' '}
+                  <code className="bg-yellow-100 px-1 rounded">lib/genLayerClient.ts</code> (fast failure)
+                  and again in the contract (authoritative). Unsafe input never reaches consensus.
+                </p>
+              </div>
+            </div>
+
+            {/* Advisor contract API */}
+            <div id="advisor-api" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">Advisor Contract API</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                GenVM dispatch uses snake_case methods with kwargs. Names mirror the deployed schema in{' '}
+                <code className="bg-gray-100 px-2 py-1 rounded">config/genLayerContracts.ts</code>.
+              </p>
+
+              <div className="overflow-x-auto mb-4">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Method
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Type
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Returns
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">generate_explanation</td>
+                      <td className="px-4 py-2">write</td>
+                      <td className="px-4 py-2">stores explanation keyed by trial + patient</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">get_explanation</td>
+                      <td className="px-4 py-2">view</td>
+                      <td className="px-4 py-2">str</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">recommend_trials</td>
+                      <td className="px-4 py-2">write</td>
+                      <td className="px-4 py-2">stores trial_ids + reasoning keyed by profile hash</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">get_recommendations</td>
+                      <td className="px-4 py-2">view</td>
+                      <td className="px-4 py-2">Recommendation</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">validate_trial</td>
+                      <td className="px-4 py-2">write</td>
+                      <td className="px-4 py-2">stores ValidationResult keyed by trial</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">get_validation</td>
+                      <td className="px-4 py-2">view</td>
+                      <td className="px-4 py-2">ValidationResult</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">check_eligibility</td>
+                      <td className="px-4 py-2">write</td>
+                      <td className="px-4 py-2">stores EligibilityCheck keyed by check_id</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">get_eligibility_check</td>
+                      <td className="px-4 py-2">view</td>
+                      <td className="px-4 py-2">EligibilityCheck</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold mb-2">Write: generate an explanation</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs">
+                    <code>{`import { generateExplanation } from '@/lib/genLayerClient';
+
+await generateExplanation({
+  trialId: 1,
+  patientAddress: '0x...',
+  isEligible: true,           // computed under FHE by AegisCare.sol
+  trialName: 'Diabetes Treatment Study 2025',
+  minAge: 18, maxAge: 65,
+  conditionCode: 'E11',
+  minBmi: '18.5', maxBmi: '35',
+});`}</code>
+                  </pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2">Read: fetch the stored eligibility check</h4>
+                  <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs">
+                    <code>{`import { getEligibilityCheck, parseCriteria } from '@/lib/genLayerClient';
+
+const check = await getEligibilityCheck('check-001');
+// check.result  -> 'ELIGIBLE' | 'NOT_ELIGIBLE' | 'UNCLEAR'
+// parseCriteria(check.matched_criteria) -> string[]
+// parseCriteria(check.failed_criteria)  -> string[]`}</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Deploying the advisor */}
+            <div id="advisor-deploy" className="docs-card">
+              <h3 className="text-xl font-bold mb-4">Deploying the Advisor</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                The advisor is deployed independently on GenLayer StudioNet (gasless). Lint before deploy,
+                then wire the returned address into the frontend.
+              </p>
+              <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs">
+                <code>{`# 1. Lint the Intelligent Contract (fix errors first)
+genvm-lint check contracts/aegiscare_advisor.py --json
+
+# 2. Deploy on GenLayer StudioNet
+genlayer deploy --contract contracts/aegiscare_advisor.py
+
+# 3. Inspect the deployed schema
+genlayer schema <advisor-address>
+
+# 4. Put the address into .env
+NEXT_PUBLIC_ADVISOR_ADDRESS=0x...
+NEXT_PUBLIC_GENLAYER_CHAIN_ID=studionet`}</code>
+              </pre>
+              <div className="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Current deployment:</strong>{' '}
+                  <code className="bg-blue-100 px-1 rounded">0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19</code>{' '}
+                  on GenLayer StudioNet. The frontend guards against a missing address (
+                  <code>assertAdvisorConfigured</code>), so a misconfigured deploy fails loudly instead of
+                  sending transactions to address(0).
+                </p>
+                <p className="mt-3">
+                  <a
+                    href={ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-purple-700 underline font-semibold"
+                  >
+                    🧠 Open the deployed Advisor on GenLayer Explorer →
+                  </a>
+                </p>
+              </div>
+            </div>
+          </section>
+
           {/* API Reference */}
-          <section id="api-reference" className="docs-section mb-16">
+          <section id="api-reference" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">📚 API Reference</h2>
 
             <div id="fhe-api" className="docs-card mb-6">
@@ -1223,7 +1631,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
           </section>
 
           {/* Troubleshooting */}
-          <section id="troubleshooting" className="docs-section mb-16">
+          <section id="troubleshooting" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">🐛 Troubleshooting</h2>
 
             <div className="space-y-6">
@@ -1232,9 +1640,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-red-700">"Cannot connect to wallet"</h4>
+                    <h4 className="font-semibold text-red-700">&quot;Cannot connect to wallet&quot;</h4>
                     <p className="text-sm mb-2">
-                      Ensure MetaMask is installed and you're on Sepolia testnet
+                      Ensure MetaMask is installed and you&apos;re on Sepolia testnet
                     </p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Refresh page, check MetaMask, verify network
@@ -1242,7 +1650,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">"Transaction failed"</h4>
+                    <h4 className="font-semibold text-red-700">&quot;Transaction failed&quot;</h4>
                     <p className="text-sm mb-2">Not enough ETH for gas fees</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Get free Sepolia ETH from{' '}
@@ -1257,7 +1665,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">"FHE initialization failed"</h4>
+                    <h4 className="font-semibold text-red-700">&quot;FHE initialization failed&quot;</h4>
                     <p className="text-sm mb-2">Zama FHE SDK still loading</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Wait 5-10 seconds, check internet connection,
@@ -1266,15 +1674,15 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">"Eligibility computation failed"</h4>
+                    <h4 className="font-semibold text-red-700">&quot;Eligibility computation failed&quot;</h4>
                     <p className="text-sm mb-2">Patient or trial not registered</p>
                     <p className="text-sm">
-                      <strong>Solution:</strong> Ensure you're registered and the trial exists
+                      <strong>Solution:</strong> Ensure you&apos;re registered and the trial exists
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">"Cannot decrypt result"</h4>
+                    <h4 className="font-semibold text-red-700">&quot;Cannot decrypt result&quot;</h4>
                     <p className="text-sm mb-2">Only patients can decrypt their own results</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Use the correct wallet address, sign EIP-712
@@ -1287,7 +1695,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
           </section>
 
           {/* Security */}
-          <section id="security" className="docs-section mb-16">
+          <section id="security" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">🔒 Security & Privacy</h2>
 
             <div className="docs-card">
@@ -1329,7 +1737,7 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
           </section>
 
           {/* Deployment */}
-          <section id="deployment" className="docs-section mb-16">
+          <section id="deployment" data-reveal className="docs-section mb-16">
             <h2 className="docs-section-title">🚢 Deployment</h2>
 
             <div className="docs-card">
