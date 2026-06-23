@@ -55,8 +55,7 @@ class AegisCareAdvisor(gl.Contract):
         self.validations = gl.storage.inmem_allocate(TreeMap[u32, ValidationResult])
         self.eligibility_checks = gl.storage.inmem_allocate(TreeMap[str, EligibilityCheck])
 
-    @staticmethod
-    def _parse_json(raw) -> dict:
+    def _parse_json(self, raw) -> dict:
         if isinstance(raw, dict):
             return raw
         if isinstance(raw, str):
@@ -72,8 +71,7 @@ class AegisCareAdvisor(gl.Contract):
                     pass
         raise gl.vm.UserError("LLM_ERROR: could not parse JSON from LLM output")
 
-    @staticmethod
-    def _check_pii(text: str) -> None:
+    def _check_pii(self, text: str) -> None:
         for pattern in _PII_PATTERNS:
             if re.search(pattern, text):
                 raise gl.vm.UserError(
@@ -113,7 +111,7 @@ Rules:
 - Length: 50 to 400 characters.
 Respond ONLY as JSON: {{"explanation": "your text here"}}"""
             result = gl.nondet.exec_prompt(prompt)
-            data = AegisCareAdvisor._parse_json(result)
+            data = self._parse_json(result)
             explanation = data.get("explanation", "")
             if not isinstance(explanation, str) or not (50 <= len(explanation) <= 400):
                 raise gl.vm.UserError("LLM_ERROR: explanation invalid or wrong length")
@@ -181,7 +179,7 @@ Candidates:
 Respond ONLY as JSON: {{"trial_ids": [1, 2], "reasoning": "explanation"}}
 Only use IDs from the candidates list. Pick 1 to 3."""
             result = gl.nondet.exec_prompt(prompt)
-            data = AegisCareAdvisor._parse_json(result)
+            data = self._parse_json(result)
             raw_ids = data.get("trial_ids", [])
             reasoning = data.get("reasoning", "")
             if not isinstance(raw_ids, list):
@@ -251,7 +249,7 @@ ICD-10 reference: {web_context}
 valid=true ONLY if description is coherent AND code is a real ICD-10 code.
 Respond ONLY as JSON: {{"valid": true, "reason": "", "suggestions": []}}"""
             result = gl.nondet.exec_prompt(prompt)
-            data = AegisCareAdvisor._parse_json(result)
+            data = self._parse_json(result)
             valid = data.get("valid")
             reason = data.get("reason", "")
             suggestions = data.get("suggestions", [])
@@ -321,7 +319,7 @@ Result must be exactly one of: ELIGIBLE, NOT_ELIGIBLE, UNCLEAR
 Respond ONLY as JSON:
 {{"result": "ELIGIBLE", "matched_criteria": ["criterion: PASS"], "failed_criteria": [], "reasoning": "explanation"}}"""
             raw = gl.nondet.exec_prompt(prompt)
-            data = AegisCareAdvisor._parse_json(raw)
+            data = self._parse_json(raw)
             result = data.get("result", "")
             if result not in ("ELIGIBLE", "NOT_ELIGIBLE", "UNCLEAR"):
                 raise gl.vm.UserError("LLM_ERROR: result must be ELIGIBLE, NOT_ELIGIBLE, or UNCLEAR")
