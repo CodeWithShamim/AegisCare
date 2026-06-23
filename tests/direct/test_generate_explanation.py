@@ -70,7 +70,7 @@ class TestGenerateExplanation:
         )
 
         explanation = contract.get_explanation(
-            u32(1), "0x1234567890abcdef1234567890abcdef12345678"
+            1, "0x1234567890abcdef1234567890abcdef12345678"
         )
         assert "ELIGIBLE" in explanation.upper()
         assert len(explanation) >= 50
@@ -94,14 +94,14 @@ class TestGenerateExplanation:
         )
 
         explanation = contract.get_explanation(
-            u32(2), "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+            2, "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
         )
         assert "NOT ELIGIBLE" in explanation.upper()
 
     def test_retrieve_missing_explanation(self, direct_vm, direct_deploy):
         """Retrieving explanation for non-existent key returns empty string."""
         contract = direct_deploy(CONTRACT_PATH)
-        result = contract.get_explanation(u32(999), "0x0000000000000000000000000000000000000000")
+        result = contract.get_explanation(999, "0x0000000000000000000000000000000000000000")
         assert result == ""
 
     def test_explanation_references_criterion(self, direct_vm, direct_deploy, direct_alice):
@@ -123,7 +123,7 @@ class TestGenerateExplanation:
         )
 
         explanation = contract.get_explanation(
-            u32(3), "0x1111111111111111111111111111111111111111"
+            3, "0x1111111111111111111111111111111111111111"
         )
         # The mock includes age range (30-65) and BMI range — one must appear
         has_boundary = any(s in explanation for s in ("30", "65", "18.5", "30.0"))
@@ -148,7 +148,7 @@ class TestGenerateExplanation:
         )
 
         explanation = contract.get_explanation(
-            u32(4), "0x2222222222222222222222222222222222222222"
+            4, "0x2222222222222222222222222222222222222222"
         )
         # Patient address should not leak into explanation text
         assert "0x222222" not in explanation
@@ -179,6 +179,6 @@ class TestGetExplanation:
             condition_code="A00", min_bmi="18.0", max_bmi="29.0",
         )
 
-        alice_expl = contract.get_explanation(u32(10), alice_addr)
-        bob_expl = contract.get_explanation(u32(10), bob_addr)
+        alice_expl = contract.get_explanation(10, alice_addr)
+        bob_expl = contract.get_explanation(10, bob_addr)
         assert alice_expl != "" and bob_expl != ""

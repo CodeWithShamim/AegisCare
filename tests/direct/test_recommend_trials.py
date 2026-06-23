@@ -12,11 +12,29 @@ import json
 CONTRACT_PATH = "contracts/aegiscare_advisor.py"
 
 
+def _parse_ids(trial_ids_field) -> list:
+    """The contract stores Recommendation.trial_ids as a JSON array string
+    (e.g. '[42, 55]'). Parse it back into a list of ints."""
+    if isinstance(trial_ids_field, (list, tuple)):
+        return [int(t) for t in trial_ids_field]
+    if not trial_ids_field:
+        return []
+    try:
+        parsed = json.loads(trial_ids_field)
+        return [int(t) for t in parsed] if isinstance(parsed, list) else []
+    except (ValueError, TypeError):
+        return []
+
+
 def _mock_recommend_llm(vm, picked_ids, reasoning):
-    """Mock the LLM to return a JSON string with specific trial IDs."""
+    """Mock the LLM to return a JSON string with specific trial IDs.
+
+    Regex matches the opening of recommend_trials' leader_fn prompt:
+      "Recommend 1 to 3 best-matching clinical trials for this patient."
+    """
     mock_json = json.dumps({"trial_ids": picked_ids, "reasoning": reasoning})
     vm.mock_llm(
-        r".*recommending clinical trials.*",
+        r".*Recommend 1 to 3 best-matching clinical trials.*",
         mock_json,
     )
 
@@ -38,7 +56,7 @@ class TestRecommendTrials:
             profile_hash="hash_abc123",
             age_bucket="30-40",
             condition_category="metabolic disorder",
-            trial_ids=[u32(42), u32(55), u32(78)],
+            trial_ids=[42, 55, 78],
             trial_summaries=[
                 "Trial 42: Metabolic syndrome treatment study",
                 "Trial 55: Cardiology observational study",
@@ -64,7 +82,7 @@ class TestRecommendTrials:
             profile_hash="hash_multi",
             age_bucket="50-60",
             condition_category="respiratory",
-            trial_ids=[u32(10), u32(20), u32(30), u32(40)],
+            trial_ids=[10, 20, 30, 40],
             trial_summaries=[
                 "Trial 10: Asthma management",
                 "Trial 20: COPD treatment",
@@ -101,7 +119,7 @@ class TestRecommendTrials:
                 profile_hash="hash_mismatch",
                 age_bucket="40-50",
                 condition_category="neurological",
-                trial_ids=[u32(1), u32(2)],
+                trial_ids=[1, 2],
                 trial_summaries=["Only one summary"],
             )
 
@@ -131,7 +149,7 @@ class TestRecommendationPrivacy:
             profile_hash="sha256_of_profile_buckets",
             age_bucket="60-70",
             condition_category="oncology",
-            trial_ids=[u32(5)],
+            trial_ids=[5],
             trial_summaries=["Trial 5: Cancer immunotherapy"],
         )
 

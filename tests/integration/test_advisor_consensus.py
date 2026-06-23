@@ -6,12 +6,14 @@ calls through the consensus pipeline (NOT mocked). Run with:
 
     gltest tests/integration/test_advisor_consensus.py -v -s
 
-BLOCKED in this environment on Python 3.9 (genlayer-py needs 3.12+).
-Run after upgrading Python.
+BLOCKED in this environment on Python 3.9 (genlayer-py / gltest need 3.12+).
+Run from a Python 3.12+ environment after `pip install genlayer-test[sim]`.
 
-Consensus model: each write method uses gl.eq_principle.prompt_comparative,
-so leader and all validators independently call the LLM (and Feature 3 also
-fetches the web), then an LLM judges equivalence against the principle string.
+Consensus model: each write method runs
+    gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+where the leader calls the LLM (and Feature 3 also fetches the ICD-10 web
+page) and the validator independently re-runs the leader and agrees on the
+decided field (status / verdict / boolean) — equivalence on meaning, not bytes.
 """
 import pytest
 from gltest import contract_factory

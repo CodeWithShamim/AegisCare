@@ -24,30 +24,34 @@ J00-J99 Diseases of the respiratory system
 
 
 def _mock_validation_llm(vm, valid: bool, reason: str = "", suggestions=None):
-    """Mock the LLM to return a JSON string with a validation result."""
+    """Mock the LLM to return a JSON string with a validation result.
+
+    Regex matches the opening of validate_trial's leader_fn prompt:
+      "Validate this clinical trial registration."
+    """
     result = {
         "valid": valid,
         "reason": reason if reason else ("Validation passed" if valid else "Validation failed"),
         "suggestions": suggestions or [],
     }
     vm.mock_llm(
-        r".*validating a clinical-trial registration.*",
+        r".*Validate this clinical trial registration.*",
         json.dumps(result),
     )
 
 
 def _mock_icd10_web(vm):
-    """Mock the ICD-10 reference web page using the canonical simulator
-    response shape: {response: {status, headers, body}}."""
+    """Mock the ICD-10 reference web page.
+
+    The direct-mode MockedWebResponseData shape is a flat dict:
+        {"method": str, "status": int, "body": str}
+    """
     vm.mock_web(
         r".*icd\.who\.int.*",
         {
-            "response": {
-                "status": 200,
-                "headers": {},
-                "body": _FAKE_ICD10_BODY,
-            },
             "method": "GET",
+            "status": 200,
+            "body": _FAKE_ICD10_BODY,
         },
     )
 
@@ -76,7 +80,7 @@ class TestValidateTrial:
             condition_code="I10",
         )
 
-        val = contract.get_validation(u32(1))
+        val = contract.get_validation(1)
         assert val.valid is True
 
     def test_invalid_trial(self, direct_vm, direct_deploy, direct_alice):
@@ -100,7 +104,7 @@ class TestValidateTrial:
             condition_code="Z99.9",
         )
 
-        val = contract.get_validation(u32(2))
+        val = contract.get_validation(2)
         assert val.valid is False
         assert val.reason != ""
 
@@ -124,7 +128,7 @@ class TestValidateTrial:
             condition_code="E11",
         )
 
-        val = contract.get_validation(u32(3))
+        val = contract.get_validation(3)
         parsed = json.loads(val.suggestions)
         assert isinstance(parsed, list)
         assert len(parsed) == 2
@@ -132,7 +136,7 @@ class TestValidateTrial:
     def test_missing_validation_returns_default(self, direct_vm, direct_deploy):
         """Non-existent trial_id returns default invalid ValidationResult."""
         contract = direct_deploy(CONTRACT_PATH)
-        val = contract.get_validation(u32(999))
+        val = contract.get_validation(999)
         assert val.valid is False
         assert val.reason == ""
         assert val.suggestions == "[]"
@@ -158,7 +162,7 @@ class TestValidateTrial:
         _mock_icd10_web(direct_vm)
         # Mock returns a non-JSON string
         direct_vm.mock_llm(
-            r".*validating a clinical-trial registration.*",
+            r".*Validate this clinical trial registration.*",
             "this is not json at all",
         )
         contract = direct_deploy(CONTRACT_PATH)
@@ -195,5 +199,5 @@ class TestValidationPrivacy:
             condition_code="E11",
         )
 
-        val = contract.get_validation(u32(6))
+        val = contract.get_validation(6)
         assert val.valid is True
