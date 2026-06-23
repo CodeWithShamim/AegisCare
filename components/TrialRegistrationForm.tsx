@@ -254,7 +254,7 @@ export default function TrialRegistrationForm({
                 id="trialName"
                 value={formData.trialName}
                 onChange={(e) => handleInputChange('trialName', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="e.g., Diabetes Treatment Study 2025"
                 required
                 disabled={!isConnected || isLoading}
@@ -272,7 +272,7 @@ export default function TrialRegistrationForm({
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="Brief description of the clinical trial"
                 required
                 disabled={!isConnected || isLoading}
@@ -299,7 +299,7 @@ export default function TrialRegistrationForm({
                     id="trialPhase"
                     value={formData.trialPhase}
                     onChange={(e) => handleInputChange('trialPhase', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   >
@@ -321,7 +321,7 @@ export default function TrialRegistrationForm({
                     id="studyType"
                     value={formData.studyType}
                     onChange={(e) => handleInputChange('studyType', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   >
@@ -348,7 +348,7 @@ export default function TrialRegistrationForm({
                   min="0"
                   value={formData.compensation}
                   onChange={(e) => handleInputChange('compensation', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., 0.5"
                   disabled={!isConnected || isLoading}
                 />
@@ -371,7 +371,7 @@ export default function TrialRegistrationForm({
                     id="location"
                     value={formData.location}
                     onChange={(e) => handleInputChange('location', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     placeholder="e.g., New York, NY"
                     required
                     disabled={!isConnected || isLoading}
@@ -394,7 +394,7 @@ export default function TrialRegistrationForm({
                     onChange={(e) =>
                       handleInputChange('durationWeeks', parseInt(e.target.value) || 0)
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                     required
                     disabled={!isConnected || isLoading}
                   />
@@ -415,7 +415,7 @@ export default function TrialRegistrationForm({
                   max="150"
                   value={formData.minAge}
                   onChange={(e) => handleInputChange('minAge', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -431,7 +431,7 @@ export default function TrialRegistrationForm({
                   max="150"
                   value={formData.maxAge}
                   onChange={(e) => handleInputChange('maxAge', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -451,7 +451,7 @@ export default function TrialRegistrationForm({
                 id="requiredGender"
                 value={formData.requiredGender}
                 onChange={(e) => handleInputChange('requiredGender', parseInt(e.target.value))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 required
                 disabled={!isConnected || isLoading}
               >
@@ -480,7 +480,7 @@ export default function TrialRegistrationForm({
                     const bmi = parseFloat(e.target.value);
                     handleInputChange('minBMIScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                   }}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -500,7 +500,7 @@ export default function TrialRegistrationForm({
                     const bmi = parseFloat(e.target.value);
                     handleInputChange('maxBMIScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                   }}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   required
                   disabled={!isConnected || isLoading}
                 />
@@ -553,7 +553,7 @@ export default function TrialRegistrationForm({
                   id="conditionCode"
                   value={formData.conditionCode || ''}
                   onChange={(e) => handleInputChange('conditionCode', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., E11 (Type 2 diabetes)"
                   disabled={!isConnected || isLoading}
                 />

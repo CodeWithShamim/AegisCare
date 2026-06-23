@@ -239,7 +239,7 @@ export default function PatientRegistrationForm({
                 max="150"
                 value={formData.age || ''}
                 onChange={(e) => handleInputChange('age', parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="Enter your age"
                 required
                 disabled={!isConnected || isLoading}
@@ -255,7 +255,7 @@ export default function PatientRegistrationForm({
                 id="gender"
                 value={formData.gender}
                 onChange={(e) => handleInputChange('gender', parseInt(e.target.value))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 required
                 disabled={!isConnected || isLoading}
               >
@@ -282,7 +282,7 @@ export default function PatientRegistrationForm({
                   const bmi = parseFloat(e.target.value);
                   handleInputChange('bmiScore', isNaN(bmi) ? 0 : Math.round(bmi * 10));
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                 placeholder="e.g., 24.5"
                 required
                 disabled={!isConnected || isLoading}
@@ -337,7 +337,7 @@ export default function PatientRegistrationForm({
                   id="conditionCode"
                   value={formData.conditionCode || ''}
                   onChange={(e) => handleInputChange('conditionCode', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="e.g., E11 (Type 2 diabetes)"
                   disabled={!isConnected || isLoading}
                 />
