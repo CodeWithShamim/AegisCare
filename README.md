@@ -11,6 +11,21 @@ AegisCare uses a **dual-chain architecture**:
 
 > The GenLayer advisor is **strictly additive**: it handles AI features only and **never receives raw or encrypted patient medical data**. All AI inputs are anonymized (age buckets, condition categories, PII-screened summaries).
 
+🧠 **GenLayer Explorer:** [View the AI Advisor Intelligent Contract](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+
+### About GenLayer
+
+[**GenLayer**](https://www.genlayer.com/) is an **AI-native blockchain** whose smart contracts — called **Intelligent Contracts** — can natively call LLMs and read the live web from inside contract execution. Because LLM and web outputs are non-deterministic, GenLayer settles them with **Optimistic Democracy** consensus: a randomly selected **leader** proposes a result, independent **validators** re-run the same logic, and the value is committed **only when validators agree on its meaning** (not on exact bytes). This makes AI reasoning *trustless and verifiable on-chain* — no centralized oracle and no single model deciding the outcome.
+
+In AegisCare, GenLayer powers the `AegisCareAdvisor` Intelligent Contract (`contracts/aegiscare_advisor.py`), the platform's AI brain:
+
+- 🗣️ **Explains** an FHE eligibility result in plain language — validated to never echo specific patient values.
+- 🎯 **Recommends** the 1–3 best-matching trials from a candidate list using an anonymized profile.
+- ✅ **Validates** trial registrations against **live WHO ICD-10 data** fetched on-chain via GenLayer's web access.
+- 🔍 **Checks eligibility** against an external trial-registry URL from a PII-screened, anonymized summary.
+
+Why pair it with FHE? Zama's fhEVM is ideal for **deterministic, confidential math** (the encrypted eligibility computation), but it cannot *reason* — it can't explain a result, rank trials from free text, or check a code against a live medical reference. Those tasks need judgment, so they run on GenLayer with leader/validator consensus. The two layers are complementary: **FHE keeps medical data private; GenLayer makes AI reasoning trustless** — and the advisor only ever sees anonymized, de-identified inputs, enforced both client-side and in the contract.
+
 ### The Problem
 
 Traditional clinical trial matching requires patients to:
@@ -92,17 +107,17 @@ This guide provides a comprehensive introduction to understanding and using Aegi
 
 ### 📖 What's Inside the User Guide
 
-| Section | Description |
-|---------|-------------|
-| **What is AegisCare?** | Simple explanation of the platform |
-| **Why Do We Need It?** | Real-world problems it solves |
-| **How Does It Work?** | Step-by-step process explanation |
-| **Key Concepts** | FHE, EIP-712, ACLs explained simply |
-| **Technology Stack** | All technologies used |
-| **Who Should Use This?** | Target users and use cases |
-| **Getting Started** | 5-minute quick start tutorial |
-| **Security & Privacy** | How your data is protected |
-| **FAQ** | Common questions answered |
+| Section                  | Description                         |
+| ------------------------ | ----------------------------------- |
+| **What is AegisCare?**   | Simple explanation of the platform  |
+| **Why Do We Need It?**   | Real-world problems it solves       |
+| **How Does It Work?**    | Step-by-step process explanation    |
+| **Key Concepts**         | FHE, EIP-712, ACLs explained simply |
+| **Technology Stack**     | All technologies used               |
+| **Who Should Use This?** | Target users and use cases          |
+| **Getting Started**      | 5-minute quick start tutorial       |
+| **Security & Privacy**   | How your data is protected          |
+| **FAQ**                  | Common questions answered           |
 
 ### 🚀 Quick Links
 
@@ -293,6 +308,13 @@ npm run dev
 - **Documentation:** http://localhost:3000/docs
 - **Analytics:** http://localhost:3000/analytics
 
+### Explore the Live Contracts (no setup)
+
+Both contracts are already deployed — open them in their explorers before you run anything locally:
+
+- 🔐 **FHE Matching Contract** (Zama fhEVM · Sepolia) → [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7)
+- 🧠 **AI Advisor** (GenLayer Intelligent Contract · StudioNet) → [View Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+
 ### Deployed Contracts
 
 **AegisCare is already deployed — no setup needed to start exploring:**
@@ -312,11 +334,11 @@ Deployment Date: December 27, 2025
 **AI Advisor (GenLayer Intelligent Contract · StudioNet):**
 
 ```
-Address: 0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19
+Address: 0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
 Network: GenLayer StudioNet
 ```
 
-🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19)
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
 
 No need to deploy - just connect MetaMask to Sepolia and start testing!
 
@@ -437,26 +459,26 @@ No need to deploy - just connect MetaMask to Sepolia and start testing!
 
 #### Frontend
 
-| Technology       | Version | Purpose                         |
-| ---------------- | ------- | ------------------------------- |
-| **Next.js**      | 16.1.1  | React framework with App Router |
-| **React**        | 19.2.3  | UI library                      |
-| **TypeScript**   | 5.x     | Type safety                     |
-| **TailwindCSS**  | 4.x     | Styling                         |
-| **ethers.js**    | 6.9.0   | Web3 integration                |
-| **Wagmi**        | 2.x     | React hooks for Web3            |
-| **Zama FHE SDK** | 0.3.0-8 | Client-side FHE encryption      |
+| Technology       | Version | Purpose                              |
+| ---------------- | ------- | ------------------------------------ |
+| **Next.js**      | 16.1.1  | React framework with App Router      |
+| **React**        | 19.2.3  | UI library                           |
+| **TypeScript**   | 5.x     | Type safety                          |
+| **TailwindCSS**  | 4.x     | Styling                              |
+| **ethers.js**    | 6.9.0   | Web3 integration                     |
+| **Wagmi**        | 2.x     | React hooks for Web3                 |
+| **Zama FHE SDK** | 0.3.0-8 | Client-side FHE encryption           |
 | **genlayer-js**  | 1.1.8   | GenLayer Intelligent Contract client |
 
 #### Blockchain
 
-| Technology          | Version | Purpose                 |
-| ------------------- | ------- | ----------------------- |
-| **Solidity**        | 0.8.27  | Smart contract language |
-| **Zama fhEVM**      | Latest  | FHE-enabled EVM         |
+| Technology          | Version   | Purpose                           |
+| ------------------- | --------- | --------------------------------- |
+| **Solidity**        | 0.8.27    | Smart contract language           |
+| **Zama fhEVM**      | Latest    | FHE-enabled EVM                   |
 | **GenLayer**        | studionet | AI Intelligent Contracts (Python) |
-| **Hardhat**         | 2.19.0  | Development framework   |
-| **Sepolia Testnet** | -       | FHE contract deployment network |
+| **Hardhat**         | 2.19.0    | Development framework             |
+| **Sepolia Testnet** | -         | FHE contract deployment network   |
 
 ---
 
@@ -529,12 +551,14 @@ aegiscare/
 ### Test Breakdown by Category
 
 #### SECTION 1: Deployment & Initialization (4 tests)
+
 - ✅ Contract deployment validation
 - ✅ Owner initialization
 - ✅ Counter initialization (trialCount, patientCount)
 - ✅ Paused state initialization
 
 #### SECTION 2: View Functions (5 tests)
+
 - ✅ Non-existent trial queries
 - ✅ Non-existent patient queries
 - ✅ Patient registration checks
@@ -542,18 +566,21 @@ aegiscare/
 - ✅ Sponsor trial lists
 
 #### SECTION 3: Patient Registration with FHE (4 tests)
+
 - ✅ Register Patient 1 - John Doe (45, Male, BMI 28.5, Diabetes E11)
 - ✅ Register Patient 2 - Jane Smith (32, Female, BMI 22.1, Healthy)
 - ✅ Verify patient registration
 - ✅ Prevent duplicate registration
 
 #### SECTION 4: Trial Registration with FHE (4 tests)
+
 - ✅ Register Trial 1 - Diabetes Treatment Study 2025
 - ✅ Register Trial 2 - General Wellness Study
 - ✅ Sponsor trial count queries
 - ✅ Sponsor trial list queries
 
 #### SECTION 5: Eligibility Computation with FHE (7 tests)
+
 - ✅ Compute Patient 1 + Trial 1 → ELIGIBLE (1)
 - ✅ Decrypt Patient 1 result for Trial 1
 - ✅ Compute Patient 2 + Trial 1 → NOT ELIGIBLE (0)
@@ -563,19 +590,23 @@ aegiscare/
 - ✅ Patient eligibility check history
 
 #### SECTION 6: Check Eligibility Function (2 tests)
+
 - ✅ checkEligibility function testing
 - ✅ Decrypt checkEligibility results
 
 #### SECTION 7: Trial Information Functions (3 tests)
+
 - ✅ getTrialInfo - Full trial details
 - ✅ getTrialPublicInfo - Public trial details
 - ✅ Trial metadata (compensation, location, duration)
 
 #### SECTION 8: Patient Information Functions (2 tests)
+
 - ✅ getPatientInfo - Patient details
 - ✅ isPatientRegistered validation
 
 #### SECTION 9: Admin Functions (5 tests)
+
 - ✅ Pause contract
 - ✅ Prevent operations when paused
 - ✅ Unpause contract
@@ -583,15 +614,18 @@ aegiscare/
 - ✅ Transfer ownership
 
 #### SECTION 10: Trial Deactivation (2 tests)
+
 - ✅ Sponsor deactivates own trial
 - ✅ Prevent unauthorized deactivation
 
 #### SECTION 11: Error Handling (3 tests)
+
 - ✅ TrialNotFound error
 - ✅ PatientNotFound error
 - ✅ UnauthorizedAccess error
 
 #### SECTION 12: Edge Cases & Stress Tests (3 tests)
+
 - ✅ Maximum age boundary (65)
 - ✅ Minimum BMI boundary (18.5)
 - ✅ All genders (0)
@@ -600,13 +634,13 @@ aegiscare/
 
 All **FHE (Fully Homomorphic Encryption)** operations are tested:
 
-| Operation | Encryption | Computation | Decryption | Status |
-|-----------|-------------|-------------|------------|--------|
-| **Patient Registration** | ✅ euint8, euint128 | - | - | ✅ Tested |
-| **Trial Registration** | ✅ euint32, euint128 | - | - | ✅ Tested |
-| **Eligibility Computation** | - | ✅ FHE comparisons | - | ✅ Tested |
-| **Result Decryption** | - | - | ✅ EIP-712 | ✅ Tested |
-| **Permission Management** | - | - | ✅ ACL | ✅ Tested |
+| Operation                   | Encryption           | Computation        | Decryption | Status    |
+| --------------------------- | -------------------- | ------------------ | ---------- | --------- |
+| **Patient Registration**    | ✅ euint8, euint128  | -                  | -          | ✅ Tested |
+| **Trial Registration**      | ✅ euint32, euint128 | -                  | -          | ✅ Tested |
+| **Eligibility Computation** | -                    | ✅ FHE comparisons | -          | ✅ Tested |
+| **Result Decryption**       | -                    | -                  | ✅ EIP-712 | ✅ Tested |
+| **Permission Management**   | -                    | -                  | ✅ ACL     | ✅ Tested |
 
 ### Running Tests
 
@@ -632,18 +666,18 @@ npx hardhat clean && npm run compile
 
 ### Test Coverage Summary
 
-| Component | Functions Tested | Tests | Status |
-|-----------|------------------|-------|--------|
-| **Deployment** | Deployment & initialization | 4 | ✅ 100% |
-| **View Functions** | All view functions | 5 | ✅ 100% |
-| **Patient Registration** | registerPatient with FHE | 4 | ✅ 100% |
-| **Trial Registration** | registerTrial with FHE | 4 | ✅ 100% |
-| **Eligibility Computation** | computeEligibility, checkEligibility | 9 | ✅ 100% |
-| **Information Functions** | getTrialInfo, getPatientInfo | 5 | ✅ 100% |
-| **Admin Functions** | pause, unpause, transferOwnership | 5 | ✅ 100% |
-| **Trial Management** | deactivateTrial, access control | 2 | ✅ 100% |
-| **Error Handling** | Custom errors & edge cases | 6 | ✅ 100% |
-| **TOTAL** | **All contract functions** | **44** | **✅ 100%** |
+| Component                   | Functions Tested                     | Tests  | Status      |
+| --------------------------- | ------------------------------------ | ------ | ----------- |
+| **Deployment**              | Deployment & initialization          | 4      | ✅ 100%     |
+| **View Functions**          | All view functions                   | 5      | ✅ 100%     |
+| **Patient Registration**    | registerPatient with FHE             | 4      | ✅ 100%     |
+| **Trial Registration**      | registerTrial with FHE               | 4      | ✅ 100%     |
+| **Eligibility Computation** | computeEligibility, checkEligibility | 9      | ✅ 100%     |
+| **Information Functions**   | getTrialInfo, getPatientInfo         | 5      | ✅ 100%     |
+| **Admin Functions**         | pause, unpause, transferOwnership    | 5      | ✅ 100%     |
+| **Trial Management**        | deactivateTrial, access control      | 2      | ✅ 100%     |
+| **Error Handling**          | Custom errors & edge cases           | 6      | ✅ 100%     |
+| **TOTAL**                   | **All contract functions**           | **44** | **✅ 100%** |
 
 ### FHEVM Environment Requirements
 
@@ -655,6 +689,7 @@ All tests run on **fhEVM (FHE-enabled EVM)** with full encryption/decryption sup
 - ✅ **Permission Management** - ACL-based access control
 
 **Test Environment:**
+
 ```bash
 # Deploy to FHEVM devnet
 npm run deploy:local
@@ -767,7 +802,7 @@ import { decryptEligibilityResult } from "@/lib/fheClient";
 const isEligible = await decryptEligibilityResult(
   encryptedResult,
   contractAddress,
-  signer
+  signer,
 );
 
 console.log(isEligible); // true or false
@@ -777,18 +812,15 @@ console.log(isEligible); // true or false
 
 The advisor exposes four AI features. Write methods run LLM consensus; read methods return the stored result. All inputs are anonymized — **never send raw or encrypted patient data**.
 
-| Feature | Write method | Read method |
-| ------- | ------------ | ----------- |
-| Eligibility explainer | `generate_explanation` | `get_explanation` |
-| Trial recommender | `recommend_trials` | `get_recommendations` |
-| Trial validator | `validate_trial` | `get_validation` |
-| Registry eligibility check | `check_eligibility` | `get_eligibility_check` |
+| Feature                    | Write method           | Read method             |
+| -------------------------- | ---------------------- | ----------------------- |
+| Eligibility explainer      | `generate_explanation` | `get_explanation`       |
+| Trial recommender          | `recommend_trials`     | `get_recommendations`   |
+| Trial validator            | `validate_trial`       | `get_validation`        |
+| Registry eligibility check | `check_eligibility`    | `get_eligibility_check` |
 
 ```typescript
-import {
-  generateExplanation,
-  getExplanation,
-} from "@/lib/genLayerClient";
+import { generateExplanation, getExplanation } from "@/lib/genLayerClient";
 
 // Write: run LLM consensus to produce a plain-language explanation
 await generateExplanation({
@@ -873,12 +905,12 @@ npm run dev
 The AI advisor is a separate Python Intelligent Contract on GenLayer. It is **already deployed** for this project:
 
 ```
-Advisor Address: 0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19
+Advisor Address: 0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
 Network: GenLayer studionet
 Contract: contracts/aegiscare_advisor.py
 ```
 
-🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19)
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
 
 To deploy your own instance:
 

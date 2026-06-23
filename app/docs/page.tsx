@@ -27,6 +27,8 @@ export default function DocsPage() {
     { id: 'eligibility-workflow', title: 'Eligibility Workflow', level: 3 },
     { id: 'architecture', title: 'Architecture', level: 2 },
     { id: 'genlayer-advisor', title: 'GenLayer AI Advisor', level: 2 },
+    { id: 'advisor-what', title: 'What is GenLayer?', level: 3 },
+    { id: 'advisor-problem', title: 'Problems It Solves', level: 3 },
     { id: 'advisor-features', title: 'Advisor Capabilities', level: 3 },
     { id: 'advisor-consensus', title: 'Consensus & Equivalence', level: 3 },
     { id: 'advisor-privacy', title: 'Privacy Boundary', level: 3 },
@@ -73,6 +75,16 @@ export default function DocsPage() {
           <Link href="/docs" className="docs-sidebar-link active">
             Overview
           </Link>
+          <a
+            href={
+              ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
+            🧠 GenLayer Explorer
+          </a>
         </div>
 
         <div className="docs-sidebar-section">
@@ -83,6 +95,16 @@ export default function DocsPage() {
           <Link href="/docs#how-it-works" className="docs-sidebar-link">
             🚀 How It Works
           </Link>
+          <a
+            href={
+              ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="docs-sidebar-link"
+          >
+            🧠 Advisor on Explorer
+          </a>
           <Link href="/docs#troubleshooting" className="docs-sidebar-link">
             🐛 Troubleshooting
           </Link>
@@ -90,10 +112,16 @@ export default function DocsPage() {
 
         <div className="docs-sidebar-section">
           <h3 className="docs-sidebar-section-title">Core Concepts</h3>
-          <Link href="/docs#architecture" className={`docs-sidebar-link${activeSection === 'architecture' ? ' active' : ''}`}>
+          <Link
+            href="/docs#architecture"
+            className={`docs-sidebar-link${activeSection === 'architecture' ? ' active' : ''}`}
+          >
             Architecture
           </Link>
-          <Link href="/docs#genlayer-advisor" className={`docs-sidebar-link${activeSection === 'genlayer-advisor' ? ' active' : ''}`}>
+          <Link
+            href="/docs#genlayer-advisor"
+            className={`docs-sidebar-link${activeSection === 'genlayer-advisor' ? ' active' : ''}`}
+          >
             🧠 GenLayer AI Advisor
           </Link>
           <Link href="/docs#tech-stack" className="docs-sidebar-link">
@@ -156,7 +184,9 @@ export default function DocsPage() {
             Contract on Etherscan
           </a>
           <a
-            href={ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL}
+            href={
+              ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="docs-sidebar-link"
@@ -241,7 +271,9 @@ export default function DocsPage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-indigo-800">🔐 FHE Matching Contract</span>
-                    <span className="text-indigo-500 transition-transform group-hover:translate-x-0.5">↗</span>
+                    <span className="text-indigo-500 transition-transform group-hover:translate-x-0.5">
+                      ↗
+                    </span>
                   </div>
                   <p className="mt-1 text-xs text-indigo-600">Zama fhEVM · Sepolia · Etherscan</p>
                   <code className="mt-2 block text-xs text-gray-500">0x3DB49…4192F7</code>
@@ -259,13 +291,17 @@ export default function DocsPage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-purple-800">🧠 AI Advisor Contract</span>
-                    <span className="text-purple-500 transition-transform group-hover:translate-x-0.5">↗</span>
+                    <span className="text-purple-500 transition-transform group-hover:translate-x-0.5">
+                      ↗
+                    </span>
                   </div>
                   <p className="mt-1 text-xs text-purple-600">
                     GenLayer StudioNet · Studio Explorer
                   </p>
                   <code className="mt-2 block text-xs text-gray-500">
-                    {ADVISOR_ADDRESS ? `${ADVISOR_ADDRESS.slice(0, 6)}…${ADVISOR_ADDRESS.slice(-4)}` : 'not configured'}
+                    {ADVISOR_ADDRESS
+                      ? `${ADVISOR_ADDRESS.slice(0, 6)}…${ADVISOR_ADDRESS.slice(-4)}`
+                      : 'not configured'}
                   </code>
                 </a>
               </div>
@@ -295,8 +331,8 @@ export default function DocsPage() {
                 </h4>
                 <p className="mb-4">
                   We&apos;ve created a complete, in-depth user guide to help you understand and use
-                  AegisCare. Whether you&apos;re a patient, trial sponsor, developer, or just curious
-                  about FHE technology, this guide has everything you need.
+                  AegisCare. Whether you&apos;re a patient, trial sponsor, developer, or just
+                  curious about FHE technology, this guide has everything you need.
                 </p>
                 <Link
                   href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
@@ -520,8 +556,9 @@ export default function DocsPage() {
                 <div>
                   <h5 className="font-semibold text-red-800 mb-2">📊 Comprehensive FAQ</h5>
                   <p className="text-sm text-gray-700">
-                    Over 50 frequently asked questions answered. From &quot;Can trial sponsors see my
-                    data?&quot; to &quot;How does FHE work?&quot; - find answers to all your questions.
+                    Over 50 frequently asked questions answered. From &quot;Can trial sponsors see
+                    my data?&quot; to &quot;How does FHE work?&quot; - find answers to all your
+                    questions.
                   </p>
                 </div>
               </div>
@@ -1142,11 +1179,156 @@ export default function DocsPage() {
               <div className="bg-purple-50 border-l-4 border-purple-500 p-4">
                 <p className="font-semibold text-purple-800">🎯 The core idea</p>
                 <p className="text-sm text-purple-700 mt-2">
-                  FHE is great at deterministic, confidential math, but it cannot{' '}
-                  <em>explain</em> a result, <em>recommend</em> a trial from free text, or{' '}
-                  <em>validate</em> a registration against a live medical reference. Those need
-                  judgment — so they run on GenLayer, on anonymized inputs only, with leader/validator
-                  consensus so the result is trustless.
+                  FHE is great at deterministic, confidential math, but it cannot <em>explain</em> a
+                  result, <em>recommend</em> a trial from free text, or <em>validate</em> a
+                  registration against a live medical reference. Those need judgment — so they run
+                  on GenLayer, on anonymized inputs only, with leader/validator consensus so the
+                  result is trustless.
+                </p>
+              </div>
+            </div>
+
+            {/* What is GenLayer */}
+            <div id="advisor-what" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">What is GenLayer?</h3>
+              <p className="text-sm text-gray-700 mb-4">
+                <a
+                  href="https://www.genlayer.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-700 underline font-semibold"
+                >
+                  GenLayer
+                </a>{' '}
+                is an <strong>AI-native blockchain</strong>. Its smart contracts —{' '}
+                <strong>Intelligent Contracts</strong>, written in Python — can natively call LLMs
+                and read the live web <em>from inside contract execution</em>. Because that output is
+                non-deterministic, GenLayer settles it with <strong>Optimistic Democracy</strong>{' '}
+                consensus: a randomly chosen <strong>leader</strong> proposes a result, independent{' '}
+                <strong>validators</strong> re-run the same logic, and the value commits{' '}
+                <strong>only when validators agree on its meaning</strong> — not on exact bytes. The
+                result is AI reasoning that is <strong>trustless and verifiable on-chain</strong>,
+                with no centralized oracle and no single model deciding the outcome.
+              </p>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <p className="font-semibold text-purple-800 text-sm">🤖 LLM in the contract</p>
+                  <p className="text-xs text-purple-700 mt-1">
+                    <code className="bg-purple-100 px-1 rounded">gl.nondet.exec_prompt()</code> runs a
+                    model as a first-class on-chain operation.
+                  </p>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="font-semibold text-blue-800 text-sm">🌐 Live web access</p>
+                  <p className="text-xs text-blue-700 mt-1">
+                    <code className="bg-blue-100 px-1 rounded">gl.nondet.web.render()</code> reads
+                    real sources (e.g. WHO ICD-10) at execution time.
+                  </p>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="font-semibold text-green-800 text-sm">⚖️ Consensus on meaning</p>
+                  <p className="text-xs text-green-700 mt-1">
+                    Validators agree the result is <em>equivalent</em>, so non-deterministic output
+                    still settles deterministically.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Problems GenLayer solves */}
+            <div id="advisor-problem" className="docs-card mb-6">
+              <h3 className="text-xl font-bold mb-4">
+                How GenLayer Contributes &amp; the Problems It Solves
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                FHE makes the eligibility decision <strong>private and correct</strong>, but a raw
+                boolean isn&apos;t enough for real users. GenLayer adds the reasoning layer FHE
+                cannot — and does it without ever weakening the privacy guarantee. Each row below is
+                a concrete gap the advisor closes.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Problem
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Why FHE alone can&apos;t
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        GenLayer&apos;s contribution
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-2 font-medium">
+                        &quot;Why am I (not) eligible?&quot;
+                      </td>
+                      <td className="px-4 py-2 text-gray-600">
+                        FHE returns a 1/0 — it can&apos;t produce natural language.
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">
+                        <code className="bg-gray-100 px-1 rounded">generate_explanation</code> turns
+                        the result into a plain-language reason, validated to never leak patient
+                        values.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium">
+                        Finding the right trial among many
+                      </td>
+                      <td className="px-4 py-2 text-gray-600">
+                        Ranking free-text trial descriptions needs semantic judgment, not arithmetic.
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">
+                        <code className="bg-gray-100 px-1 rounded">recommend_trials</code> picks 1–3
+                        best matches from an anonymized profile, with validators bounding the picks
+                        to the candidate set.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium">Garbage / fake trial data</td>
+                      <td className="px-4 py-2 text-gray-600">
+                        A contract can&apos;t tell if an ICD-10 code is real or a description is
+                        coherent.
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">
+                        <code className="bg-gray-100 px-1 rounded">validate_trial</code> fetches{' '}
+                        <strong>live WHO ICD-10</strong> data on-chain and validates the registration
+                        before it&apos;s trusted.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium">Eligibility for off-chain trials</td>
+                      <td className="px-4 py-2 text-gray-600">
+                        Real trials live on external registries the FHE contract never sees.
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">
+                        <code className="bg-gray-100 px-1 rounded">check_eligibility</code> reads a
+                        registry URL and assesses a PII-screened summary against it.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium">Trusting an AI answer</td>
+                      <td className="px-4 py-2 text-gray-600">
+                        A normal LLM/oracle is a centralized black box — one model, no recourse.
+                      </td>
+                      <td className="px-4 py-2 text-gray-700">
+                        <strong>Leader + validator consensus</strong> means every AI result is
+                        independently re-derived and agreed before it&apos;s stored.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-4 bg-purple-50 border-l-4 border-purple-500 p-4">
+                <p className="text-sm text-purple-800">
+                  <strong>The division of labor:</strong> Zama fhEVM keeps medical data{' '}
+                  <em>private</em> and computes the decision under encryption; GenLayer makes the AI
+                  reasoning on top of that decision <em>trustless</em>. Neither layer ever sees the
+                  other&apos;s secrets — the advisor receives only anonymized, de-identified inputs.
                 </p>
               </div>
             </div>
@@ -1160,10 +1342,10 @@ export default function DocsPage() {
                     1. Eligibility explainer · generate_explanation
                   </h4>
                   <p className="text-sm text-gray-600">
-                    Turns the binary FHE eligibility result into a plain-language explanation for the
-                    patient. The validator enforces the explanation names the correct status, references a
-                    criterion boundary, stays within 50–400 characters, and never echoes specific patient
-                    values.
+                    Turns the binary FHE eligibility result into a plain-language explanation for
+                    the patient. The validator enforces the explanation names the correct status,
+                    references a criterion boundary, stays within 50–400 characters, and never
+                    echoes specific patient values.
                   </p>
                 </div>
 
@@ -1172,9 +1354,9 @@ export default function DocsPage() {
                     2. Trial recommender · recommend_trials
                   </h4>
                   <p className="text-sm text-gray-600">
-                    Suggests the best 1–3 trials from a candidate list using an anonymized profile (age
-                    bucket + condition category + profile hash). The validator confirms the picked IDs are
-                    within the candidate set and the count is valid.
+                    Suggests the best 1–3 trials from a candidate list using an anonymized profile
+                    (age bucket + condition category + profile hash). The validator confirms the
+                    picked IDs are within the candidate set and the count is valid.
                   </p>
                 </div>
 
@@ -1183,9 +1365,10 @@ export default function DocsPage() {
                     3. Trial validator · validate_trial
                   </h4>
                   <p className="text-sm text-gray-600">
-                    Fetches the live WHO <strong>ICD-10</strong> reference on-chain via GenLayer&apos;s web
-                    access and checks that a trial registration is coherent and its condition code is real.
-                    The validator re-runs the leader and agrees only on the boolean outcome.
+                    Fetches the live WHO <strong>ICD-10</strong> reference on-chain via
+                    GenLayer&apos;s web access and checks that a trial registration is coherent and
+                    its condition code is real. The validator re-runs the leader and agrees only on
+                    the boolean outcome.
                   </p>
                 </div>
 
@@ -1195,8 +1378,8 @@ export default function DocsPage() {
                   </h4>
                   <p className="text-sm text-gray-600">
                     Assesses eligibility against an external trial-registry URL from a PII-screened
-                    anonymized summary. Returns ELIGIBLE / NOT_ELIGIBLE / UNCLEAR with matched and failed
-                    criteria. The validator agrees on the verdict class.
+                    anonymized summary. Returns ELIGIBLE / NOT_ELIGIBLE / UNCLEAR with matched and
+                    failed criteria. The validator agrees on the verdict class.
                   </p>
                 </div>
               </div>
@@ -1206,9 +1389,10 @@ export default function DocsPage() {
             <div id="advisor-consensus" className="docs-card mb-6">
               <h3 className="text-xl font-bold mb-4">Consensus &amp; Equivalence</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Every write method follows the same pattern — a leader proposes, validators independently
-                evaluate, and only equivalent results settle. Because LLM and web output are
-                non-deterministic, validators agree on <strong>meaning</strong>, not exact bytes.
+                Every write method follows the same pattern — a leader proposes, validators
+                independently evaluate, and only equivalent results settle. Because LLM and web
+                output are non-deterministic, validators agree on <strong>meaning</strong>, not
+                exact bytes.
               </p>
               <div className="bg-gray-50 p-6 rounded-lg font-mono text-sm overflow-x-auto">
                 <pre>
@@ -1232,15 +1416,16 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <p className="font-semibold text-green-800 text-sm">✅ Equivalence on meaning</p>
                   <p className="text-xs text-green-700 mt-1">
-                    Two validators may phrase an explanation differently, but they agree it conveys the
-                    right status — so the result is trustworthy.
+                    Two validators may phrase an explanation differently, but they agree it conveys
+                    the right status — so the result is trustworthy.
                   </p>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="font-semibold text-blue-800 text-sm">🛡️ Defensive LLM handling</p>
                   <p className="text-xs text-blue-700 mt-1">
-                    JSON is parsed defensively; malformed output, wrong types, and missing fields are
-                    classified with deterministic prefixes so failures are reproducible, not silent.
+                    JSON is parsed defensively; malformed output, wrong types, and missing fields
+                    are classified with deterministic prefixes so failures are reproducible, not
+                    silent.
                   </p>
                 </div>
               </div>
@@ -1250,8 +1435,8 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
             <div id="advisor-privacy" className="docs-card mb-6">
               <h3 className="text-xl font-bold mb-4">Privacy Boundary</h3>
               <p className="text-sm text-gray-600 mb-4">
-                The advisor is <strong>strictly additive and isolated</strong>. It never receives raw or
-                encrypted patient medical data — only anonymized, de-identified inputs.
+                The advisor is <strong>strictly additive and isolated</strong>. It never receives
+                raw or encrypted patient medical data — only anonymized, de-identified inputs.
               </p>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -1268,7 +1453,9 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
                   <tbody className="divide-y divide-gray-200">
                     <tr>
                       <td className="px-4 py-2">Patient age</td>
-                      <td className="px-4 py-2">Coarse bucket (e.g. <code>&quot;30-40&quot;</code>)</td>
+                      <td className="px-4 py-2">
+                        Coarse bucket (e.g. <code>&quot;30-40&quot;</code>)
+                      </td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2">Condition</td>
@@ -1277,13 +1464,15 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
                     <tr>
                       <td className="px-4 py-2">Patient summary</td>
                       <td className="px-4 py-2">
-                        Pre-screened, length-bounded (20–2000 chars), regex-checked for email / phone /
-                        ID runs
+                        Pre-screened, length-bounded (20–2000 chars), regex-checked for email /
+                        phone / ID runs
                       </td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2">Eligibility</td>
-                      <td className="px-4 py-2">A boolean computed under FHE, not the raw values</td>
+                      <td className="px-4 py-2">
+                        A boolean computed under FHE, not the raw values
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -1291,8 +1480,9 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
               <div className="mt-4 bg-yellow-50 border-l-4 border-yellow-500 p-4">
                 <p className="text-sm text-yellow-800">
                   <strong>Enforced twice.</strong> The same PII/length rules run client-side in{' '}
-                  <code className="bg-yellow-100 px-1 rounded">lib/genLayerClient.ts</code> (fast failure)
-                  and again in the contract (authoritative). Unsafe input never reaches consensus.
+                  <code className="bg-yellow-100 px-1 rounded">lib/genLayerClient.ts</code> (fast
+                  failure) and again in the contract (authoritative). Unsafe input never reaches
+                  consensus.
                 </p>
               </div>
             </div>
@@ -1301,7 +1491,8 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
             <div id="advisor-api" className="docs-card mb-6">
               <h3 className="text-xl font-bold mb-4">Advisor Contract API</h3>
               <p className="text-sm text-gray-600 mb-4">
-                GenVM dispatch uses snake_case methods with kwargs. Names mirror the deployed schema in{' '}
+                GenVM dispatch uses snake_case methods with kwargs. Names mirror the deployed schema
+                in{' '}
                 <code className="bg-gray-100 px-2 py-1 rounded">config/genLayerContracts.ts</code>.
               </p>
 
@@ -1334,7 +1525,9 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
                     <tr>
                       <td className="px-4 py-2 font-mono text-xs">recommend_trials</td>
                       <td className="px-4 py-2">write</td>
-                      <td className="px-4 py-2">stores trial_ids + reasoning keyed by profile hash</td>
+                      <td className="px-4 py-2">
+                        stores trial_ids + reasoning keyed by profile hash
+                      </td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2 font-mono text-xs">get_recommendations</td>
@@ -1360,6 +1553,79 @@ gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
                       <td className="px-4 py-2 font-mono text-xs">get_eligibility_check</td>
                       <td className="px-4 py-2">view</td>
                       <td className="px-4 py-2">EligibilityCheck</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h4 className="font-semibold mb-2">Stored data structures</h4>
+              <p className="text-sm text-gray-600 mb-3">
+                View methods return these dataclasses from contract storage. List-valued fields are
+                stored as JSON strings — decode them client-side with{' '}
+                <code className="bg-gray-100 px-1 rounded">parseCriteria()</code>.
+              </p>
+              <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs mb-6">
+                <code>{`@dataclass
+class ValidationResult:        # get_validation(trial_id)
+    valid: bool                #   true only if coherent AND real ICD-10 code
+    reason: str                #   required when valid=false
+    suggestions: str           #   JSON-encoded list[str]
+
+@dataclass
+class Recommendation:          # get_recommendations(profile_hash)
+    trial_ids: str             #   JSON-encoded list[int], 1-3 picks
+    reasoning: str
+
+@dataclass
+class EligibilityCheck:        # get_eligibility_check(check_id)
+    trial_registry_url: str
+    anonymized_summary: str    #   20-2000 chars, PII-screened
+    result: str                #   'ELIGIBLE' | 'NOT_ELIGIBLE' | 'UNCLEAR'
+    reasoning: str
+    matched_criteria: str      #   JSON-encoded list[str]
+    failed_criteria: str       #   JSON-encoded list[str]
+
+# Storage layout (on-chain TreeMaps):
+#   explanations:       u32 trial_id -> (str patient_address -> str)
+#   recommendations:    str profile_hash -> Recommendation
+#   validations:        u32 trial_id -> ValidationResult
+#   eligibility_checks: str check_id -> EligibilityCheck`}</code>
+              </pre>
+
+              <h4 className="font-semibold mb-2">On-chain web sources</h4>
+              <p className="text-sm text-gray-600 mb-3">
+                Web reads run inside the leader via{' '}
+                <code className="bg-gray-100 px-1 rounded">gl.nondet.web.render(url, mode=&quot;text&quot;)</code>{' '}
+                and are length-bounded so the prompt stays deterministic across validators.
+              </p>
+              <div className="overflow-x-auto mb-6">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Method
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Source
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        Cap
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">validate_trial</td>
+                      <td className="px-4 py-2">
+                        WHO ICD-10 ·{' '}
+                        <code className="bg-gray-100 px-1 rounded">icd.who.int/browse10</code>
+                      </td>
+                      <td className="px-4 py-2">3,000 chars</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-mono text-xs">check_eligibility</td>
+                      <td className="px-4 py-2">Caller-supplied trial-registry URL</td>
+                      <td className="px-4 py-2">5,000 chars</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1401,8 +1667,8 @@ const check = await getEligibilityCheck('check-001');
             <div id="advisor-deploy" className="docs-card">
               <h3 className="text-xl font-bold mb-4">Deploying the Advisor</h3>
               <p className="text-sm text-gray-600 mb-4">
-                The advisor is deployed independently on GenLayer StudioNet (gasless). Lint before deploy,
-                then wire the returned address into the frontend.
+                The advisor is deployed independently on GenLayer StudioNet (gasless). Lint before
+                deploy, then wire the returned address into the frontend.
               </p>
               <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-xs">
                 <code>{`# 1. Lint the Intelligent Contract (fix errors first)
@@ -1421,14 +1687,20 @@ NEXT_PUBLIC_GENLAYER_CHAIN_ID=studionet`}</code>
               <div className="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4">
                 <p className="text-sm text-blue-800">
                   <strong>Current deployment:</strong>{' '}
-                  <code className="bg-blue-100 px-1 rounded">0x27bcE443529Ec81d002f801C1D5b6aC7bd43bB19</code>{' '}
+                  <code className="bg-blue-100 px-1 rounded">
+                    0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
+                  </code>{' '}
                   on GenLayer StudioNet. The frontend guards against a missing address (
-                  <code>assertAdvisorConfigured</code>), so a misconfigured deploy fails loudly instead of
-                  sending transactions to address(0).
+                  <code>assertAdvisorConfigured</code>), so a misconfigured deploy fails loudly
+                  instead of sending transactions to address(0).
                 </p>
                 <p className="mt-3">
                   <a
-                    href={ADVISOR_ADDRESS ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS) : GENLAYER_EXPLORER_URL}
+                    href={
+                      ADVISOR_ADDRESS
+                        ? genlayerExplorerAddressUrl(ADVISOR_ADDRESS)
+                        : GENLAYER_EXPLORER_URL
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-purple-700 underline font-semibold"
@@ -1640,7 +1912,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-red-700">&quot;Cannot connect to wallet&quot;</h4>
+                    <h4 className="font-semibold text-red-700">
+                      &quot;Cannot connect to wallet&quot;
+                    </h4>
                     <p className="text-sm mb-2">
                       Ensure MetaMask is installed and you&apos;re on Sepolia testnet
                     </p>
@@ -1665,7 +1939,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">&quot;FHE initialization failed&quot;</h4>
+                    <h4 className="font-semibold text-red-700">
+                      &quot;FHE initialization failed&quot;
+                    </h4>
                     <p className="text-sm mb-2">Zama FHE SDK still loading</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Wait 5-10 seconds, check internet connection,
@@ -1674,7 +1950,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">&quot;Eligibility computation failed&quot;</h4>
+                    <h4 className="font-semibold text-red-700">
+                      &quot;Eligibility computation failed&quot;
+                    </h4>
                     <p className="text-sm mb-2">Patient or trial not registered</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Ensure you&apos;re registered and the trial exists
@@ -1682,7 +1960,9 @@ await computeEligibility(signer, trialId, patientAddress);`}</code>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-red-700">&quot;Cannot decrypt result&quot;</h4>
+                    <h4 className="font-semibold text-red-700">
+                      &quot;Cannot decrypt result&quot;
+                    </h4>
                     <p className="text-sm mb-2">Only patients can decrypt their own results</p>
                     <p className="text-sm">
                       <strong>Solution:</strong> Use the correct wallet address, sign EIP-712

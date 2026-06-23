@@ -215,7 +215,7 @@ export default function TrialAdminDashboard() {
                   <div className="text-4xl mb-4">📋</div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">No Trials Yet</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    You haven't created any clinical trials yet.
+                    You haven&apos;t created any clinical trials yet.
                   </p>
                   <button
                     onClick={() => handleTabChange('create')}
