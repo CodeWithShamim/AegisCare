@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+/*
+ * AegisCare is an intentionally light-themed app: every component uses
+ * hardcoded light Tailwind classes (bg-white, text-gray-900, …). We force a
+ * light color scheme so OS dark mode can't flip the body foreground to white
+ * and make text-on-white inputs unreadable. (No dark-mode support by design.)
+ */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -12,15 +19,32 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/*
+ * Readable defaults for every form control, regardless of whether an
+ * individual element sets an explicit text color. Tailwind text-* utilities
+ * still override these per-element where present.
+ */
+@layer base {
+  input,
+  textarea,
+  select {
+    color: #111827; /* gray-900 */
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #9ca3af; /* gray-400 */
+  }
+
+  /* Native select options render in the OS popup; keep them legible too. */
+  option {
+    color: #111827;
+    background-color: #ffffff;
+  }
 }

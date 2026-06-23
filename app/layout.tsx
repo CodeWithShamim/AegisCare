@@ -34,7 +34,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}>
         <Web3ContextProvider>
           <FHEProvider>{children}</FHEProvider>
         </Web3ContextProvider>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import TrialRegistrationForm from '@/components/TrialRegistrationForm';
 import SponsorAnalytics from '@/components/SponsorAnalytics';
+import AIAdvisor from '@/components/AIAdvisor';
 import Header from '@/components/Header';
 import {
   getTrialCount,
@@ -22,7 +23,7 @@ interface Trial {
 }
 
 export default function TrialAdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'create' | 'manage' | 'analytics'>('create');
+  const [activeTab, setActiveTab] = useState<'create' | 'manage' | 'analytics' | 'advisor'>('create');
   const [trials, setTrials] = useState<Trial[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string>('');
@@ -63,7 +64,7 @@ export default function TrialAdminDashboard() {
     }
   };
 
-  const handleTabChange = (tab: 'create' | 'manage' | 'analytics') => {
+  const handleTabChange = (tab: 'create' | 'manage' | 'analytics' | 'advisor') => {
     setActiveTab(tab);
     if (tab === 'manage' && trials.length === 0) {
       loadTrials();
@@ -123,6 +124,16 @@ export default function TrialAdminDashboard() {
               >
                 Analytics Dashboard (New)
               </button>
+              <button
+                onClick={() => handleTabChange('advisor')}
+                className={`${
+                  activeTab === 'advisor'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
+              >
+                🧠 AI Advisor
+              </button>
             </nav>
           </div>
         </div>
@@ -156,6 +167,22 @@ export default function TrialAdminDashboard() {
                 </p>
               </div>
               <SponsorAnalytics />
+            </div>
+          )}
+
+          {activeTab === 'advisor' && (
+            <div>
+              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-indigo-900 mb-2">
+                  🧠 GenLayer AI Advisor
+                </h3>
+                <p className="text-xs text-indigo-800">
+                  Validate trial registrations for coherence and real ICD-10 codes, and generate
+                  eligibility explanations — settled by GenLayer&apos;s AI-validator consensus.
+                  Uses only public trial metadata; no patient data involved.
+                </p>
+              </div>
+              <AIAdvisor patientAddress={walletAddress || '0x0'} />
             </div>
           )}
 

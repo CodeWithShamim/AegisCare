@@ -6,13 +6,14 @@ import EligibilityChecker from '@/components/EligibilityChecker';
 import BatchEligibilityChecker from '@/components/BatchEligibilityChecker';
 import TrialDiscovery from '@/components/TrialDiscovery';
 import EligibilityHistory from '@/components/EligibilityHistory';
+import AIAdvisor from '@/components/AIAdvisor';
 import Header from '@/components/Header';
 import { patientExists, connectWallet } from '@/lib/web3Client';
 import { useWalletConnection } from '@/lib/hooks/useWalletConnection';
 
 export default function PatientDashboard() {
   const { isConnected, address } = useWalletConnection();
-  const [activeTab, setActiveTab] = useState<'register' | 'check' | 'discover' | 'batch' | 'history'>('register');
+  const [activeTab, setActiveTab] = useState<'register' | 'check' | 'discover' | 'batch' | 'history' | 'advisor'>('register');
   const [isRegistered, setIsRegistered] = useState<boolean | null>(null);
   const [patientAddress, setPatientAddress] = useState<string>('');
   const [isChecking, setIsChecking] = useState(false);
@@ -120,6 +121,16 @@ export default function PatientDashboard() {
                 } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
               >
                 Eligibility History
+              </button>
+              <button
+                onClick={() => setActiveTab('advisor')}
+                className={`${
+                  activeTab === 'advisor'
+                    ? 'border-indigo-500 text-indigo-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors flex-shrink-0`}
+              >
+                🧠 AI Advisor
               </button>
             </nav>
           </div>
@@ -247,6 +258,23 @@ export default function PatientDashboard() {
               )}
 
               {patientAddress && <EligibilityHistory patientAddress={patientAddress} />}
+            </div>
+          )}
+
+          {activeTab === 'advisor' && (
+            <div>
+              <div className="mb-6 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                <h3 className="text-sm font-semibold text-indigo-900 mb-2">
+                  🧠 GenLayer AI Advisor
+                </h3>
+                <p className="text-xs text-indigo-800">
+                  AI-powered explanations and trial recommendations, settled by GenLayer&apos;s
+                  AI-validator consensus. Operates only on public trial criteria and coarse profile
+                  buckets — your encrypted medical data never leaves the FHE layer.
+                </p>
+              </div>
+
+              {patientAddress && <AIAdvisor patientAddress={patientAddress} />}
             </div>
           )}
 
