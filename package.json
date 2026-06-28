@@ -19,10 +19,10 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "typecheck:test": "tsc --noEmit -p tsconfig.test.json",
     "lint:site": "eslint app components lib --max-warnings 0",
-    "lint:contract": "genvm-lint check contracts/aegiscare_advisor.py --json",
+    "lint:contract": ".venv-genvm/bin/genvm-lint check contracts/aegiscare_advisor.py --json",
     "test:solidity": "hardhat test",
-    "test:contract": "pytest tests/direct -v",
-    "test:contract:integration": "gltest tests/integration -v -s"
+    "test:contract": ".venv-genvm/bin/python -m pytest tests/direct -v",
+    "test:contract:integration": ".venv-genvm/bin/gltest tests/integration -v -s"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",

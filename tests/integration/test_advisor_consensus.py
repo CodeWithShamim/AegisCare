@@ -16,15 +16,19 @@ page) and the validator independently re-runs the leader and agrees on the
 decided field (status / verdict / boolean) — equivalence on meaning, not bytes.
 """
 import pytest
-from gltest import contract_factory
+from gltest import get_contract_factory
 from gltest.assertions import tx_execution_failed
 
 CONTRACT_PATH = "contracts/aegiscare_advisor.py"
+CONTRACT_PATH = "contracts/aegiscare_advisor.py"
+# get_contract_factory resolves contract_file_path relative to the contracts
+# directory, so pass the bare filename here.
+CONTRACT_FILE = "aegiscare_advisor.py"
 
 
 @pytest.fixture(scope="module")
 def advisor():
-    factory = contract_factory(CONTRACT_PATH)
+    factory = get_contract_factory(contract_file_path=CONTRACT_FILE)
     return factory.deploy()
 
 

@@ -49,11 +49,13 @@ class AegisCareAdvisor(gl.Contract):
     eligibility_checks: TreeMap[str, EligibilityCheck]
 
     def __init__(self) -> None:
-        # Fix: use inmem_allocate for all storage types in __init__
-        self.explanations = gl.storage.inmem_allocate(TreeMap[u32, TreeMap[str, str]])
-        self.recommendations = gl.storage.inmem_allocate(TreeMap[str, Recommendation])
-        self.validations = gl.storage.inmem_allocate(TreeMap[u32, ValidationResult])
-        self.eligibility_checks = gl.storage.inmem_allocate(TreeMap[str, EligibilityCheck])
+        # An explicit __init__ is required by the GenVM validator (E106).
+        # Do NOT inmem_allocate the top-level collections here — that creates
+        # in-memory (pickled) collections instead of storage-backed ones, which
+        # breaks reads in nondet mode (block explorer warns "Detected pickling
+        # storage class"). They are zero-initialized by the framework. A nested
+        # TreeMap *value* still needs inmem_allocate at its assignment site.
+        pass
 
     def _parse_json(self, raw) -> dict:
         if isinstance(raw, dict):
@@ -239,7 +241,10 @@ Only use IDs from the candidates list. Pick 1 to 3."""
     ) -> None:
 
         def leader_fn():
-            web_context = gl.nondet.web.render(_ICD10_URL, mode="text")
+            try:
+                web_context = gl.nondet.web.render(_ICD10_URL, mode="text")
+            except Exception:
+                raise gl.vm.UserError("LLM_ERROR: failed to fetch ICD-10 reference page")
             web_context = (web_context or "")[:3000]
             prompt = f"""Validate this clinical trial registration.
 Trial: {trial_name}
@@ -308,7 +313,10 @@ Respond ONLY as JSON: {{"valid": true, "reason": "", "suggestions": []}}"""
         self._check_pii(anonymized_summary)
 
         def leader_fn():
-            trial_page = gl.nondet.web.render(trial_registry_url, mode="text")
+            try:
+                trial_page = gl.nondet.web.render(trial_registry_url, mode="text")
+            except Exception:
+                raise gl.vm.UserError("LLM_ERROR: failed to fetch trial registry page")
             trial_page = (trial_page or "")[:5000]
             if not trial_page.strip():
                 raise gl.vm.UserError("EXPECTED: trial registry page returned empty content")

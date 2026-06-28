@@ -66,7 +66,7 @@ class TestRecommendTrials:
 
         rec = contract.get_recommendations("hash_abc123")
         assert rec.reasoning != ""
-        assert 42 in [int(t) for t in rec.trial_ids]
+        assert 42 in _parse_ids(rec.trial_ids)
 
     def test_multiple_recommendations(self, direct_vm, direct_deploy, direct_alice):
         """LLM picks 3 trials — all stored."""
@@ -92,7 +92,7 @@ class TestRecommendTrials:
         )
 
         rec = contract.get_recommendations("hash_multi")
-        ids = sorted([int(t) for t in rec.trial_ids])
+        ids = sorted(_parse_ids(rec.trial_ids))
         assert ids == [10, 20, 30]
 
     def test_empty_trial_list_fails(self, direct_vm, direct_deploy, direct_alice):
@@ -128,7 +128,7 @@ class TestRecommendTrials:
         contract = direct_deploy(CONTRACT_PATH)
         rec = contract.get_recommendations("nonexistent_hash")
         assert rec.reasoning == ""
-        assert len(rec.trial_ids) == 0
+        assert len(_parse_ids(rec.trial_ids)) == 0
 
 
 class TestRecommendationPrivacy:
@@ -154,4 +154,4 @@ class TestRecommendationPrivacy:
         )
 
         rec = contract.get_recommendations("sha256_of_profile_buckets")
-        assert len(rec.trial_ids) == 1
+        assert len(_parse_ids(rec.trial_ids)) == 1
