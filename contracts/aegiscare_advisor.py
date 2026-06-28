@@ -41,6 +41,37 @@ _PII_PATTERNS = [
 ]
 
 
+# These helpers are module-level (NOT methods) on purpose. They are called from
+# inside non-deterministic blocks (leader_fn/validator_fn). A method would close
+# over `self` — the storage-backed contract object — and capturing a storage
+# class into a nondet closure makes GenVM pickle it, raising:
+#   "Detected pickling storage class. Reading storage in nondet mode is not supported"
+# Keeping them free functions means the nondet closures capture no storage.
+def _parse_json(raw) -> dict:
+    if isinstance(raw, dict):
+        return raw
+    if isinstance(raw, str):
+        try:
+            return json.loads(raw)
+        except Exception:
+            pass
+        match = re.search(r'\{.*\}', raw, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group())
+            except Exception:
+                pass
+    raise gl.vm.UserError("LLM_ERROR: could not parse JSON from LLM output")
+
+
+def _check_pii(text: str) -> None:
+    for pattern in _PII_PATTERNS:
+        if re.search(pattern, text):
+            raise gl.vm.UserError(
+                "EXPECTED: summary contains PII — remove email, phone, or ID numbers"
+            )
+
+
 class AegisCareAdvisor(gl.Contract):
 
     explanations: TreeMap[u32, TreeMap[str, str]]
@@ -56,29 +87,6 @@ class AegisCareAdvisor(gl.Contract):
         # storage class"). They are zero-initialized by the framework. A nested
         # TreeMap *value* still needs inmem_allocate at its assignment site.
         pass
-
-    def _parse_json(self, raw) -> dict:
-        if isinstance(raw, dict):
-            return raw
-        if isinstance(raw, str):
-            try:
-                return json.loads(raw)
-            except Exception:
-                pass
-            match = re.search(r'\{.*\}', raw, re.DOTALL)
-            if match:
-                try:
-                    return json.loads(match.group())
-                except Exception:
-                    pass
-        raise gl.vm.UserError("LLM_ERROR: could not parse JSON from LLM output")
-
-    def _check_pii(self, text: str) -> None:
-        for pattern in _PII_PATTERNS:
-            if re.search(pattern, text):
-                raise gl.vm.UserError(
-                    "EXPECTED: summary contains PII — remove email, phone, or ID numbers"
-                )
 
     # ==================================================================
     # Feature 1 — Eligibility explainer
@@ -113,7 +121,7 @@ Rules:
 - Length: 50 to 400 characters.
 Respond ONLY as JSON: {{"explanation": "your text here"}}"""
             result = gl.nondet.exec_prompt(prompt)
-            data = self._parse_json(result)
+            data = _parse_json(result)
             explanation = data.get("explanation", "")
             if not isinstance(explanation, str) or not (50 <= len(explanation) <= 400):
                 raise gl.vm.UserError("LLM_ERROR: explanation invalid or wrong length")
@@ -135,10 +143,11 @@ Respond ONLY as JSON: {{"explanation": "your text here"}}"""
 
         result = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
 
-        # Fix: use inmem_allocate for nested TreeMap
-        if trial_id not in self.explanations:
-            self.explanations[trial_id] = gl.storage.inmem_allocate(TreeMap[str, str])
-        self.explanations[trial_id][patient_address] = result["explanation"]
+        # The inner TreeMap must be created *inside* the outer storage tree so it
+        # is storage-backed (readable in nondet/view mode). Using inmem_allocate
+        # here detaches an in-memory map and pickles it into the slot, which
+        # triggers "Detected pickling storage class" and breaks nondet reads.
+        self.explanations.get_or_insert_default(trial_id)[patient_address] = result["explanation"]
 
     @gl.public.view
     def get_explanation(self, trial_id: u32, patient_address: str) -> str:
@@ -181,7 +190,7 @@ Candidates:
 Respond ONLY as JSON: {{"trial_ids": [1, 2], "reasoning": "explanation"}}
 Only use IDs from the candidates list. Pick 1 to 3."""
             result = gl.nondet.exec_prompt(prompt)
-            data = self._parse_json(result)
+            data = _parse_json(result)
             raw_ids = data.get("trial_ids", [])
             reasoning = data.get("reasoning", "")
             if not isinstance(raw_ids, list):
@@ -254,7 +263,7 @@ ICD-10 reference: {web_context}
 valid=true ONLY if description is coherent AND code is a real ICD-10 code.
 Respond ONLY as JSON: {{"valid": true, "reason": "", "suggestions": []}}"""
             result = gl.nondet.exec_prompt(prompt)
-            data = self._parse_json(result)
+            data = _parse_json(result)
             valid = data.get("valid")
             reason = data.get("reason", "")
             suggestions = data.get("suggestions", [])
@@ -310,8 +319,7 @@ Respond ONLY as JSON: {{"valid": true, "reason": "", "suggestions": []}}"""
             raise gl.vm.UserError("EXPECTED: summary too short")
         if len(anonymized_summary) > 2000:
             raise gl.vm.UserError("EXPECTED: summary too long")
-        self._check_pii(anonymized_summary)
-
+        _check_pii(anonymized_summary)
         def leader_fn():
             try:
                 trial_page = gl.nondet.web.render(trial_registry_url, mode="text")
@@ -327,7 +335,7 @@ Result must be exactly one of: ELIGIBLE, NOT_ELIGIBLE, UNCLEAR
 Respond ONLY as JSON:
 {{"result": "ELIGIBLE", "matched_criteria": ["criterion: PASS"], "failed_criteria": [], "reasoning": "explanation"}}"""
             raw = gl.nondet.exec_prompt(prompt)
-            data = self._parse_json(raw)
+            data = _parse_json(raw)
             result = data.get("result", "")
             if result not in ("ELIGIBLE", "NOT_ELIGIBLE", "UNCLEAR"):
                 raise gl.vm.UserError("LLM_ERROR: result must be ELIGIBLE, NOT_ELIGIBLE, or UNCLEAR")

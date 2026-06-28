@@ -1202,8 +1202,8 @@ export default function DocsPage() {
                 </a>{' '}
                 is an <strong>AI-native blockchain</strong>. Its smart contracts —{' '}
                 <strong>Intelligent Contracts</strong>, written in Python — can natively call LLMs
-                and read the live web <em>from inside contract execution</em>. Because that output is
-                non-deterministic, GenLayer settles it with <strong>Optimistic Democracy</strong>{' '}
+                and read the live web <em>from inside contract execution</em>. Because that output
+                is non-deterministic, GenLayer settles it with <strong>Optimistic Democracy</strong>{' '}
                 consensus: a randomly chosen <strong>leader</strong> proposes a result, independent{' '}
                 <strong>validators</strong> re-run the same logic, and the value commits{' '}
                 <strong>only when validators agree on its meaning</strong> — not on exact bytes. The
@@ -1214,8 +1214,8 @@ export default function DocsPage() {
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   <p className="font-semibold text-purple-800 text-sm">🤖 LLM in the contract</p>
                   <p className="text-xs text-purple-700 mt-1">
-                    <code className="bg-purple-100 px-1 rounded">gl.nondet.exec_prompt()</code> runs a
-                    model as a first-class on-chain operation.
+                    <code className="bg-purple-100 px-1 rounded">gl.nondet.exec_prompt()</code> runs
+                    a model as a first-class on-chain operation.
                   </p>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -1276,11 +1276,10 @@ export default function DocsPage() {
                       </td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-2 font-medium">
-                        Finding the right trial among many
-                      </td>
+                      <td className="px-4 py-2 font-medium">Finding the right trial among many</td>
                       <td className="px-4 py-2 text-gray-600">
-                        Ranking free-text trial descriptions needs semantic judgment, not arithmetic.
+                        Ranking free-text trial descriptions needs semantic judgment, not
+                        arithmetic.
                       </td>
                       <td className="px-4 py-2 text-gray-700">
                         <code className="bg-gray-100 px-1 rounded">recommend_trials</code> picks 1–3
@@ -1296,8 +1295,8 @@ export default function DocsPage() {
                       </td>
                       <td className="px-4 py-2 text-gray-700">
                         <code className="bg-gray-100 px-1 rounded">validate_trial</code> fetches{' '}
-                        <strong>live WHO ICD-10</strong> data on-chain and validates the registration
-                        before it&apos;s trusted.
+                        <strong>live WHO ICD-10</strong> data on-chain and validates the
+                        registration before it&apos;s trusted.
                       </td>
                     </tr>
                     <tr>
@@ -1595,7 +1594,9 @@ class EligibilityCheck:        # get_eligibility_check(check_id)
               <h4 className="font-semibold mb-2">On-chain web sources</h4>
               <p className="text-sm text-gray-600 mb-3">
                 Web reads run inside the leader via{' '}
-                <code className="bg-gray-100 px-1 rounded">gl.nondet.web.render(url, mode=&quot;text&quot;)</code>{' '}
+                <code className="bg-gray-100 px-1 rounded">
+                  gl.nondet.web.render(url, mode=&quot;text&quot;)
+                </code>{' '}
                 and are length-bounded so the prompt stays deterministic across validators.
               </p>
               <div className="overflow-x-auto mb-6">
@@ -1688,7 +1689,7 @@ NEXT_PUBLIC_GENLAYER_CHAIN_ID=studionet`}</code>
                 <p className="text-sm text-blue-800">
                   <strong>Current deployment:</strong>{' '}
                   <code className="bg-blue-100 px-1 rounded">
-                    0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
+                    0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3
                   </code>{' '}
                   on GenLayer StudioNet. The frontend guards against a missing address (
                   <code>assertAdvisorConfigured</code>), so a misconfigured deploy fails loudly

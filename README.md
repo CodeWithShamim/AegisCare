@@ -11,11 +11,11 @@ AegisCare uses a **dual-chain architecture**:
 
 > The GenLayer advisor is **strictly additive**: it handles AI features only and **never receives raw or encrypted patient medical data**. All AI inputs are anonymized (age buckets, condition categories, PII-screened summaries).
 
-🧠 **GenLayer Explorer:** [View the AI Advisor Intelligent Contract](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+🧠 **GenLayer Explorer:** [View the AI Advisor Intelligent Contract](https://explorer-studio.genlayer.com/address/0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3)
 
 ### About GenLayer
 
-[**GenLayer**](https://www.genlayer.com/) is an **AI-native blockchain** whose smart contracts — called **Intelligent Contracts** — can natively call LLMs and read the live web from inside contract execution. Because LLM and web outputs are non-deterministic, GenLayer settles them with **Optimistic Democracy** consensus: a randomly selected **leader** proposes a result, independent **validators** re-run the same logic, and the value is committed **only when validators agree on its meaning** (not on exact bytes). This makes AI reasoning *trustless and verifiable on-chain* — no centralized oracle and no single model deciding the outcome.
+[**GenLayer**](https://www.genlayer.com/) is an **AI-native blockchain** whose smart contracts — called **Intelligent Contracts** — can natively call LLMs and read the live web from inside contract execution. Because LLM and web outputs are non-deterministic, GenLayer settles them with **Optimistic Democracy** consensus: a randomly selected **leader** proposes a result, independent **validators** re-run the same logic, and the value is committed **only when validators agree on its meaning** (not on exact bytes). This makes AI reasoning _trustless and verifiable on-chain_ — no centralized oracle and no single model deciding the outcome.
 
 In AegisCare, GenLayer powers the `AegisCareAdvisor` Intelligent Contract (`contracts/aegiscare_advisor.py`), the platform's AI brain:
 
@@ -24,7 +24,7 @@ In AegisCare, GenLayer powers the `AegisCareAdvisor` Intelligent Contract (`cont
 - ✅ **Validates** trial registrations against **live WHO ICD-10 data** fetched on-chain via GenLayer's web access.
 - 🔍 **Checks eligibility** against an external trial-registry URL from a PII-screened, anonymized summary.
 
-Why pair it with FHE? Zama's fhEVM is ideal for **deterministic, confidential math** (the encrypted eligibility computation), but it cannot *reason* — it can't explain a result, rank trials from free text, or check a code against a live medical reference. Those tasks need judgment, so they run on GenLayer with leader/validator consensus. The two layers are complementary: **FHE keeps medical data private; GenLayer makes AI reasoning trustless** — and the advisor only ever sees anonymized, de-identified inputs, enforced both client-side and in the contract.
+Why pair it with FHE? Zama's fhEVM is ideal for **deterministic, confidential math** (the encrypted eligibility computation), but it cannot _reason_ — it can't explain a result, rank trials from free text, or check a code against a live medical reference. Those tasks need judgment, so they run on GenLayer with leader/validator consensus. The two layers are complementary: **FHE keeps medical data private; GenLayer makes AI reasoning trustless** — and the advisor only ever sees anonymized, de-identified inputs, enforced both client-side and in the contract.
 
 ### The Problem
 
@@ -313,7 +313,7 @@ npm run dev
 Both contracts are already deployed — open them in their explorers before you run anything locally:
 
 - 🔐 **FHE Matching Contract** (Zama fhEVM · Sepolia) → [View on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x3DB49a1Ca0d72740e54f5FB06Ccc69576c4192F7)
-- 🧠 **AI Advisor** (GenLayer Intelligent Contract · StudioNet) → [View Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+- 🧠 **AI Advisor** (GenLayer Intelligent Contract · StudioNet) → [View Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3)
 
 ### Deployed Contracts
 
@@ -334,11 +334,11 @@ Deployment Date: December 27, 2025
 **AI Advisor (GenLayer Intelligent Contract · StudioNet):**
 
 ```
-Address: 0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
+Address: 0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3
 Network: GenLayer StudioNet
 ```
 
-🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3)
 
 No need to deploy - just connect MetaMask to Sepolia and start testing!
 
@@ -905,12 +905,12 @@ npm run dev
 The AI advisor is a separate Python Intelligent Contract on GenLayer. It is **already deployed** for this project:
 
 ```
-Advisor Address: 0xb5c1b14b91f5ecc613F380d43e8AE6258f089287
+Advisor Address: 0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3
 Network: GenLayer studionet
 Contract: contracts/aegiscare_advisor.py
 ```
 
-🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0xb5c1b14b91f5ecc613F380d43e8AE6258f089287)
+🔎 **Explorer:** [View AI Advisor on GenLayer Studio Explorer](https://explorer-studio.genlayer.com/address/0x7feFc3d155c5c268E3e104e6620d71C0A4ebe4e3)
 
 To deploy your own instance:
 
