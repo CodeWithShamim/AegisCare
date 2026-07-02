@@ -51,6 +51,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Open Sauce One — base UI font for the landing redesign. Not on
+            next/font/google, so loaded from Fontshare's CDN. */}
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=open-sauce-one@400,500,600,700,800&display=swap"
+          rel="stylesheet"
+        />
         <Script
           src="https://cdn.zama.org/relayer-sdk-js/0.3.0-8/relayer-sdk-js.umd.cjs"
           strategy="beforeInteractive"

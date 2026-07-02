@@ -9,20 +9,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-open-sauce: "Open Sauce One", var(--font-geist-sans), Arial, Helvetica, sans-serif;
   color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-open-sauce);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-open-sauce);
 }
 
 /*
@@ -239,6 +240,38 @@ body {
   animation: ac-sparkle-fall linear forwards;
 }
 
+/* ============================================================
+ * Masked-card landing redesign helpers
+ * ============================================================ */
+
+/* Clamp-based hero headline: heavy, tight leading (0.79–1.05). */
+.ac-hero-headline {
+  font-size: clamp(2.5rem, 8vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+/* Section titles: same heavy language, one step down from the hero. */
+.ac-section-title {
+  font-size: clamp(1.875rem, 4vw, 3.5rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: #000;
+}
+
+/* Mobile full-screen nav: staggered link entrance. */
+@keyframes ac-nav-link-in {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.ac-nav-link {
+  opacity: 0;
+  animation: ac-nav-link-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ---- Respect user motion preferences ---- */
 @media (prefers-reduced-motion: reduce) {
   .ac-blob,
@@ -254,4 +287,8 @@ body {
   }
   .ac-card:hover { transform: none; }
   .ac-sparkle { display: none !important; }
+  .ac-nav-link {
+    opacity: 1 !important;
+    animation: none !important;
+  }
 }

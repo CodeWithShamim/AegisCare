@@ -3,1014 +3,327 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ScrollReveal from '@/components/ScrollReveal';
+import SplashScreen from '@/components/SplashScreen';
+import MaskedCard from '@/components/MaskedCard';
 import { useSparkleBurst } from '@/components/useSparkleBurst';
 import { usePlatformStats } from '@/lib/hooks/usePlatformStats';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useImageWidth } from '@/hooks/useImageWidth';
+import { useMaskPositions } from '@/hooks/useMaskPositions';
+import { useStaggeredReveal } from '@/hooks/useStaggeredReveal';
+
+/**
+ * Shared hero background. A single large image is windowed across three feature
+ * bars + one hero card via `useMaskPositions`. Swap this one string for a local
+ * `/hero.jpg` later if desired.
+ */
+const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=2000&q=80';
+
+const FEATURES = [
+  'Zero-Knowledge Matching',
+  'FHE-Encrypted Data',
+  'HIPAA & GDPR Compliant',
+];
+
+/** Capability cards — restyled from the original feature grid. */
+const CAPABILITIES = [
+  {
+    title: 'GenLayer AI Advisor',
+    body: 'An AegisCareAdvisor Intelligent Contract explains eligibility, recommends trials, and validates registrations against live ICD-10 data — all through LLM-backed consensus.',
+  },
+  {
+    title: 'Optimistic Democracy',
+    body: 'Every advisor result is proposed by a leader and verified by independent validators with equivalence rules, so non-deterministic LLM output settles on-chain trustlessly.',
+  },
+  {
+    title: 'End-to-End Encryption',
+    body: 'Medical data is encrypted before leaving your browser and stays encrypted throughout the entire matching process.',
+  },
+  {
+    title: 'FHE-Powered Matching',
+    body: 'Eligibility is computed on encrypted data using Zama FHEVM — no plaintext exposure at any point.',
+  },
+  {
+    title: 'Strict Privacy Boundary',
+    body: 'The advisor only ever sees anonymized inputs — age buckets, condition categories, and PII-screened summaries. Raw or encrypted PHI never leaves the FHE layer.',
+  },
+  {
+    title: 'Private Results',
+    body: 'Only you can decrypt your eligibility results, using an EIP-712 signature from your own private key.',
+  },
+];
+
+const PATIENT_STEPS = [
+  'Register with encrypted medical data (age, gender, BMI, conditions)',
+  'Browse available clinical trials',
+  'Check eligibility — computed on encrypted data on-chain',
+  'Decrypt your result with an EIP-712 signature (only you see it)',
+];
+
+const SPONSOR_STEPS = [
+  'Create a trial with encrypted eligibility criteria',
+  'Set age range, gender requirements, BMI limits, condition codes',
+  'Patients check eligibility without revealing their data',
+  'Privacy guaranteed — you never see patient medical data',
+];
 
 export default function Home() {
-  const stats = usePlatformStats();
   const sparkle = useSparkleBurst();
+  const stats = usePlatformStats();
+  const isMobile = useIsMobile();
+  const [gridRef, gridWidth] = useImageWidth<HTMLDivElement>();
+  const { bars, hero } = useMaskPositions(gridWidth, isMobile, FEATURES.length);
+  const revealRef = useStaggeredReveal<HTMLDivElement>({ stagger: 110 });
+  const statsRef = useStaggeredReveal<HTMLDivElement>({ stagger: 90 });
+  const capsRef = useStaggeredReveal<HTMLDivElement>({ stagger: 70 });
+  const worksRef = useStaggeredReveal<HTMLDivElement>({ stagger: 120 });
+  const archRef = useStaggeredReveal<HTMLDivElement>({ stagger: 120 });
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
-      <ScrollReveal />
+    <div className="relative min-h-screen bg-white text-black">
+      <SplashScreen />
+      <Header />
 
-      {/* Animated aurora background — covers the full page */}
-      <div className="ac-aurora-bg" aria-hidden="true">
-        <div className="ac-blob ac-blob-indigo" />
-        <div className="ac-blob ac-blob-purple" />
-        <div className="ac-blob ac-blob-pink" />
-      </div>
+      {/* Hero — full-height masked-card grid */}
+      <main className="px-4 pt-20 md:px-6 md:pt-24">
+        <section className="mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl flex-col justify-center py-6">
+          <div
+            ref={gridRef}
+            className="grid grid-cols-1 gap-3 md:grid-cols-[38%_1fr] md:gap-4"
+          >
+            {/* Feature bars column */}
+            <div ref={revealRef} className="flex flex-col gap-3 md:gap-4">
+              {FEATURES.map((label, i) => (
+                <MaskedCard
+                  key={label}
+                  image={HERO_IMAGE}
+                  mask={bars[i]}
+                  overlay={0.4}
+                  className="h-24 md:h-auto md:flex-1"
+                >
+                  <div className="flex h-full items-end p-4">
+                    <span className="text-lg font-bold leading-tight text-white md:text-xl">
+                      {label}
+                    </span>
+                  </div>
+                </MaskedCard>
+              ))}
+            </div>
 
-      {/* Header */}
-      <div className="relative z-10">
-        <Header />
-      </div>
-
-      {/* Hero Section */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <div className="py-16">
-            {/* Built-for badge */}
-            <h2
-              data-reveal
-              className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+            {/* Large hero card */}
+            <MaskedCard
+              image={HERO_IMAGE}
+              mask={hero}
+              overlay={0.45}
+              className="min-h-104 md:min-h-152"
             >
-              Clinical Trial Matching with
-              <span className="ac-gradient-text block mt-2">Complete Privacy</span>
-            </h2>
-            <p
-              data-reveal
-              className="ac-delay-1 mt-6 max-w-2xl mx-auto text-xl text-gray-500"
-            >
-              AegisCare combines{' '}
-              <strong className="text-gray-700">Fully Homomorphic Encryption (FHE)</strong> for
-              private eligibility matching with a{' '}
-              <strong className="text-gray-700">GenLayer AI advisor</strong> that explains,
-              recommends, and validates trials through on-chain LLM consensus — never touching raw
-              patient data.
-            </p>
-
-            {/* Dual-chain chips */}
-            <div
-              data-reveal
-              className="ac-delay-2 mt-8 flex flex-wrap items-center justify-center gap-3"
-            >
-              <span className="inline-flex items-center space-x-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-sm border border-indigo-100">
-                <span className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm">
-                  🔐
+              <div className="flex h-full flex-col justify-between p-6 md:p-10">
+                <span className="text-sm font-semibold uppercase tracking-[0.2em] text-white/80">
+                  Privacy-First Clinical Trials
                 </span>
-                <span className="text-sm font-medium text-gray-700">
-                  Zama fhEVM · encrypted eligibility
-                </span>
-              </span>
-              <span className="text-gray-400">+</span>
-              <span className="inline-flex items-center space-x-2 bg-white rounded-full pl-2 pr-4 py-2 shadow-sm border border-purple-100">
-                <span className="w-7 h-7 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm">
-                  🧠
-                </span>
-                <span className="text-sm font-medium text-gray-700">
-                  GenLayer · AI advisor (Optimistic Democracy)
-                </span>
-              </span>
-            </div>
-          </div>
 
-          {/* Platform Statistics */}
-          <div className="mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Total Trials */}
-              <div
-                data-reveal="pop"
-                className="ac-card bg-white rounded-xl shadow-lg p-6 border-2 border-indigo-100"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                      Active Trials
-                    </p>
-                    {stats.isLoading ? (
-                      <div className="animate-pulse mt-2">
-                        <div className="h-8 bg-gray-200 rounded w-20"></div>
-                      </div>
-                    ) : (
-                      <p className="text-4xl font-bold text-indigo-600 mt-2">{stats.totalTrials}</p>
-                    )}
-                    <p className="text-xs text-gray-500 mt-1">Registered clinical trials</p>
-                  </div>
-                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-indigo-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Total Patients */}
-              <div
-                data-reveal="pop"
-                className="ac-card ac-delay-1 bg-white rounded-xl shadow-lg p-6 border-2 border-green-100"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                      Protected Patients
-                    </p>
-                    {stats.isLoading ? (
-                      <div className="animate-pulse mt-2">
-                        <div className="h-8 bg-gray-200 rounded w-20"></div>
-                      </div>
-                    ) : (
-                      <p className="text-4xl font-bold text-green-600 mt-2">
-                        {stats.totalPatients}
-                      </p>
-                    )}
-                    <p className="text-xs text-gray-500 mt-1">Privacy-preserving registrations</p>
-                  </div>
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-green-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Privacy Score */}
-              <div
-                data-reveal="pop"
-                className="ac-card ac-delay-2 bg-white rounded-xl shadow-lg p-6 border-2 border-purple-100"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                      Data Privacy
-                    </p>
-                    <p className="text-4xl font-bold text-purple-600 mt-2">100%</p>
-                    <p className="text-xs text-gray-500 mt-1">End-to-end encrypted</p>
-                  </div>
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-purple-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Activity Indicator */}
-            <div className="mt-6 flex items-center justify-center space-x-2 text-sm text-gray-600">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-              </span>
-              <span>Platform active on Zama FHE Devnet &amp; GenLayer StudioNet</span>
-            </div>
-          </div>
-
-          {/* Key Features */}
-          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div data-reveal className="ac-card ac-shine bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🧠</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">GenLayer AI Advisor</h3>
-              <p className="text-sm text-gray-600">
-                An <strong>AegisCareAdvisor</strong> Intelligent Contract explains eligibility,
-                recommends trials, validates registrations against live ICD-10 data, and checks
-                registry eligibility — all through LLM-backed consensus.
-              </p>
-            </div>
-
-            <div data-reveal className="ac-card ac-shine ac-delay-1 bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">⚖️</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Optimistic Democracy</h3>
-              <p className="text-sm text-gray-600">
-                Every advisor result is proposed by a leader and verified by independent validators
-                with equivalence rules, so non-deterministic LLM/web output settles on-chain
-                trustlessly.
-              </p>
-            </div>
-
-            <div data-reveal className="ac-card ac-shine ac-delay-2 bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🔒</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">End-to-End Encryption</h3>
-              <p className="text-sm text-gray-600">
-                Medical data is encrypted before leaving your browser and stays encrypted throughout
-                the matching process
-              </p>
-            </div>
-
-            <div data-reveal className="ac-card ac-shine ac-delay-3 bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🔐</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">FHE-Powered Matching</h3>
-              <p className="text-sm text-gray-600">
-                Eligibility is computed on encrypted data using Zama FHEVM - no plaintext exposure
-              </p>
-            </div>
-
-            <div data-reveal className="ac-card ac-shine ac-delay-4 bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">🚫</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Strict Privacy Boundary</h3>
-              <p className="text-sm text-gray-600">
-                The advisor only ever sees anonymized inputs — age buckets, condition categories,
-                and PII-screened summaries. Raw or encrypted PHI never leaves the FHE layer.
-              </p>
-            </div>
-
-            <div data-reveal className="ac-card ac-shine ac-delay-5 bg-white p-6 rounded-lg shadow-md">
-              <div className="ac-wiggle-hover text-3xl mb-3 inline-block">👤</div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Private Results</h3>
-              <p className="text-sm text-gray-600">
-                Only you can decrypt your eligibility results using your private key
-              </p>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div data-reveal className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/patient"
-              onClick={sparkle}
-              className="ac-shine inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30"
-            >
-              I&apos;m a Patient
-            </Link>
-            <Link
-              href="/trial-admin"
-              onClick={sparkle}
-              className="ac-shine inline-flex items-center justify-center px-8 py-3 border border-indigo-200 text-base font-medium rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-sm hover:shadow-md"
-            >
-              I&apos;m a Trial Sponsor
-            </Link>
-            <Link
-              href="/analytics"
-              onClick={sparkle}
-              className="ac-shine inline-flex items-center justify-center gap-2 px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 md:py-4 md:text-lg md:px-10 transition-all hover:scale-105 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
-              Platform Analytics
-            </Link>
-          </div>
-
-          {/* How It Works */}
-          <div className="mt-20">
-            <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-8">How It Works</h3>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div data-reveal className="ac-card bg-white p-6 rounded-lg shadow-md text-left">
-                <h4 className="text-lg font-semibold text-indigo-600 mb-3">For Patients</h4>
-                <ol className="space-y-3 text-sm text-gray-600">
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      1
-                    </span>
-                    <span>Register with encrypted medical data (age, gender, BMI, conditions)</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      2
-                    </span>
-                    <span>Browse available clinical trials</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      3
-                    </span>
-                    <span>Check eligibility - computed on encrypted data on the blockchain</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      4
-                    </span>
-                    <span>Decrypt your result with EIP-712 signature (only you see it)</span>
-                  </li>
-                </ol>
-              </div>
-
-              <div data-reveal className="ac-card ac-delay-1 bg-white p-6 rounded-lg shadow-md text-left">
-                <h4 className="text-lg font-semibold text-indigo-600 mb-3">For Trial Sponsors</h4>
-                <ol className="space-y-3 text-sm text-gray-600">
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      1
-                    </span>
-                    <span>Create trial with encrypted eligibility criteria</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      2
-                    </span>
-                    <span>Set age range, gender requirements, BMI limits, condition codes</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      3
-                    </span>
-                    <span>
-                      Patients automatically check eligibility without revealing their data
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mr-3 mt-0.5">
-                      4
-                    </span>
-                    <span>Privacy guaranteed - you never see patient medical data</span>
-                  </li>
-                </ol>
-              </div>
-            </div>
-          </div>
-
-          {/* Two-Layer Architecture */}
-          <div className="mt-20">
-            <div className="text-center mb-10">
-              <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-3">A Dual-Chain Architecture</h3>
-              <p data-reveal className="ac-delay-1 text-lg text-gray-600 max-w-3xl mx-auto">
-                FHE handles the confidential math; GenLayer handles the judgment. Each layer does
-                the one thing the other fundamentally cannot.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* FHE Layer */}
-              <div data-reveal className="ac-card bg-white rounded-2xl shadow-md border-2 border-indigo-100 p-8 text-left">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="ac-wiggle-hover w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl">
-                    🔐
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-gray-900">FHE Matching Layer</h4>
-                    <p className="text-sm text-indigo-600 font-medium">
-                      Zama fhEVM · Solidity · Sepolia
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Computes eligibility entirely on encrypted data. Medical values and trial criteria
-                  never appear in plaintext on-chain.
-                </p>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start">
-                    <span className="text-indigo-500 mr-2">▸</span>
-                    <span>Encrypted patient registration &amp; trial criteria</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-500 mr-2">▸</span>
-                    <span>
-                      FHE comparisons on{' '}
-                      <code className="text-xs bg-gray-100 px-1 rounded">euint</code> values
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-indigo-500 mr-2">▸</span>
-                    <span>EIP-712 private decryption by the patient only</span>
-                  </li>
-                </ul>
-                <p className="mt-4 text-xs text-gray-500">
-                  Contract: <code className="text-xs bg-gray-100 px-1 rounded">0x3DB49…92F7</code>
-                </p>
-              </div>
-
-              {/* GenLayer Layer */}
-              <div data-reveal className="ac-card ac-delay-1 bg-white rounded-2xl shadow-md border-2 border-purple-100 p-8 text-left">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="ac-wiggle-hover w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl">
-                    🧠
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-gray-900">AI Advisor Layer</h4>
-                    <p className="text-sm text-purple-600 font-medium">
-                      GenLayer · Python · StudioNet
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Runs LLM-backed logic with leader/validator consensus on anonymized inputs only.
-                  Explains, recommends, validates, and checks eligibility.
-                </p>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start">
-                    <span className="text-purple-500 mr-2">▸</span>
-                    <span>
-                      <strong>generate_explanation</strong> — plain-language eligibility result
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-purple-500 mr-2">▸</span>
-                    <span>
-                      <strong>recommend_trials</strong> — best 1–3 matches from candidates
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-purple-500 mr-2">▸</span>
-                    <span>
-                      <strong>validate_trial</strong> — checks against live ICD-10 reference
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-purple-500 mr-2">▸</span>
-                    <span>
-                      <strong>check_eligibility</strong> — registry page + PII-screened summary
-                    </span>
-                  </li>
-                </ul>
-                <p className="mt-4 text-xs text-gray-500">
-                  Contract: <code className="text-xs bg-gray-100 px-1 rounded">0x27bcE4…3bB19</code>
-                </p>
-              </div>
-            </div>
-
-            {/* Privacy boundary callout */}
-            <div data-reveal className="ac-card mt-6 bg-purple-50 border border-purple-200 rounded-2xl p-6">
-              <div className="flex items-start">
-                <div className="ac-wiggle-hover text-2xl mr-4 inline-block">🛡️</div>
                 <div>
-                  <h4 className="font-bold text-purple-900 mb-1">Why a privacy boundary?</h4>
-                  <p className="text-sm text-purple-800">
-                    The advisor is strictly additive and isolated. FHE decides the binary
-                    eligibility; the advisor explains and enriches it using only anonymized buckets
-                    and PII-screened summaries. No raw or encrypted PHI is ever sent to the GenLayer
-                    contract — both the client and the contract enforce this.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <h1 className="ac-hero-headline max-w-3xl text-white">
+                    Trial matching, without exposing your medical data
+                  </h1>
 
-          {/* Video Section */}
-          <div className="mt-20">
-            <div className="text-center mb-10">
-              <h3 data-reveal className="text-3xl font-bold text-gray-900 mb-3">See AegisCare in Action</h3>
-              <p data-reveal className="ac-delay-1 text-lg text-gray-600 max-w-2xl mx-auto">
-                Watch how our platform revolutionizes clinical trial matching with complete privacy
-                preservation
-              </p>
-            </div>
-
-            <div className="relative max-w-5xl mx-auto">
-              {/* Gradient Border Effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur-lg opacity-30"></div>
-
-              {/* Video Container */}
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-white">
-                {/* Video Header */}
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-3 h-3 rounded-full bg-red-400 animate-pulse"></div>
-                      <span className="text-white font-semibold">Featured Demo</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-white/80 text-sm">Powered by</span>
-                      <span className="text-white font-bold">Zama FHE</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* YouTube Video Embed */}
-                <div className="relative aspect-video w-full bg-gray-900">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src="https://www.youtube.com/embed/EvdMsxFs08c?rel=0&modestbranding=1"
-                    title="AegisCare Demo - Privacy-Preserving Clinical Trial Matching"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                {/* Video Footer */}
-                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-gray-200">
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-2">
-                        <svg
-                          className="w-5 h-5 text-indigo-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path
-                            fillRule="evenodd"
-                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        <span className="text-sm text-gray-600">
-                          Learn how FHE protects patient data
-                        </span>
-                      </div>
-                    </div>
-
-                    <a
-                      href="https://www.youtube.com/watch?v=EvdMsxFs08c"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg"
-                    >
-                      <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
-                      </svg>
-                      Watch on YouTube
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-xl animate-bounce">
-                <span className="text-3xl">🎬</span>
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-xl animate-pulse">
-                <span className="text-2xl">🔐</span>
-              </div>
-            </div>
-
-            {/* Feature Highlights Below Video */}
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div data-reveal className="ac-card bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-100">
-                <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                    />
-                  </svg>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">100% Encrypted</h4>
-                <p className="text-sm text-gray-600">
-                  Medical data stays encrypted throughout the entire process
-                </p>
-              </div>
-
-              <div data-reveal className="ac-card ac-delay-1 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
-                <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">HIPAA Compliant</h4>
-                <p className="text-sm text-gray-600">
-                  Meets healthcare privacy regulations with FHE technology
-                </p>
-              </div>
-
-              <div data-reveal className="ac-card ac-delay-2 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
-                <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2">Lightning Fast</h4>
-                <p className="text-sm text-gray-600">
-                  Real-time eligibility checking on encrypted data
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Technology Stack */}
-          <div data-reveal className="ac-card mt-20 bg-white rounded-2xl shadow-md p-8">
-            <h3 data-reveal className="text-2xl font-bold text-gray-900 mb-6">
-              Built with Privacy-First Technology
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-              <div data-reveal className="text-center">
-                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">⚡</div>
-                <p className="text-sm font-medium text-gray-900">Zama FHEVM</p>
-                <p className="text-xs text-gray-500">Fully Homomorphic Encryption</p>
-              </div>
-              <div data-reveal className="ac-delay-1 text-center">
-                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🧠</div>
-                <p className="text-sm font-medium text-gray-900">GenLayer</p>
-                <p className="text-xs text-gray-500">AI Intelligent Contracts &amp; consensus</p>
-              </div>
-              <div data-reveal className="ac-delay-2 text-center">
-                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🔗</div>
-                <p className="text-sm font-medium text-gray-900">Ethereum</p>
-                <p className="text-xs text-gray-500">Blockchain Infrastructure</p>
-              </div>
-              <div data-reveal className="ac-delay-3 text-center">
-                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🛡️</div>
-                <p className="text-sm font-medium text-gray-900">EIP-712</p>
-                <p className="text-xs text-gray-500">Typed Data Signing</p>
-              </div>
-              <div data-reveal className="ac-delay-4 text-center">
-                <div className="ac-wiggle-hover text-2xl mb-2 inline-block">🔑</div>
-                <p className="text-sm font-medium text-gray-900">Private Keys</p>
-                <p className="text-xs text-gray-500">User-Only Decryption</p>
-              </div>
-            </div>
-          </div>
-
-          {/* User Guide Section - Web3 Style */}
-          <div className="mt-20 relative">
-            {/* Background Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl blur-3xl"></div>
-
-            <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-1 shadow-2xl border border-gray-700">
-              {/* Inner Gradient Border */}
-              <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 md:p-12">
-                {/* Header */}
-                <div className="text-center mb-12">
-                  <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 rounded-full px-4 py-2 mb-4">
-                    <span className="relative flex h-3 w-3">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                    </span>
-                    <span className="text-indigo-300 text-sm font-medium">
-                      NEW Comprehensive Guide
-                    </span>
-                  </div>
-
-                  <h3 className="ac-gradient-text text-4xl md:text-5xl font-bold mb-4">
-                    📘 Master AegisCare
-                  </h3>
-                  <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-                    Everything you need to know about privacy-preserving clinical trial matching
-                  </p>
-                </div>
-
-                {/* Main Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                  {/* Left Card - CTA */}
-                  <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-2xl p-8 border border-indigo-500/30 hover:border-indigo-500/50 transition-all">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-white">Complete User Guide</h4>
-                        <p className="text-indigo-300 text-sm">500+ Lines of Documentation</p>
-                      </div>
-                    </div>
-
-                    <p className="text-gray-300 mb-6">
-                      Dive deep into AegisCare with our comprehensive guide. Learn about FHE
-                      technology, privacy preservation, and how to use the platform effectively.
-                    </p>
-
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center text-sm text-gray-300">
-                        <svg
-                          className="w-5 h-5 text-green-400 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        10 Comprehensive Sections
-                      </div>
-                      <div className="flex items-center text-sm text-gray-300">
-                        <svg
-                          className="w-5 h-5 text-green-400 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        50+ FAQ Questions Answered
-                      </div>
-                      <div className="flex items-center text-sm text-gray-300">
-                        <svg
-                          className="w-5 h-5 text-green-400 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Step-by-Step Tutorials
-                      </div>
-                      <div className="flex items-center text-sm text-gray-300">
-                        <svg
-                          className="w-5 h-5 text-green-400 mr-2"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        Real-World Use Cases
-                      </div>
-                    </div>
-
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                     <Link
-                      href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
-                      className="inline-flex items-center justify-center w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl border border-indigo-400/30"
+                      href="/patient"
+                      onClick={sparkle}
+                      className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-base font-bold text-black transition-transform hover:scale-105"
                     >
-                      <svg
-                        className="w-5 h-5 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        />
-                      </svg>
-                      Read Full Guide
+                      Check Eligibility
+                    </Link>
+                    <Link
+                      href="/trial-admin"
+                      className="inline-flex items-center justify-center rounded-full border border-white/70 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-white hover:text-black"
+                    >
+                      I&apos;m a Trial Sponsor
                     </Link>
                   </div>
-
-                  {/* Right Card - Quick Links */}
-                  <div className="space-y-4">
-                    <h4 className="text-lg font-bold text-white mb-4 flex items-center">
-                      <span className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3">
-                        <svg
-                          className="w-5 h-5 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 10V3L4 14h7v7l9-11h-7z"
-                          />
-                        </svg>
-                      </span>
-                      Quick Access
-                    </h4>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#what-is-aegiscare"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-indigo-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">🛡️</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-indigo-300">
-                          What is AegisCare?
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">Platform overview</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#why-do-we-need-it"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-purple-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">💡</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-purple-300">
-                          Why Do We Need It?
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">Real-world problems</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#how-does-it-work"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-pink-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">⚙️</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-pink-300">
-                          How It Works
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">Step-by-step guide</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#key-concepts-explained"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-blue-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">🔐</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-blue-300">
-                          Key Concepts
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">FHE, EIP-712, ACLs</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#getting-started-tutorial"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-green-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">🚀</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-green-300">
-                          Getting Started
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">5-minute tutorial</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#real-world-use-cases"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">🎯</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-yellow-300">
-                          Use Cases
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">Practical examples</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#security--privacy"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-red-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">🔒</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-red-300">
-                          Security
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">Privacy guarantees</p>
-                      </a>
-
-                      <a
-                        href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md#faq"
-                        className="group bg-gray-800/50 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700 hover:border-cyan-500/50 transition-all"
-                      >
-                        <div className="text-2xl mb-2">❓</div>
-                        <p className="text-sm font-semibold text-white group-hover:text-cyan-300">
-                          FAQ
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">50+ questions</p>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Target Audience */}
-                <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-2xl p-6 border border-gray-600">
-                  <h4 className="text-lg font-bold text-white mb-4 text-center">Perfect For</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center group">
-                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-2xl flex items-center justify-center mb-3 border border-blue-500/30 group-hover:border-blue-500/60 transition-all">
-                        <span className="text-3xl">👤</span>
-                      </div>
-                      <p className="text-sm font-semibold text-white">Patients</p>
-                      <p className="text-xs text-gray-400 mt-1">Protect your privacy</p>
-                    </div>
-
-                    <div className="text-center group">
-                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl flex items-center justify-center mb-3 border border-purple-500/30 group-hover:border-purple-500/60 transition-all">
-                        <span className="text-3xl">🏢</span>
-                      </div>
-                      <p className="text-sm font-semibold text-white">Trial Sponsors</p>
-                      <p className="text-xs text-gray-400 mt-1">Zero-knowledge matching</p>
-                    </div>
-
-                    <div className="text-center group">
-                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-2xl flex items-center justify-center mb-3 border border-green-500/30 group-hover:border-green-500/60 transition-all">
-                        <span className="text-3xl">💻</span>
-                      </div>
-                      <p className="text-sm font-semibold text-white">Developers</p>
-                      <p className="text-xs text-gray-400 mt-1">Explore FHE tech</p>
-                    </div>
-
-                    <div className="text-center group">
-                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-yellow-500/20 to-yellow-600/20 rounded-2xl flex items-center justify-center mb-3 border border-yellow-500/30 group-hover:border-yellow-500/60 transition-all">
-                        <span className="text-3xl">🎓</span>
-                      </div>
-                      <p className="text-sm font-semibold text-white">Students</p>
-                      <p className="text-xs text-gray-400 mt-1">Learn privacy apps</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom CTA */}
-                <div className="mt-8 text-center">
-                  <p className="text-gray-400 mb-4">
-                    Ready to explore the future of private healthcare?
-                  </p>
-                  <Link
-                    href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
-                    onClick={sparkle}
-                    className="ac-shine inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl border border-white/20"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                      />
-                    </svg>
-                    Start Reading the User Guide
-                  </Link>
-                  <p className="text-xs text-gray-500 mt-3">
-                    10 Major Sections • 500+ Lines • Perfect for Beginners
-                  </p>
                 </div>
               </div>
+            </MaskedCard>
+          </div>
+        </section>
+
+        {/* Platform stats */}
+        <section className="mx-auto max-w-7xl py-16 md:py-24">
+          <div ref={statsRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            <div className="rounded-2xl border border-black bg-white p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                Active Trials
+              </p>
+              {stats.isLoading ? (
+                <div className="mt-3 h-12 w-24 animate-pulse rounded bg-neutral-200" />
+              ) : (
+                <p className="mt-3 text-6xl font-extrabold tabular-nums leading-none">
+                  {stats.totalTrials}
+                </p>
+              )}
+              <p className="mt-2 text-sm text-neutral-500">Registered clinical trials</p>
+            </div>
+
+            <div className="rounded-2xl border border-black bg-black p-8 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
+                Protected Patients
+              </p>
+              {stats.isLoading ? (
+                <div className="mt-3 h-12 w-24 animate-pulse rounded bg-white/20" />
+              ) : (
+                <p className="mt-3 text-6xl font-extrabold tabular-nums leading-none">
+                  {stats.totalPatients}
+                </p>
+              )}
+              <p className="mt-2 text-sm text-white/60">Privacy-preserving registrations</p>
+            </div>
+
+            <div className="rounded-2xl border border-black bg-white p-8">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                Data Privacy
+              </p>
+              <p className="mt-3 text-6xl font-extrabold tabular-nums leading-none">100%</p>
+              <p className="mt-2 text-sm text-neutral-500">End-to-end encrypted</p>
             </div>
           </div>
 
-          {/* Security Notice */}
-          <div
-            data-reveal
-            className="ac-card mt-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-200"
-          >
-            <h4 className="text-lg font-semibold text-indigo-900 mb-3 flex items-center gap-2">
-              <span className="ac-wiggle-hover inline-block">🔒</span> Security Guarantee
-            </h4>
-            <p className="text-sm text-indigo-800">
-              AegisCare ensures that <strong>no plaintext medical data ever appears</strong>{' '}
-              on-chain, in logs, or in the UI. All computation happens on encrypted data using FHE,
-              and only the patient can decrypt their eligibility results using their private key.
-              This provides unprecedented privacy protection for clinical trial matching.
-            </p>
+          <div className="mt-6 flex items-center gap-2 text-sm text-neutral-600">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black/40" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-black" />
+            </span>
+            <span>Active on Zama FHE Devnet &amp; GenLayer StudioNet</span>
           </div>
-        </div>
+        </section>
+
+        {/* Capabilities */}
+        <section className="mx-auto max-w-7xl py-16 md:py-24">
+          <h2 className="ac-section-title mb-10 max-w-4xl">
+            One platform, two layers of privacy
+          </h2>
+          <div ref={capsRef} className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            {CAPABILITIES.map((cap) => (
+              <div
+                key={cap.title}
+                className="group rounded-2xl border border-black p-8 transition-colors hover:bg-black hover:text-white"
+              >
+                <h3 className="text-xl font-bold">{cap.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-neutral-600 group-hover:text-white/80">
+                  {cap.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="mx-auto max-w-7xl py-16 md:py-24">
+          <h2 className="ac-section-title mb-10">How it works</h2>
+          <div ref={worksRef} className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+            {[
+              { title: 'For Patients', steps: PATIENT_STEPS },
+              { title: 'For Trial Sponsors', steps: SPONSOR_STEPS },
+            ].map((col) => (
+              <div key={col.title} className="rounded-2xl border border-black p-8">
+                <h3 className="text-xl font-bold">{col.title}</h3>
+                <ol className="mt-6 space-y-4">
+                  {col.steps.map((step, i) => (
+                    <li key={step} className="flex items-start gap-4">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black text-sm font-bold text-white">
+                        {i + 1}
+                      </span>
+                      <span className="text-sm leading-relaxed text-neutral-700">{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Dual-chain architecture */}
+        <section className="mx-auto max-w-7xl py-16 md:py-24">
+          <h2 className="ac-section-title mb-4 max-w-4xl">A dual-chain architecture</h2>
+          <p className="mb-10 max-w-3xl text-lg text-neutral-600">
+            FHE handles the confidential math; GenLayer handles the judgment. Each layer does
+            the one thing the other fundamentally cannot.
+          </p>
+          <div ref={archRef} className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+            <div className="rounded-2xl border border-black p-8">
+              <h3 className="text-xl font-bold">FHE Matching Layer</h3>
+              <p className="mt-1 text-sm font-medium text-neutral-500">
+                Zama fhEVM · Solidity · Sepolia
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-neutral-600">
+                Computes eligibility entirely on encrypted data. Medical values and trial
+                criteria never appear in plaintext on-chain.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+                <li>▸ Encrypted patient registration &amp; trial criteria</li>
+                <li>▸ FHE comparisons on encrypted euint values</li>
+                <li>▸ EIP-712 private decryption by the patient only</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-black bg-black p-8 text-white">
+              <h3 className="text-xl font-bold">AI Advisor Layer</h3>
+              <p className="mt-1 text-sm font-medium text-white/60">
+                GenLayer · Python · StudioNet
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-white/80">
+                Runs LLM-backed logic with leader/validator consensus on anonymized inputs
+                only. Explains, recommends, validates, and checks eligibility.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-white/80">
+                <li>▸ generate_explanation — plain-language result</li>
+                <li>▸ recommend_trials — best 1–3 matches</li>
+                <li>▸ validate_trial — checks live ICD-10 reference</li>
+                <li>▸ check_eligibility — PII-screened summary</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Demo video */}
+        <section className="mx-auto max-w-7xl py-16 md:py-24">
+          <h2 className="ac-section-title mb-10">See AegisCare in action</h2>
+          <div className="overflow-hidden rounded-2xl border border-black">
+            <div className="relative aspect-video w-full bg-black">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src="https://www.youtube.com/embed/EvdMsxFs08c?rel=0&modestbranding=1"
+                title="AegisCare Demo — Privacy-Preserving Clinical Trial Matching"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* User guide CTA */}
+        <section className="mx-auto max-w-7xl pb-24 pt-16 md:pt-24">
+          <div className="flex flex-col items-start justify-between gap-8 rounded-2xl bg-black p-8 text-white md:flex-row md:items-center md:p-12">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
+                Master AegisCare
+              </h2>
+              <p className="mt-3 text-white/70">
+                Everything you need to know about privacy-preserving clinical trial matching —
+                10 sections, 50+ FAQ answers, step-by-step tutorials.
+              </p>
+            </div>
+            <Link
+              href="https://github.com/CodeWithShamim/AegisCare/blob/main/USER_GUIDE.md"
+              onClick={sparkle}
+              className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-8 py-4 text-base font-bold text-black transition-transform hover:scale-105"
+            >
+              Read the User Guide
+            </Link>
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
